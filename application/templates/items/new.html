@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('items_create') }}">
+    <input type="text" name="name"/>
+    <input type="number" name="starting_price"/>
+    <input type="number" name="buyout_price"/>
+    <input type="submit" value="Add a new item"/>
+</form>
+{% endblock %}

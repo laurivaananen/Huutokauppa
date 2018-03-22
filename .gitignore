@@ -9,3 +9,4 @@ pip-delete-this-directory.txt
 *.so
 *.py[cod]
 *$py.class
+items.db
