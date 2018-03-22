@@ -1,2 +1,11 @@
 venv
 .vscode
+__pycache__
+instance/
+.webassets-cache
+pip-log.txt
+pip-delete-this-directory.txt
+.Python
+*.so
+*.py[cod]
+*$py.class

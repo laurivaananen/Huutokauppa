@@ -1,6 +1,6 @@
 # Huutokauppa
 
-##Sovelluksen käyttäjiä
+## Sovelluksen käyttäjiä
 
 Ostaja
 * Voi tehdä tarjouksia eri tuotteista
@@ -15,6 +15,6 @@ Admin
 * Pystyy poistamaan käyttäjiä palvelusta
 * Pystyy poistamaan eri tuotteita
 
-##Sovelluksen toiminta
+## Sovelluksen toiminta
 
 Jos olet myyjä, voit lisätä omia tuotteitasi sivulle myyntiin. Ostajat voivat tarjota tuotteesta jonkun hinnan niin kauan, kuin tuote on myynnissä. Korkeimman hinnan tarjoaja saa tuotteen. Adminit voivat seurata sivun toimintaa ja tarpeen tullessa poistaa käyttäjiä tai tuotteita sivulta.
