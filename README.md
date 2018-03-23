@@ -1,5 +1,11 @@
 # Huutokauppa
 
+[Live version in Heroku](http://huutokauppa-sovellus.herokuapp.com/)
+
+[Database graph](https://yuml.me/f51ba676.jpg)
+
+[User stories](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/userstories.md)
+
 ## Sovelluksen käyttäjiä
 
 Ostaja
