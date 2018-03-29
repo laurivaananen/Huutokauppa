@@ -2,9 +2,57 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('items_create') }}">
-    <input type="text" name="name"/>
-    <input type="number" name="starting_price"/>
-    <input type="number" name="buyout_price"/>
-    <input type="submit" value="Add a new item"/>
+    <table>
+        <tr>
+            <td>
+                {{ form.starting_price.label }}
+            </td>
+            <td>
+                {{ form.starting_price }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.starting_price.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.buyout_price.label }}
+            </td>
+            <td>
+                {{ form.buyout_price }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.buyout_price.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.name.label }}
+            </td>
+            <td>
+                {{ form.name }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Add a new item"/>
+            </td>
+        </tr>
+    </table>
 </form>
 {% endblock %}
