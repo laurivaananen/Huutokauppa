@@ -11,9 +11,6 @@ class Item(db.Model):
     name = db.Column(db.String(256), nullable=False)
     sold = db.Column(db.Boolean, nullable=False)
 
-    account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
-                           nullable=False)
-
     def __init__(self, name, buyout_price, starting_price, account_id):
         self.name = name
         self.buyout_price = buyout_price
