@@ -21,7 +21,7 @@ class UserAccount(db.Model):
         self.user_name = user_name
         self.first_name = first_name
         self.last_name = last_name
-        self.account_information = account_information
+        self.account_informations = account_information
 
     def get_id(self):
         return self.id
@@ -52,7 +52,7 @@ class AccountInformation(db.Model):
 
     #user_account = db.Column(db.Integer, db.ForeignKey('UserAccount.id'), nullable=False)
 
-    user_account = db.relationship("UserAccount", backref='AccountInformation', lazy=True)
+    user_accounts = db.relationship("UserAccount", backref='AccountInformation', lazy=True)
 
 
     country = db.Column(db.Integer, db.ForeignKey('Country.id'), nullable=False)
@@ -60,18 +60,30 @@ class AccountInformation(db.Model):
     postal_code = db.Column(db.Integer, db.ForeignKey('PostalCode.id'), nullable=False)
     street_address = db.Column(db.Integer, db.ForeignKey('StreetAddress.id'), nullable=False)
 
-    def __init__(self, email_address, password, phone_number, user_account, country, city, postal_code, street_address):
+    def __init__(self, email_address, password, phone_number, country, city, postal_code, street_address):
         self.email_address = email_address
         self.password = password
         self.phone_number = phone_number
         self.account_balance = 0
         self.banned = False
 
-        self.user_account = user_account
         self.country = country
         self.city = city
         self.postal_code = postal_code
         self.street_address = street_address
+
+
+    def get_id(self):
+        return self.id
+
+    def is_active(self):
+        return True
+
+    def id_anonymous(self):
+        return False
+    
+    def is_authenticated(self):
+        return True
 
 class Country(db.Model):
 

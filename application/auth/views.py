@@ -49,11 +49,13 @@ def auth_usersignup():
                                              street_address = form.street_address.data)
 
     db.session.add(account_information)
-    db.session().commit()
+    db.session.flush()
+
+    print("\n \n \n \n \n account_information id {}\n\n\n\n".format(account_information.id))
 
 
     user_account = UserAccount(user_name = form.user_name.data,
-                               account_informations = AccountInformation.query.filter_by(email_address = account_information.email_address).first().id,
+                               account_information = account_information.id,
                                first_name = form.first_name.data,
                                last_name = form.last_name.data)
 

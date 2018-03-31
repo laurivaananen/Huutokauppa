@@ -8,7 +8,7 @@
     <body>
         {% if current_user.is_authenticated %}
         <p>
-            Kirjautunut nimellä {{ current_user.user_name }}. <a href="{{ url_for('auth_logout') }}">Kirjaudu Ulos</a>
+            Kirjautunut nimellä {{ current_user.user_accounts[0].user_name }}. <a href="{{ url_for('auth_logout') }}">Kirjaudu Ulos</a>
         </p>
         {% else %}
         <a href="{{ url_for('auth_login') }}">Kirjaudu</a>
