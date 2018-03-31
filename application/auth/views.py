@@ -2,7 +2,8 @@ from flask import render_template, request, redirect, url_for
 from flask_login import login_user, logout_user
 
 from application import app, db
-from application.auth.models import UserAccount, AccountInformation
+from application.extensions import get_or_create
+from application.auth.models import UserAccount, AccountInformation, Country, City, PostalCode, StreetAddress
 from application.auth.forms import LoginForm, UserSignupForm
 
 @app.route("/auth/login", methods = ["GET", "POST"])
@@ -40,19 +41,22 @@ def auth_usersignup():
     if not form.validate():
         return render_template("auth/usersignupform.html", form=form, error="Error happened")
 
+
+    country = get_or_create(db.session, Country, name=form.country.data)
+    city = get_or_create(db.session, City, name=form.city.data)
+    postal_code = get_or_create(db.session, PostalCode, name=form.postal_code.data)
+    street_address = get_or_create(db.session, StreetAddress, name=form.street_address.data)
+
     account_information = AccountInformation(email_address = form.email_address.data,
                                              password = form.password.data,
                                              phone_number = form.phone_number.data,
-                                             country = form.country.data,
-                                             city = form.city.data,
-                                             postal_code = form.postal_code.data,
-                                             street_address = form.street_address.data)
+                                             country = country.id,
+                                             city = city.id,
+                                             postal_code = postal_code.id,
+                                             street_address = street_address.id)
 
     db.session.add(account_information)
     db.session.flush()
-
-    print("\n \n \n \n \n account_information id {}\n\n\n\n".format(account_information.id))
-
 
     user_account = UserAccount(user_name = form.user_name.data,
                                account_information = account_information.id,
