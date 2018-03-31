@@ -1,0 +1,164 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ error }}
+<form method="POST" action="{{ url_for('auth_usersignup')}}">
+    <table>
+        <tr>
+            <td>
+                {{ form.first_name.label }}
+            </td>
+            <td>
+                {{ form.first_name }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.first_name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.last_name.label }}
+            </td>
+            <td>
+                {{ form.last_name }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.last_name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.user_name.label }}
+            </td>
+            <td>
+                {{ form.user_name }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.user_name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.email_address.label }}
+            </td>
+            <td>
+                {{ form.email_address }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.email_address.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.phone_number.label }}
+            </td>
+            <td>
+                {{ form.phone_number }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.phone_number.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.password.label }}
+            </td>
+            <td>
+                {{ form.password }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.country.label }}
+            </td>
+            <td>
+                {{ form.country }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.country.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.city.label }}
+            </td>
+            <td>
+                {{ form.city }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.city.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.postal_code.label }}
+            </td>
+            <td>
+                {{ form.postal_code }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.postal_code.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.street_address.label }}
+            </td>
+            <td>
+                {{ form.street_address }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.street_address.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Login"/>
+            </td>
+        </tr>
+    </table>
+</form>
+{% endblock %}
