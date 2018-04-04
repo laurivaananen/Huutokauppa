@@ -1,17 +1,20 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, BooleanField, validators, ValidationError
+from wtforms import StringField, IntegerField, BooleanField, DateTimeField, validators, ValidationError, TextAreaField
 
 class ItemForm(FlaskForm):
+    name = StringField("Item name", [validators.Length(min=2)])
     starting_price = IntegerField("Starting price", [validators.NumberRange(min=1)])
-    buyout_price = IntegerField("Buyout price", [validators.InputRequired()])
+    buyout_price = IntegerField("Buyout price", [validators.InputRequired(), validators.NumberRange(min=5)])
 
     def validate_buyout_price(form, field):
-        try:
+        if type(field.data) is int and type(form.starting_price.data) is int:
             if field.data < form.starting_price.data:
                 raise ValidationError("Buyout price has to be bigger then starting price")
-        except:
-            raise ValidationError("Error validating input")
-    name = StringField("Item name", [validators.Length(min=2)])
+
+    bidding_end = DateTimeField("Bidding end time", [validators.InputRequired()])
+    description = TextAreaField("Item description", [validators.Length(min=1, max=4096)])
+    quality = IntegerField("Item quality", [validators.InputRequired()])
+
 
     class Meta:
         csrf = False

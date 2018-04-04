@@ -1,8 +1,9 @@
 from application import app, db
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
-from application.items.models import Item
+from application.items.models import Item, Quality, Image
 from application.items.forms import ItemForm
+from application.extensions import get_or_create
 
 @app.route("/items", methods=["GET"])
 def items_index():
@@ -31,10 +32,15 @@ def items_create():
     if not form.validate():
         return render_template("items/new.html", form=form)
 
+    quality_id = get_or_create(db.session, Quality, name=form.quality.data)
+
     item = Item(starting_price = form.starting_price.data,
                 buyout_price = form.buyout_price.data,
                 name = form.name.data,
-                account_id = current_user.id)
+                account_information_id = current_user.id,
+                quality_id = quality_id.id,
+                description = form.description.data,
+                bidding_end = form.bidding_end.data)
 
     db.session().add(item)
     db.session().commit()

@@ -42,5 +42,6 @@ def load_user(user_id):
 
 try:
     db.create_all()
+    db.session().add()
 except:
     pass

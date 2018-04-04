@@ -60,6 +60,8 @@ class AccountInformation(db.Model):
     postal_code = db.Column(db.Integer, db.ForeignKey('PostalCode.id'), nullable=False)
     street_address = db.Column(db.Integer, db.ForeignKey('StreetAddress.id'), nullable=False)
 
+    items = db.relationship('Item', backref='AccountInformation', lazy=True)
+
     def __init__(self, email_address, password, phone_number, country, city, postal_code, street_address):
         self.email_address = email_address
         self.password = password
