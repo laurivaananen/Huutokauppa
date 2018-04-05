@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, BooleanField, DateTimeField, validators, ValidationError, TextAreaField
+from wtforms import StringField, IntegerField, BooleanField, DateField, validators, ValidationError, TextAreaField
 
 class ItemForm(FlaskForm):
     name = StringField("Item name", [validators.Length(min=2)])
@@ -11,7 +11,7 @@ class ItemForm(FlaskForm):
             if field.data < form.starting_price.data:
                 raise ValidationError("Buyout price has to be bigger then starting price")
 
-    bidding_end = DateTimeField("Bidding end time", [validators.InputRequired()])
+    bidding_end = DateField("Bidding end date", [validators.InputRequired()])
     description = TextAreaField("Item description", [validators.Length(min=1, max=4096)])
     quality = IntegerField("Item quality", [validators.InputRequired()])
 
