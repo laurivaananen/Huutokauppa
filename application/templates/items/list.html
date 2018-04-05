@@ -11,14 +11,16 @@
         </tr>
         {% for item in items %}
         <tr>
-            <td>{{ item.name }}</td>
+            <td>
+                <a href="{{ url_for('item_detail', item_id=item.id) }}">
+                    {{ item.name }}
+                </a>
+            </td>
             <td>{{ item.starting_price }}</td>
             <td>{{ item.buyout_price }}</td>
             <td>{{ item.sold }}</td>
             <td>
-                <form method="POST" action="{{ url_for('item_sell', item_id=item.id) }}">
-                    <input type="submit" value="Buy Item"/>
-                </form>
+                nothing here
             </td>
         </tr>
         {% endfor %}

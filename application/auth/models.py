@@ -15,7 +15,7 @@ class UserAccount(db.Model):
 
     #account_informations = db.relationship("AccountInformation", backref='UserAccount', lazy=True)
 
-    account_informations = db.Column(db.Integer, db.ForeignKey('AccountInformation.id'), nullable=False)
+    account_information = db.Column(db.Integer, db.ForeignKey('AccountInformation.id'), nullable=False)
 
     def __init__(self,user_name, first_name, last_name, account_information):
         self.user_name = user_name
@@ -52,7 +52,7 @@ class AccountInformation(db.Model):
 
     #user_account = db.Column(db.Integer, db.ForeignKey('UserAccount.id'), nullable=False)
 
-    user_accounts = db.relationship("UserAccount", backref='AccountInformation', lazy=True)
+    user_account = db.relationship("UserAccount", backref='AccountInformation', lazy=True, uselist=False)
 
 
     country = db.Column(db.Integer, db.ForeignKey('Country.id'), nullable=False)

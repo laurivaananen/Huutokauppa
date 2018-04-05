@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<ul>
+    <li>
+        <p>
+            <b>
+                Name: 
+            </b>
+            {{ item.name }}
+        </p>
+    </li>
+    <li>
+        <p>
+            <b>
+                Description: 
+            </b>
+            {{ item.description }}
+        </p>
+    </li>
+    <li>
+        <p>
+            <b>
+                Quality: 
+            </b>
+            {{ item.quality_id }}
+        </p>
+    </li>
+    <li>
+        <p>
+            <b>
+                Seller: 
+            </b>
+            {{ item.AccountInformation.user_account.first_name }}
+        </p>
+    </li>
+</ul>
+
+{% endblock %}

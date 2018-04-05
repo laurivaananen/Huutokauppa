@@ -14,15 +14,22 @@ def items_index():
 def items_form():
     return render_template("items/new.html", form = ItemForm())
 
-@app.route("/items/<item_id>/", methods=["POST"])
-@login_required
-def item_sell(item_id):
+@app.route("/items/<item_id>/", methods=["GET"])
+def item_detail(item_id):
 
     item = Item.query.get(item_id)
-    item.sold = True
-    db.session().commit()
 
-    return redirect(url_for("items_index"))
+    return render_template("items/detail.html", item=item)
+
+# @app.route("/items/<item_id>/", methods=["POST"])
+# @login_required
+# def item_sell(item_id):
+
+#     item = Item.query.get(item_id)
+#     item.sold = True
+#     db.session().commit()
+
+#     return redirect(url_for("items_index"))
 
 @app.route("/items/", methods=["POST"])
 @login_required
