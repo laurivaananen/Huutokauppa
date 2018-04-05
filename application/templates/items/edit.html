@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 
 {% block body %}
+
+{% if current_user.id == item.AccountInformation.id %}
+
+
 <form method="POST" action="{{ url_for('items_create') }}">
     <table>
         <tr>
@@ -101,4 +105,10 @@
         </tr>
     </table>
 </form>
+
+
+{% else %}
+    <p>You do not have the permission to edit this item</p>
+{% endif %}
+
 {% endblock %}

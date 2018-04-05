@@ -2,6 +2,10 @@
 
 {% block body %}
 
+{% if current_user.id == item.AccountInformation.id %}
+    <a href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
+{% endif %}
+
 <ul>
     <li>
         <p>
@@ -32,7 +36,47 @@
             <b>
                 Seller: 
             </b>
-            {{ item.AccountInformation.user_account.first_name }}
+            {{ item.AccountInformation.user_account.first_name }} {{ item.AccountInformation.user_account.last_name }}
+        </p>
+    </li>
+    <li>
+        <p>
+            <b>
+                Added for sale: 
+            </b>
+            {{ item.bidding_start }}
+        </p>
+    </li>
+    <li>
+        <p>
+            <b>
+                Sale ends: 
+            </b>
+            {{ item.bidding_end }}
+        </p>
+    </li>
+    <li>
+        <p>
+            <b>
+                Starting price: 
+            </b>
+            {{ item.starting_price }}
+        </p>
+    </li>
+    <li>
+        <p>
+            <b>
+                Buyout price: 
+            </b>
+            {{ item.buyout_price }}
+        </p>
+    </li>
+    <li>
+        <p>
+            <b>
+                Contact seller: 
+            </b>
+            {{ item.AccountInformation.email_address }}
         </p>
     </li>
 </ul>

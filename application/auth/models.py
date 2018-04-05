@@ -21,7 +21,7 @@ class UserAccount(db.Model):
         self.user_name = user_name
         self.first_name = first_name
         self.last_name = last_name
-        self.account_informations = account_information
+        self.account_information = account_information
 
     def get_id(self):
         return self.id
@@ -49,8 +49,6 @@ class AccountInformation(db.Model):
     phone_number = db.Column(db.String(144), nullable=False)
     account_balance = db.Column(db.Integer(), nullable=False)
     banned = db.Column(db.Boolean(), nullable=False)
-
-    #user_account = db.Column(db.Integer, db.ForeignKey('UserAccount.id'), nullable=False)
 
     user_account = db.relationship("UserAccount", backref='AccountInformation', lazy=True, uselist=False)
 
@@ -97,7 +95,6 @@ class Country(db.Model):
 
 
     account_informations = db.relationship("AccountInformation", backref='Country', lazy=True)
-    # business_acounts = db.relationship("BusinessAccount", backref='Country', lazy=True)
 
     def __init__(self, name):
         self.name = name

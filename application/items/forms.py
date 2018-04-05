@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, DateField, validators, ValidationError, TextAreaField
 
 class ItemForm(FlaskForm):
+    
     name = StringField("Item name", [validators.Length(min=2)])
     starting_price = IntegerField("Starting price", [validators.NumberRange(min=1)])
     buyout_price = IntegerField("Buyout price", [validators.InputRequired(), validators.NumberRange(min=5)])

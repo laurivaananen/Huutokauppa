@@ -21,6 +21,13 @@ def item_detail(item_id):
 
     return render_template("items/detail.html", item=item)
 
+@app.route("/items/edit/<item_id>/", methods=["GET"])
+def item_edit(item_id):
+
+    item = Item.query.get(item_id)
+
+    return render_template("items/edit.html", item=item, form=ItemForm(obj=item))
+
 # @app.route("/items/<item_id>/", methods=["POST"])
 # @login_required
 # def item_sell(item_id):
