@@ -30,7 +30,7 @@ app.config["SECRET_KEY"] = urandom(32)
 
 from flask_login import LoginManager
 login_manager = LoginManager()
-login_manager.setup_app(app)
+login_manager.init_app(app)
 
 login_manager.login_view = "auth_login"
 login_manager.login_message = "Please login to use this functionality"
@@ -42,6 +42,5 @@ def load_user(user_id):
 
 try:
     db.create_all()
-    db.session().add()
 except:
     pass
