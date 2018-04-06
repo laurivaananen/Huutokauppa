@@ -14,7 +14,7 @@ class ItemForm(FlaskForm):
 
     bidding_end = DateField("Bidding end date", [validators.InputRequired()])
     description = TextAreaField("Item description", [validators.Length(min=1, max=4096)])
-    quality = IntegerField("Item quality", [validators.InputRequired()])
+    quality = StringField("Item quality", [validators.InputRequired()])
 
 
     class Meta:

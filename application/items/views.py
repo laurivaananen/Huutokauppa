@@ -46,7 +46,9 @@ def item_update(item_id):
         if form.bidding_end.data >= item.bidding_end:
             item.bidding_end = form.bidding_end.data
 
-        item.quality = form.quality.data
+        if item.Quality.name != form.quality.data:
+            quality = get_or_create(db.session, Quality, name=form.quality.data)
+            item.quality = quality.id
 
         db.session().commit()
 
@@ -71,13 +73,13 @@ def items_create():
     if not form.validate():
         return render_template("items/new.html", form=form)
 
-    quality_id = get_or_create(db.session, Quality, name=form.quality.data)
+    quality = get_or_create(db.session, Quality, name=form.quality.data)
 
     item = Item(starting_price = form.starting_price.data,
                 buyout_price = form.buyout_price.data,
                 name = form.name.data,
                 account_information_id = current_user.id,
-                quality_id = quality_id.id,
+                quality = quality.id,
                 description = form.description.data,
                 bidding_end = form.bidding_end.data)
 

@@ -43,7 +43,6 @@
             </td>
             <td>
                 {{ form.bidding_end }}
-                <!-- <input type="date" id="{{ form.bidding_end.id }}" name="{{ form.bidding_end.name }}" value }}"> -->
             </td>
             <td>
                 <ul>
@@ -89,7 +88,8 @@
                 {{ form.quality.label }}
             </td>
             <td>
-                {{ form.quality }}
+                <input type="text" name="{{ form.quality.name }}" id="{{ form.quality.id }}" value="{{ item.Quality.name }}">
+                <!-- {{ form.quality }} -->
             </td>
             <td>
                 <ul>
