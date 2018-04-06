@@ -4,7 +4,7 @@ There seems to be a some problem with heroku. If you get a 500 internal server e
 
 [Live version in Heroku](http://huutokauppa-sovellus.herokuapp.com/)
 
-[Database graph](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/tietokantakavio.jpg)
+[Database graph](https://raw.githubusercontent.com/laurivaananen/Huutokauppa/master/documentation/tietokantakaavio.jpg)
 
 [User stories](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/userstories.md)
 
