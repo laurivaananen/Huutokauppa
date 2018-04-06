@@ -1,8 +1,10 @@
 # Huutokauppa
 
+There seems to be a some problem with heroku. If you get a 500 internal server error, try refreshing the page.
+
 [Live version in Heroku](http://huutokauppa-sovellus.herokuapp.com/)
 
-[Database graph](https://yuml.me/cdb203f6.jpg)
+[Database graph](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/tietokantakavio.jpg)
 
 [User stories](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/userstories.md)
 
