@@ -3,27 +3,25 @@
     <head>
         <meta charset="utf-8">
         <title>Huutokauppa</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
     </head>
 
     <body>
-        {% if current_user.is_authenticated %}
-        <p>
-            Kirjautunut nimellä {{ current_user.user_account.user_name }}. <a href="{{ url_for('auth_logout') }}">Kirjaudu Ulos</a>
-        </p>
-        {% else %}
-        <a href="{{ url_for('auth_login') }}">Kirjaudu</a>
-        <a href="{{ url_for('auth_usersignup') }}">Create a new account</a>
-        {% endif %}
-        
-        <ul>
-            <li><a href="{{ url_for('items_index') }}">List items</a></li>
-            <li><a href="{{ url_for('items_form') }}">Add an item</a></li>
-        </ul>
-        
-        {% block body %}
-            <p>
-                Content
-            </p>
-        {% endblock %}
+        <div class="grid-container">
+            <div class="header">
+                {% include 'header.html' %}
+            </div>
+            
+            
+            
+            <div class="content">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti vel voluptatibus maxime quasi pariatur tenetur veritatis nisi veniam consectetur nulla totam voluptas, ex quaerat incidunt et adipisci. Nam qui consequuntur tempora asperiores, numquam soluta dolore aut nemo similique debitis incidunt sit. Quod fugiat a iste praesentium cum dolorem saepe error tempora aspernatur in laudantium enim dolor maiores cumque eum dolores repellat deleniti, incidunt dicta ad at. Minima accusantium quam obcaecati cupiditate harum? Reiciendis accusantium tenetur ad deserunt delectus aliquid tempora dolores velit qui debitis minima molestias repudiandae iusto, cumque omnis, itaque asperiores totam illo. Perferendis, quia ipsa officiis laudantium sint minima obcaecati. Praesentium ex quo dolore omnis vitae ullam, soluta magni non quia architecto animi tenetur iste ab delectus, quibusdam itaque cum. Illo distinctio et optio mollitia accusamus voluptatem nam. Eos necessitatibus tempora iusto ducimus dolore a dolorem, commodi culpa dignissimos perspiciatis obcaecati molestiae aperiam corrupti consequatur porro suscipit cum vitae ea nostrum ullam quos atque, veniam sequi corporis. Fugit autem tempora voluptates quam similique, eius at neque, libero reiciendis blanditiis molestiae. Odit tenetur unde soluta, non esse molestiae asperiores animi optio facilis, nemo fugiat magni sequi sit reprehenderit, consequuntur id debitis mollitia voluptatibus? Totam distinctio cupiditate provident fugiat officiis maiores aliquid praesentium unde laboriosam autem voluptatem, porro veritatis consequatur, amet neque nostrum fugit veniam, odio eum minus! Doloremque amet molestiae officiis eligendi laborum veniam eveniet voluptatibus quo. Eaque nulla quia consectetur! Autem perferendis est voluptatem quasi? Iste quae, qui ad saepe perferendis laudantium, explicabo mollitia molestias dolorum, nulla velit amet iure eaque tempora assumenda nisi beatae. Ut sunt itaque perspiciatis praesentium, quos voluptatum in. Numquam expedita quasi nam laborum sunt? Similique accusantium animi labore! Quibusdam sapiente voluptates voluptatem officia a ut ipsum debitis consequatur dolore unde, earum illo doloribus, dolor ducimus placeat fuga voluptatum id saepe eius commodi molestias hic? Praesentium cupiditate ea nam autem nisi inventore. Dolorem labore iste, architecto tempore perspiciatis voluptates quod similique aperiam sapiente consequatur eius provident nulla, totam quidem, aliquam aut ex vitae ipsam! Tempora veritatis modi fuga iure perferendis reiciendis eos, quasi similique laboriosam ducimus nemo nisi consequuntur laudantium. Placeat, quo a eum nesciunt praesentium dignissimos eveniet at pariatur fuga quasi mollitia illo facilis laudantium nemo corporis repudiandae in. Eveniet aliquid repellendus ullam a reprehenderit. Quos illo reiciendis distinctio porro dolor aspernatur necessitatibus ipsam labore iure. Consequatur veniam dicta, deserunt esse dolorum natus porro aliquam voluptate quam. Officiis beatae corrupti placeat aut. Molestiae similique ducimus cupiditate quia laboriosam facere. Corporis, iusto. Quos porro aspernatur animi eius minus magnam, voluptate reprehenderit! Velit, repudiandae aliquid. Ut dolores totam nobis sint quis dicta illum quos hic blanditiis ab porro, quisquam quaerat eligendi voluptas cum ipsum consequuntur. Unde inventore ea a ratione dolor consequatur odio quas, eos tempora! Sit facere impedit corporis ut porro ab mollitia similique saepe at? Quas necessitatibus beatae ratione totam voluptatem, provident illum numquam adipisci odio sequi voluptas? Suscipit, pariatur reprehenderit. Eveniet non eligendi animi doloremque ab facere, adipisci obcaecati explicabo aliquid accusamus amet voluptate sunt blanditiis quis rem dicta nihil magni tempora.
+                {% block body %}
+                    <p>
+                        Content
+                    </p>
+                {% endblock %}
+            </div>
+        </div>
     </body>
 </html>

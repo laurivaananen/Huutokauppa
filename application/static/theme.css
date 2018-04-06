@@ -1,0 +1,51 @@
+body {
+    margin: 0%;
+    background-color: red;
+}
+
+.grid-container {
+    margin-top: 50px;
+    display: grid;
+    grid-template-areas:
+    "content";
+    background-color: green;
+}
+
+.header {
+    background-color: yellow;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 50px;
+}
+
+.content {
+    background-color: purple;
+    grid-area: content;
+    margin-left: 30%;
+    margin-right: 30%;
+    font-size: 24px;
+}
+
+
+header {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+
+
+header a {
+    text-decoration: none;
+    color: black;
+}
+
+header div {
+    background-color: teal;
+    text-align: center;
+}
+
+header div:hover {
+    background-color: white;
+    color: darkgray;
+}
