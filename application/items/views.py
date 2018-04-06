@@ -21,6 +21,7 @@ def item_detail(item_id):
 
     return render_template("items/detail.html", item=item)
 
+@login_required
 @app.route("/items/edit/<item_id>/", methods=["GET"])
 def item_edit(item_id):
 
@@ -28,15 +29,39 @@ def item_edit(item_id):
 
     return render_template("items/edit.html", item=item, form=ItemForm(obj=item))
 
-# @app.route("/items/<item_id>/", methods=["POST"])
-# @login_required
-# def item_sell(item_id):
+@login_required
+@app.route("/items/update/<item_id>/", methods=["POST"])
+def item_update(item_id):
 
-#     item = Item.query.get(item_id)
-#     item.sold = True
-#     db.session().commit()
+    item = Item.query.get(item_id)
+    if current_user.id == item.AccountInformation.id:
+        form = ItemForm(request.form)
+        item.name = form.name.data
 
-#     return redirect(url_for("items_index"))
+        if form.buyout_price.data >= item.buyout_price:
+            item.buyout_price = form.buyout_price.data
+
+        item.description = form.description.data
+
+        if form.bidding_end.data >= item.bidding_end:
+            item.bidding_end = form.bidding_end.data
+
+        item.quality = form.quality.data
+
+        db.session().commit()
+
+    return redirect(url_for("item_detail", item_id=item.id))
+
+@app.route("/items/delete/<item_id>/", methods=["POST"])
+@login_required
+def item_delete(item_id):
+
+    item = Item.query.get(item_id)
+    if current_user.id == item.AccountInformation.id:
+        db.session().delete(item)
+        db.session().commit()
+
+    return redirect(url_for("items_index"))
 
 @app.route("/items/", methods=["POST"])
 @login_required

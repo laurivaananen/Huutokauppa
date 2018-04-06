@@ -14,7 +14,12 @@ class Item(db.Model):
     name = db.Column(db.String(144), nullable=False)
     description = db.Column(db.String(4096), nullable=False)
     bidding_start = db.Column(db.DateTime, default=db.func.current_timestamp())
-    bidding_end = db.Column(db.DateTime, nullable=False)
+    bidding_end = db.Column(db.Date, nullable=False)
+
+    def get_bidding_end(self):
+        from datetime import datetime
+        return self.bidding_end.strftime("%Y-%m-%d")
+
     hidden = db.Column(db.Boolean, default=False)
     sold = db.Column(db.Boolean, nullable=False)
 
