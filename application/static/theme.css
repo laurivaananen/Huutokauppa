@@ -1,51 +1,71 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+/* a {
+    text-decoration: none;
+    color: #000;
+} */
+
 body {
-    margin: 0%;
     background-color: red;
+    font-family: Arial;
+    font-size: 26px;
+    font-weight: normal;
 }
 
 .grid-container {
-    margin-top: 50px;
     display: grid;
-    grid-template-areas:
-    "content";
+    grid-template-rows: 20% auto;
     background-color: green;
 }
 
-.header {
+header {
     background-color: yellow;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 50px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 400px;
+    align-content: center;
+}
+
+header div {
+    background-color: pink;
+    text-align: center;
+}
+
+header div a {
+    text-align: center;
+    background-color: teal;
+}
+
+header .index {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+header .items {
+    grid-column-start: 2;
+}
+
+header .new {
+    grid-column-start: 3;
+}
+
+header .user {
+    grid-column-start: 4;
+}
+
+header .login {
+    grid-column-start: 5;
+}
+
+header .signup {
+    grid-column-start: 6;
 }
 
 .content {
     background-color: purple;
-    grid-area: content;
-    margin-left: 30%;
-    margin-right: 30%;
-    font-size: 24px;
-}
-
-
-header {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-}
-
-
-
-header a {
-    text-decoration: none;
-    color: black;
-}
-
-header div {
-    background-color: teal;
-    text-align: center;
-}
-
-header div:hover {
-    background-color: white;
-    color: darkgray;
 }
