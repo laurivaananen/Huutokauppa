@@ -14,7 +14,7 @@ body {
 .grid-container {
     display: grid;
     grid-template-rows: minmax(50px, 8vh) 92vh;
-    grid-template-columns: minmax(100px, 10%) 10% 1fr 20%;
+    grid-template-columns: 10% 10% 60% 20%;
     background-color: #222;
 }
 
@@ -23,7 +23,7 @@ header {
     grid-row: 1 / 2;
     background-color: rgb(33, 60, 77);
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(6, auto);
     grid-template-areas: "user . . . logout signup";
     align-content: center;
     overflow: hidden;
