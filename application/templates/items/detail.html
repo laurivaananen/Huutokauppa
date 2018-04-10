@@ -3,14 +3,14 @@
 {% block body %}
 
 {% if current_user.id == item.AccountInformation.id %}
-    <a href="{{ url_for('item_edit', item_id=item.id) }}"><strong>Edit</strong></a>
+    <a class="items-edit" href="{{ url_for('item_edit', item_id=item.id) }}"><strong>Edit</strong></a>
     <form method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
         <input type="submit" value="Delete">
     </form>
     <!-- <a href="{{ url_for('item_delete', item_id=item.id) }}"><strong>Delete</strong></a> -->
 {% endif %}
 
-<ul>
+<ul class="items-detail">
     <li>
         <p>
             <b>

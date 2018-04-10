@@ -1,71 +1,138 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
 
-/* a {
-    text-decoration: none;
-    color: #000;
-} */
-
 body {
-    background-color: red;
+    background-color: hotpink;
     font-family: Arial;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: normal;
+    color: #eee;
 }
 
 .grid-container {
     display: grid;
-    grid-template-rows: 20% auto;
-    background-color: green;
+    grid-template-rows: minmax(50px, 8vh) 92vh;
+    grid-template-columns: minmax(100px, 10%) 10% 1fr 20%;
+    background-color: #222;
 }
 
 header {
-    background-color: yellow;
+    grid-column: 1 / 5;
+    grid-row: 1 / 2;
+    background-color: rgb(33, 60, 77);
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: 400px;
+    grid-template-areas: "user . . . logout signup";
     align-content: center;
-}
-
-header div {
-    background-color: pink;
-    text-align: center;
-}
-
-header div a {
-    text-align: center;
-    background-color: teal;
-}
-
-header .index {
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 1;
-    grid-row-end: 3;
-}
-
-header .items {
-    grid-column-start: 2;
-}
-
-header .new {
-    grid-column-start: 3;
+    overflow: hidden;
+    border-bottom: solid 2px #111;
 }
 
 header .user {
-    grid-column-start: 4;
+    grid-area: "user";
 }
 
-header .login {
-    grid-column-start: 5;
+header .logout {
+    grid-area: logout;
 }
 
 header .signup {
-    grid-column-start: 6;
+    grid-area: signup;
+}
+
+nav {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    background-color: #333;
+    border-right: 2px solid #111;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav ul li {
+    border-bottom: 2px solid #111;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #ddd;
+    display: inline-block;
+    width: 90%;
+    padding: 15px 0px;
+    padding-left: 10%;
+}
+
+nav ul li a:hover {
+    color: #333;
+    background-color: #ddd;
 }
 
 .content {
-    background-color: purple;
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+    padding-top: 200px;
+    background-color: #222;
+}
+
+header .header-item {
+    text-decoration: none;
+    text-align: center;
+    padding: 100px 0px;
+    color: azure;
+}
+
+header a:hover {
+    background-color: azure;
+    color: rgb(33, 60, 77);
+}
+
+
+.items-table {
+    margin-top: 50px;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.items-table th {
+    height: 50px;
+    text-align: left;
+}
+
+.items-table td {
+    height: 50px;
+}
+
+.items-table th, .items-table td {
+    padding-left: 10px;
+    border-bottom: 2px solid #111;
+}
+
+.items-table tr:nth-child(even) {
+    background-color: #333;
+}
+
+.items-table a {
+    text-decoration: none;
+    color: rgb(255, 196, 0);
+}
+
+.items-detail {
+    margin-top: 50px;
+    list-style: none;
+}
+
+.items-detail li {
+    padding: 5px 0px;
+}
+
+.items-edit {
+    font-size: 30px;
+    text-decoration: none;
+    color: rgb(255, 196, 0);
 }

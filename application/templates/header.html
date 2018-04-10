@@ -1,34 +1,15 @@
-<div class="index">
-    <a href="{{ url_for('index') }}">Items</a>
-</div>
 
-<div class="items">
-    <a href="{{ url_for('items_index') }}">Items</a>
-</div>
+
+
 
 {% if current_user.is_authenticated %}
-<div class="new">
-    
-    <a href="{{ url_for('items_form') }}">New item</a>
-    
-</div>
+    <p class="header-item user" >{{ current_user.user_account.user_name }}</p>
 {% endif %}
 
 {% if current_user.is_authenticated %}
-<div class="user">
-    
-    <p>{{ current_user.user_account.user_name }}</p>
-</div>
+    <a class="header-item logout" href="{{ url_for('auth_logout') }}">Logout</a>
+{% else %}
+    <a class="header-item logout" href="{{ url_for('auth_login') }}">Login</a>
 {% endif %}
 
-<div class="login">
-    {% if current_user.is_authenticated %}
-    <a href="{{ url_for('auth_logout') }}">Logout</a>
-    {% else %}
-    <a href="{{ url_for('auth_login') }}">Login</a>
-    {% endif %}
-</div>
-
-<div class="signup">
-    <a href="{{ url_for('auth_usersignup') }}">Sign Up</a>
-</div>
+<a class="header-item signup" href="{{ url_for('auth_usersignup') }}">Sign Up</a>
