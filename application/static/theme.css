@@ -4,18 +4,17 @@
 }
 
 body {
-    background-color: hotpink;
+    background-color: #eee;
     font-family: Arial;
     font-size: 22px;
     font-weight: normal;
-    color: #eee;
+    color: #111;
 }
 
 .grid-container {
     display: grid;
     grid-template-rows: minmax(50px, 8vh) 92vh;
     grid-template-columns: 10% 10% 60% 20%;
-    background-color: #222;
 }
 
 header {
@@ -24,14 +23,17 @@ header {
     background-color: rgb(33, 60, 77);
     display: grid;
     grid-template-columns: repeat(6, auto);
-    grid-template-areas: "user . . . logout signup";
+    grid-template-areas: "index user . . logout signup";
     align-content: center;
     overflow: hidden;
-    border-bottom: solid 2px #111;
+}
+
+header .index {
+    grid-area: index;
 }
 
 header .user {
-    grid-area: "user";
+    grid-area: user;
 }
 
 header .logout {
@@ -45,21 +47,16 @@ header .signup {
 nav {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
-    background-color: #333;
-    border-right: 2px solid #111;
+    background-color: #ddd;
 }
 
 nav ul {
     list-style: none;
 }
 
-nav ul li {
-    border-bottom: 2px solid #111;
-}
-
 nav ul li a {
     text-decoration: none;
-    color: #ddd;
+    color: #111;
     display: inline-block;
     width: 90%;
     padding: 15px 0px;
@@ -67,15 +64,15 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    color: #333;
-    background-color: #ddd;
+    color: #ddd;
+    background-color: #333;
 }
 
 .content {
     grid-column: 3 / 4;
     grid-row: 2 / 3;
     padding-top: 200px;
-    background-color: #222;
+    background-color: #eee;
 }
 
 header .header-item {
@@ -114,12 +111,12 @@ header a:hover {
 }
 
 .items-table tr:nth-child(even) {
-    background-color: #333;
+    background-color: #ddd;
 }
 
 .items-table a {
     text-decoration: none;
-    color: rgb(255, 196, 0);
+    color: rgb(255, 81, 0);
 }
 
 .items-detail {

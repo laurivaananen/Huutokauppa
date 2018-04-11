@@ -6,25 +6,23 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
     </head>
 
-    <body>
-        <div class="grid-container">
-            <header>
-                {% include 'header.html' %}
-            </header>
+    <body class="grid-container">
+        <header>
+            {% include 'header.html' %}
+        </header>
 
-            <nav>
-                {% include 'navigation.html' %}
-            </nav>
-            
-            
-            
-            <div class="content">
-                {% block body %}
-                    <p>
-                        Content
-                    </p>
-                {% endblock %}
-            </div>
+        <nav>
+            {% include 'navigation.html' %}
+        </nav>
+        
+        
+        
+        <div class="content">
+            {% block body %}
+                <p>
+                    Content
+                </p>
+            {% endblock %}
         </div>
     </body>
 </html>
