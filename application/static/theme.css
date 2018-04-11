@@ -4,8 +4,12 @@
     padding: 0;
 }
 
+.form-error {
+    color: rgb(255, 30, 0);
+}
+
 body {
-    background-color: red;
+    background-color: #eee;
     font-family: Arial;
     font-size: 18px;
     font-weight: normal;
@@ -14,37 +18,46 @@ body {
 
 .grid-container {
     display: grid;
-    grid-template-rows: minmax(50px, 8vh) 92vh;
-    grid-template-columns: 10% 90%;
+    grid-template-columns: 15% 85%;
 }
 
 .item-detail-container {
-    align-self: start;
-
-
-
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
-    padding: 10% 10%;
-    border-spacing: 0px;
-    overflow: scroll;
-    background-color: #eee;
     display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 2fr 8fr;
+    grid-template-columns: auto auto;
+    grid-template-rows: 30% auto;
+    align-items: start;
 }
 
+.item-editor {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    padding-left: 2em;
+    margin: auto 0;
+}
 
-.item-detail-container ul{
+.new-bid {
+    padding-top: 2em;
+    grid-column: 2 / -1;
+    grid-row: 1 / 2;
+    padding-left: 2em;
+}
+
+.new-bid .btn{
+    margin-top:1em;
+    background-color: rgb(42, 182, 0);
+}
+
+.delete-item-form {
+    display: inline;
+}
+
+.item-detail-container ul {
     list-style: none;
+    padding-left: 2em;
 }
 
-.item-detail-container ul li:nth-child(even) {
-    background-color: #ddd;
-}
-
-.item-detail-container ul li {
-    padding: 5px 0px;
+.item-detail-container h2 {
+    padding-bottom: 1em;
 }
 
 .item-detail-container .item-detail {
@@ -55,23 +68,28 @@ body {
 .item-detail-container .bid-list {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
-    padding-left: 30px;
 }
 
-.item-detail-container .new-bid {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
+.btn {
+    background-color: #222;
+    color: #fff;
+    text-decoration: none;
+    font-size: 20px;
+    font: bold 18px arial;
+    border: 0;
+    border: 0;
+    padding: 1rem 1rem;
 }
 
-.item-detail-container .edit-item {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
+.edit-item {
+    background-color: rgb(255, 136, 0);
 }
 
-.item-detail-container .delete-item {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
+.delete-item {
+    background-color: rgb(255, 30, 0);
 }
+
+/* Header */
 
 header {
     grid-column: 1 / 5;
@@ -81,14 +99,15 @@ header {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-areas: "index user . . logout signup";
-    /* align-content: center;
-    overflow: hidden; */
 }
 
-header a, p {
+header a, header p {
     display: block;
     text-align: center;
-    padding: 0rem;
+    padding-top: 3vh;
+    height: 8vh;
+    text-decoration: none;
+    color: #eee;
 }
 
 header a:hover {
@@ -112,33 +131,26 @@ header .signup {
     grid-area: signup;
 }
 
-nav {
-    align-self: start;
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-    background-color: #ddd;
-}
+/* Navigation */
 
 nav ul {
-    list-style: none;
+    background-color: #ddd;
+    height: 92vh;
 }
 
-nav ul li a {
+nav a {
+    display: block;
     text-decoration: none;
-    color: #111;
-    display: inline-block;
-    width: 90%;
-    padding: 15px 0px;
-    padding-left: 10%;
+    text-align: left;
+    padding: 1em 1em;
+    color: #222;
 }
 
-nav ul li a:hover {
+nav a:hover {
+    background-color: #222;
     color: #ddd;
-    background-color: #333;
+
 }
-
-
-
 
 .items-table {
     align-self: start;
@@ -170,6 +182,30 @@ nav ul li a:hover {
     background-color: #ddd;
 }
 
+
+/* New Item form */
+
+.table-A {
+    padding-top: 6em;
+    margin: 0 auto;
+}
+
+.table-A ul, .table-A td {
+    padding-left: 2em;
+    list-style: none;
+}
+
+.table-A tr {
+    height: 2em;
+}
+
+.new-item-btn {
+    margin-top:1em;
+    background-color: rgb(42, 182, 0);
+}
+
+
+
 .important {
     text-decoration: none;
     color: rgb(255, 136, 0);
@@ -177,4 +213,9 @@ nav ul li a:hover {
 
 .important:hover {
     color: rgb(255, 102, 0);
+}
+
+.green-btn {
+    margin-top:1em;
+    background-color: rgb(42, 182, 0);
 }

@@ -2,7 +2,7 @@
 
 {% block body %}
 {{ error }}
-<form method="POST" action="{{ url_for('auth_login')}}">
+<form class="table-A" method="POST" action="{{ url_for('auth_login')}}">
     <table>
         <tr>
             <td>
@@ -14,7 +14,7 @@
             <td>
                 <ul>
                     {% for error in form.email_address.errors %}
-                    <li>{{ error }}</li>
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
@@ -29,14 +29,14 @@
             <td>
                 <ul>
                     {% for error in form.password.errors %}
-                    <li>{{ error }}</li>
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Login"/>
+                <input class="btn green-btn" type="submit" value="Login"/>
             </td>
         </tr>
     </table>

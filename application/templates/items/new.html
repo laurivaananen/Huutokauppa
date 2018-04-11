@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('items_create') }}">
+<form class="table-A" method="POST" action="{{ url_for('items_create') }}">
     <table>
         <tr>
             <td>
@@ -13,7 +13,7 @@
             <td>
                 <ul>
                     {% for error in form.starting_price.errors %}
-                    <li>{{ error }}</li>
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
@@ -28,7 +28,7 @@
             <td>
                 <ul>
                     {% for error in form.buyout_price.errors %}
-                    <li>{{ error }}</li>
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
@@ -43,7 +43,7 @@
             <td>
                 <ul>
                     {% for error in form.bidding_end.errors %}
-                    <li>{{ error }}</li>
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
@@ -59,7 +59,7 @@
             <td>
                 <ul>
                     {% for error in form.name.errors %}
-                    <li>{{ error }}</li>
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
@@ -74,7 +74,7 @@
             <td>
                 <ul>
                     {% for error in form.description.errors %}
-                    <li>{{ error }}</li>
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
@@ -89,14 +89,14 @@
             <td>
                 <ul>
                     {% for error in form.quality.errors %}
-                    <li>{{ error }}</li>
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Add a new item"/>
+                <input class="btn new-item-btn" type="submit" value="Add a new item"/>
             </td>
         </tr>
     </table>

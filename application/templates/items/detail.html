@@ -4,11 +4,13 @@
 <div class="item-detail-container">
 
     {% if current_user.id == item.AccountInformation.id %}
-        <a class="edit-item important" href="{{ url_for('item_edit', item_id=item.id) }}"><strong>Edit</strong></a>
-
-        <form class="delete-item" method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
-            <input type="submit" value="Delete">
-        </form>
+        <div class="item-editor">
+            <a class="edit-item btn" href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
+        
+            <form class="delete-item-form" method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
+                <input class="delete-item btn" type="submit" value="Delete">
+            </form>
+        </div>
     {% endif %}
 
     <ul class="item-detail">

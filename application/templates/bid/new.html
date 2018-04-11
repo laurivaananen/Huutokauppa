@@ -2,23 +2,23 @@
     <h2>Enter a bid</h2>
     <table>
         <tr>
-            <td>
+            <!-- <td>
                 {{ form.amount.label }}
-            </td>
+            </td> -->
             <td>
                 {{ form.amount }}
             </td>
             <td>
                 <ul>
                     {% for error in form.amount.errors %}
-                    <li>{{ error }}</li>
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Add a new bid"/>
+                <input class="btn" type="submit" value="Add a new bid"/>
             </td>
         </tr>
     </table>
