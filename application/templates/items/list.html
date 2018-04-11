@@ -1,32 +1,29 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<p>
-    Click on an items name to see more information. You can only edit or delete an item if you are the owner.
-</p>
 
-    <table class="items-table">
-        <tr>
-            <th>Item</th>
-            <th>Starting Price</th>
-            <th>Buyout Price</th>
-            <th>Auction ends</th>
-            <th>Quality</th>
-            <th>Seller</th>
-        </tr>
-        {% for item in items %}
-        <tr>
-            <td>
-                <a href="{{ url_for('item_detail', item_id=item.id) }}">
-                    {{ item.name }}
-                </a>
-            </td>
-            <td>{{ item.starting_price }}</td>
-            <td>{{ item.buyout_price }}</td>
-            <td>{{ item.bidding_end }}</td>
-            <td>{{ item.Quality.name }}</td>
-            <td>{{ item.AccountInformation.user_account.user_name }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<table class="items-table">
+    <tr>
+        <th>Item</th>
+        <th>Starting Price</th>
+        <th>Buyout Price</th>
+        <th>Auction ends</th>
+        <th>Quality</th>
+        <th>Seller</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>
+            <a class="important" href="{{ url_for('item_detail', item_id=item.id) }}">
+                {{ item.name }}
+            </a>
+        </td>
+        <td>{{ item.starting_price }}</td>
+        <td>{{ item.buyout_price }}</td>
+        <td>{{ item.bidding_end }}</td>
+        <td>{{ item.Quality.name }}</td>
+        <td>{{ item.AccountInformation.user_account.user_name }}</td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}

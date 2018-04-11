@@ -1,13 +1,9 @@
 from application import db
+from application.models import Base
 
-class Item(db.Model):
+class Item(Base):
 
     __tablename__ = 'Item'
-
-    id = db.Column(db.Integer, primary_key = True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
-    onupdate=db.func.current_timestamp())
 
     starting_price = db.Column(db.Integer, nullable=False)
     buyout_price = db.Column(db.Integer, nullable=False)
@@ -27,6 +23,8 @@ class Item(db.Model):
 
     images = db.relationship("Image", backref='Item', lazy=True)
 
+    bids = db.relationship("Bid", backref='Item', lazy=True)
+
     account_information_id = db.Column(db.Integer, db.ForeignKey('AccountInformation.id'), nullable=False)
 
     def __init__(self, name, buyout_price, starting_price, quality, description, bidding_end, account_information_id):
@@ -39,11 +37,10 @@ class Item(db.Model):
         self.description = description
         self.bidding_end = bidding_end
 
-class Image(db.Model):
+class Image(Base):
 
     __tablename__ = "Image"
 
-    id = db.Column(db.Integer, primary_key=True)
     file_path = db.Column(db.String(144), nullable=False)
 
     item = db.Column(db.Integer, db.ForeignKey('Item.id'), nullable=False)
@@ -53,11 +50,10 @@ class Image(db.Model):
         self.item = item
 
 
-class Quality(db.Model):
+class Quality(Base):
 
     __tablename__ = "Quality"
 
-    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(144), nullable=False)
 
     items = db.relationship("Item", backref="Quality", lazy=True)

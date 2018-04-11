@@ -20,6 +20,8 @@ from application import views
 from application.items import models
 from application.items import views
 
+from application.bid import models, views
+
 from application.auth import models
 from application.auth import views
 

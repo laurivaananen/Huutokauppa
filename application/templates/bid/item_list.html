@@ -1,0 +1,8 @@
+<ul class="bid-list">
+    <li>
+        <h2>Bids</h2>
+    </li>
+    {% for bid in item.bids %}
+        <li>{{ bid.AccountInformation.user_account.user_name }}    <strong>{{ bid.amount }}</strong></li>
+    {% endfor %}
+</ul>

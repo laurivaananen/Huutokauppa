@@ -1,13 +1,9 @@
 from application import db
+from application.models import Base
 
-class UserAccount(db.Model):
+class UserAccount(Base):
 
     __tablename__ = "UserAccount"
-
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
-                              onupdate=db.func.current_timestamp())
 
     user_name = db.Column(db.String(144), nullable=False)
     first_name = db.Column(db.String(144), nullable=False)
@@ -35,14 +31,9 @@ class UserAccount(db.Model):
     def is_authenticated(self):
         return True
 
-class AccountInformation(db.Model):
+class AccountInformation(Base):
 
     __tablename__ = "AccountInformation"
-
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
-                              onupdate=db.func.current_timestamp())
 
     email_address = db.Column(db.String(144), nullable=False)
     password = db.Column(db.String(144), nullable=False)
@@ -59,6 +50,7 @@ class AccountInformation(db.Model):
     street_address = db.Column(db.Integer, db.ForeignKey('StreetAddress.id'), nullable=False)
 
     items = db.relationship('Item', backref='AccountInformation', lazy=True)
+    bids = db.relationship('Bid', backref='AccountInformation', lazy=True)
 
     def __init__(self, email_address, password, phone_number, country, city, postal_code, street_address):
         self.email_address = email_address
@@ -85,11 +77,11 @@ class AccountInformation(db.Model):
     def is_authenticated(self):
         return True
 
-class Country(db.Model):
+class Country(Base):
 
     __tablename__ = "Country"
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(144), nullable=False)
 
 
@@ -100,11 +92,11 @@ class Country(db.Model):
         self.name = name
 
 
-class City(db.Model):
+class City(Base):
 
     __tablename__ = "City"
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(144), nullable=False)
 
     account_informations = db.relationship("AccountInformation", backref='City', lazy=True)
@@ -113,11 +105,11 @@ class City(db.Model):
     def __init__(self, name):
         self.name = name
 
-class PostalCode(db.Model):
+class PostalCode(Base):
 
     __tablename__ = "PostalCode"
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(144), nullable=False)
 
     account_informations = db.relationship("AccountInformation", backref='PostalCode', lazy=True)
@@ -126,11 +118,11 @@ class PostalCode(db.Model):
     def __init__(self, name):
         self.name = name
 
-class StreetAddress(db.Model):
+class StreetAddress(Base):
 
     __tablename__ = "StreetAddress"
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(144), nullable=False)
 
     account_informations = db.relationship("AccountInformation", backref='StreetAddress', lazy=True)

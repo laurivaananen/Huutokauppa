@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from application.items.models import Item, Quality, Image
 from application.items.forms import ItemForm
 from application.extensions import get_or_create
+from application.bid.forms import BidForm
 
 @app.route("/items", methods=["GET"])
 def items_index():
@@ -19,7 +20,7 @@ def item_detail(item_id):
 
     item = Item.query.get(item_id)
 
-    return render_template("items/detail.html", item=item)
+    return render_template("items/detail.html", item=item, form=BidForm())
 
 @login_required
 @app.route("/items/edit/<item_id>/", methods=["GET"])

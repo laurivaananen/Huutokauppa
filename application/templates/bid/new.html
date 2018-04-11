@@ -1,0 +1,25 @@
+<form class="new-bid" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
+    <h2>Enter a bid</h2>
+    <table>
+        <tr>
+            <td>
+                {{ form.amount.label }}
+            </td>
+            <td>
+                {{ form.amount }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.amount.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Add a new bid"/>
+            </td>
+        </tr>
+    </table>
+</form>

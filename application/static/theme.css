@@ -6,15 +6,69 @@
 body {
     background-color: #eee;
     font-family: Arial;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: normal;
     color: #111;
 }
 
 .grid-container {
     display: grid;
-    grid-template-rows: minmax(50px, 8vh) 92vh;
-    grid-template-columns: 10% 10% 60% 20%;
+    grid-template-rows: minmax(50px, 8vh) auto auto;
+    grid-template-columns: 10% 90%;
+}
+
+.item-detail-container {
+
+
+
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    padding: 10% 10%;
+    border-spacing: 0px;
+    overflow: scroll;
+    background-color: #eee;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 20% 80%;
+}
+
+
+.item-detail-container ul{
+    list-style: none;
+}
+
+.item-detail-container ul li:nth-child(even) {
+    background-color: #ddd;
+}
+
+.item-detail-container ul li {
+    padding: 5px 0px;
+}
+
+.item-detail-container .item-detail {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+.item-detail-container .bid-list {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    padding-left: 30px;
+}
+
+.item-detail-container .new-bid {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+
+.item-detail-container .edit-item {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+
+.item-detail-container .delete-item {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
 }
 
 header {
@@ -22,7 +76,7 @@ header {
     grid-row: 1 / 2;
     background-color: rgb(33, 60, 77);
     display: grid;
-    grid-template-columns: repeat(6, auto);
+    grid-template-columns: repeat(6, 1fr);
     grid-template-areas: "index user . . logout signup";
     align-content: center;
     overflow: hidden;
@@ -46,7 +100,8 @@ header .signup {
 
 nav {
     grid-column: 1 / 2;
-    grid-row: 2 / 3;
+    grid-row: 2 / 4;
+    height: 92vh;
     background-color: #ddd;
 }
 
@@ -68,13 +123,6 @@ nav ul li a:hover {
     background-color: #333;
 }
 
-.content {
-    grid-column: 3 / 4;
-    grid-row: 2 / 3;
-    padding-top: 200px;
-    background-color: #eee;
-}
-
 header .header-item {
     text-decoration: none;
     text-align: center;
@@ -89,47 +137,39 @@ header a:hover {
 
 
 .items-table {
-    margin-top: 50px;
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 20px;
+    overflow: scroll;
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
     text-decoration: none;
+    padding: 10% 10%;
+    border-spacing: 0px;
+}
+
+.items-table tr {
+    padding: 50px;
+    height: 15px;
 }
 
 .items-table th {
     height: 50px;
+    padding-left: 30px;
     text-align: left;
 }
 
 .items-table td {
+    padding-left: 30px;
     height: 50px;
-}
-
-.items-table th, .items-table td {
-    padding-left: 10px;
-    border-bottom: 2px solid #111;
 }
 
 .items-table tr:nth-child(even) {
     background-color: #ddd;
 }
 
-.items-table a {
+.important {
     text-decoration: none;
-    color: rgb(255, 81, 0);
+    color: rgb(255, 136, 0);
 }
 
-.items-detail {
-    margin-top: 50px;
-    list-style: none;
-}
-
-.items-detail li {
-    padding: 5px 0px;
-}
-
-.items-edit {
-    font-size: 30px;
-    text-decoration: none;
-    color: rgb(255, 196, 0);
+.important:hover {
+    color: rgb(255, 102, 0);
 }

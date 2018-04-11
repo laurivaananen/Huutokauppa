@@ -1,88 +1,99 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<div class="item-detail-container">
 
-{% if current_user.id == item.AccountInformation.id %}
-    <a class="items-edit" href="{{ url_for('item_edit', item_id=item.id) }}"><strong>Edit</strong></a>
-    <form method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
-        <input type="submit" value="Delete">
-    </form>
-    <!-- <a href="{{ url_for('item_delete', item_id=item.id) }}"><strong>Delete</strong></a> -->
-{% endif %}
+    {% if current_user.id == item.AccountInformation.id %}
+        <a class="edit-item important" href="{{ url_for('item_edit', item_id=item.id) }}"><strong>Edit</strong></a>
 
-<ul class="items-detail">
-    <li>
-        <p>
-            <b>
-                Name: 
-            </b>
-            {{ item.name }}
-        </p>
-    </li>
-    <li>
-        <p>
-            <b>
-                Description: 
-            </b>
-            {{ item.description }}
-        </p>
-    </li>
-    <li>
-        <p>
-            <b>
-                Quality: 
-            </b>
-            {{ item.Quality.name }}
-        </p>
-    </li>
-    <li>
-        <p>
-            <b>
-                Seller: 
-            </b>
-            {{ item.AccountInformation.user_account.first_name }} {{ item.AccountInformation.user_account.last_name }}
-        </p>
-    </li>
-    <li>
-        <p>
-            <b>
-                Added for sale: 
-            </b>
-            {{ item.bidding_start }}
-        </p>
-    </li>
-    <li>
-        <p>
-            <b>
-                Sale ends: 
-            </b>
-            {{ item.bidding_end }}
-        </p>
-    </li>
-    <li>
-        <p>
-            <b>
-                Starting price: 
-            </b>
-            {{ item.starting_price }}
-        </p>
-    </li>
-    <li>
-        <p>
-            <b>
-                Buyout price: 
-            </b>
-            {{ item.buyout_price }}
-        </p>
-    </li>
-    <li>
-        <p>
-            <b>
-                Contact seller: 
-            </b>
-            {{ item.AccountInformation.email_address }}
-        </p>
-    </li>
-</ul>
+        <form class="delete-item" method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
+            <input type="submit" value="Delete">
+        </form>
+    {% endif %}
 
+    <ul class="item-detail">
+        <li>
+            <h2>Details</h2>
+        </li>
+        <li>
+            <p>
+                <b>
+                    Name: 
+                </b>
+                {{ item.name }}
+            </p>
+        </li>
+        <li>
+            <p>
+                <b>
+                    Description: 
+                </b>
+                {{ item.description }}
+            </p>
+        </li>
+        <li>
+            <p>
+                <b>
+                    Quality: 
+                </b>
+                {{ item.Quality.name }}
+            </p>
+        </li>
+        <li>
+            <p>
+                <b>
+                    Seller: 
+                </b>
+                {{ item.AccountInformation.user_account.first_name }} {{ item.AccountInformation.user_account.last_name }}
+            </p>
+        </li>
+        <li>
+            <p>
+                <b>
+                    Added for sale: 
+                </b>
+                {{ item.bidding_start }}
+            </p>
+        </li>
+        <li>
+            <p>
+                <b>
+                    Sale ends: 
+                </b>
+                {{ item.bidding_end }}
+            </p>
+        </li>
+        <li>
+            <p>
+                <b>
+                    Starting price: 
+                </b>
+                {{ item.starting_price }}
+            </p>
+        </li>
+        <li>
+            <p>
+                <b>
+                    Buyout price: 
+                </b>
+                {{ item.buyout_price }}
+            </p>
+        </li>
+        <li>
+            <p>
+                <b>
+                    Contact seller: 
+                </b>
+                {{ item.AccountInformation.email_address }}
+            </p>
+        </li>
+    </ul>
+
+    {% include 'bid/item_list.html' %}
+
+    {% if current_user.is_authenticated  and current_user.id != item.AccountInformation.id %}
+        {% include 'bid/new.html' %}
+    {% endif %}
+
+</div>
 {% endblock %}
