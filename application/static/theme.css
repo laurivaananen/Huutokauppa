@@ -1,10 +1,11 @@
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
 body {
-    background-color: #eee;
+    background-color: red;
     font-family: Arial;
     font-size: 18px;
     font-weight: normal;
@@ -13,11 +14,12 @@ body {
 
 .grid-container {
     display: grid;
-    grid-template-rows: minmax(50px, 8vh) auto auto;
+    grid-template-rows: minmax(50px, 8vh) 92vh;
     grid-template-columns: 10% 90%;
 }
 
 .item-detail-container {
+    align-self: start;
 
 
 
@@ -29,7 +31,7 @@ body {
     background-color: #eee;
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 20% 80%;
+    grid-template-rows: 2fr 8fr;
 }
 
 
@@ -75,11 +77,23 @@ header {
     grid-column: 1 / 5;
     grid-row: 1 / 2;
     background-color: rgb(33, 60, 77);
+    padding: 0;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-areas: "index user . . logout signup";
-    align-content: center;
-    overflow: hidden;
+    /* align-content: center;
+    overflow: hidden; */
+}
+
+header a, p {
+    display: block;
+    text-align: center;
+    padding: 0rem;
+}
+
+header a:hover {
+    background-color: azure;
+    color: rgb(33, 60, 77);
 }
 
 header .index {
@@ -99,9 +113,9 @@ header .signup {
 }
 
 nav {
+    align-self: start;
     grid-column: 1 / 2;
-    grid-row: 2 / 4;
-    height: 92vh;
+    grid-row: 2 / 3;
     background-color: #ddd;
 }
 
@@ -123,20 +137,11 @@ nav ul li a:hover {
     background-color: #333;
 }
 
-header .header-item {
-    text-decoration: none;
-    text-align: center;
-    padding: 100px 0px;
-    color: azure;
-}
 
-header a:hover {
-    background-color: azure;
-    color: rgb(33, 60, 77);
-}
 
 
 .items-table {
+    align-self: start;
     overflow: scroll;
     grid-row: 2 / 3;
     grid-column: 2 / 3;
