@@ -1,6 +1,8 @@
 from application import db
 from application.models import Base
 
+from sqlalchemy.sql import text
+
 class UserAccount(Base):
 
     __tablename__ = "UserAccount"
@@ -76,6 +78,45 @@ class AccountInformation(Base):
     
     def is_authenticated(self):
         return True
+
+
+    @staticmethod
+    def items_count(user_id=1):
+        stmt = text("SELECT COUNT(Item.id) AS item_count FROM Item"
+                    " INNER JOIN AccountInformation ON AccountInformation.id = Item.account_information_id"
+                    " WHERE AccountInformation.id = :user_id").params(user_id=user_id)
+        res = db.engine.execute(stmt)
+
+        result = res.fetchone()
+
+        return result["item_count"]
+
+    @staticmethod
+    def bids_count(user_id=1):
+        stmt = text("SELECT COUNT(Bid.id) AS bid_count FROM Bid"
+                    " INNER JOIN AccountInformation ON AccountInformation.id = Bid.account_information_id"
+                    " WHERE AccountInformation.id = :user_id").params(user_id=user_id)
+        res = db.engine.execute(stmt)
+
+        result = res.fetchone()
+
+        return result["bid_count"]
+
+    @staticmethod
+    def top_sellers():
+        stmt = text("SELECT UserAccount.id AS user_id, UserAccount.user_name AS user_name, COUNT(Item.id) AS item_count FROM AccountInformation"
+                    " LEFT JOIN Item ON Item.account_information_id = AccountInformation.id"
+                    " INNER JOIN UserAccount on UserAccount.account_information = AccountInformation.id"
+                    " GROUP BY AccountInformation.id"
+                    " ORDER BY item_count DESC")
+
+        res = db.engine.execute(stmt)
+        
+        response = []
+        for row in res:
+            response.append({"user_id":row[0], "user_name":row[1], "item_count":row[2]})
+
+        return response
 
 class Country(Base):
 

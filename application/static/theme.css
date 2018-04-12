@@ -156,14 +156,20 @@ nav a:hover {
 }
 
 
-
-
-
 /* Index */
 
-.index-message {
-    display:grid;
-    background-color: teal;
+.top-sellers-h1 {
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+    padding: 6em 0 0 30%;
+    align-self: start;
+}
+
+.top-sellers {
+    grid-row: 3 / 4;
+    grid-column: 1 / 2;
+    padding: 6em 0 0 30%;
+    align-self: start;
 }
 
 

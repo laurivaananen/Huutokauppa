@@ -12,11 +12,11 @@
         </tr>
         <tr>
             <th>Items on sale</th>
-            <td>{{ account_information.items.length }}</td>
+            <td>{{ account_information.items_count(account_information.id) }}</td>
         </tr>
         <tr>
             <th>Bids</th>
-            <td>{{ account_information.bids.length }}</td>
+            <td>{{ account_information.bids_count(account_information.id) }}</td>
         </tr>
     </table>
 {% endblock %}

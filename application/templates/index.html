@@ -1,7 +1,18 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <p class="index-message">
-        Welcome!
-    </p>
+    <h1 class="top-sellers-h1">Top sellers</h1>
+
+    <table class="top-sellers detail-table">
+        <tr>
+            <th>Username</th>
+            <th>Items</th>
+        </tr>
+        {% for seller in top_sellers %}
+        <tr>
+            <th><a href="{{ url_for('user_detail', user_id=seller.user_id) }}">{{ seller.user_name }}</a></th>
+            <td>{{ seller.item_count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
