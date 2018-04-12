@@ -2,7 +2,53 @@
 
 {% block body %}
 
+<!-- Toolbar to edit or delete item fi you are the owner -->
+<table class="item-toolbar">
+    <tr>
+        {% if current_user.id == item.AccountInformation.id %}
+        <td>
+            <a class="item-edit-btn btn btn-blue" href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
+        </td>
+        <td>
+            <input class="item-delete-btn btn btn-red" type="submit" value="Delete">
+        </td>
+        {% endif %}
+    </tr>
+</table>
 
+
+<!-- Toolbar to add a bid if you are not the owner -->
+<form class="bid-new" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
+    <table>
+        <tr>
+            {% if current_user.id != item.AccountInformation.id %}
+            <td>
+                {{ form.amount }}
+            </td>
+            <td>
+                {% if form.amount.errors %}
+                <ul>
+                    
+                    {% for error in form.amount.errors %}
+                    <li class="form-error">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                Add your bid
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input class="btn btn-green" type="submit" value="Bid"/>
+            </td>
+            {% endif %}
+        </tr>
+    </table>
+</form>
+
+
+<!-- Item details and bids of the item -->
 <table class="item-detail detail-table">
     <tr>
         <th>Name</th>
@@ -44,102 +90,5 @@
     {% endfor %}
 </table>
 
-<!-- <div class="item-detail-container">
 
-    {% if current_user.id == item.AccountInformation.id %}
-        <div class="item-editor">
-            <a class="edit-item btn" href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
-        
-            <form class="delete-item-form" method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
-                <input class="delete-item btn" type="submit" value="Delete">
-            </form>
-        </div>
-    {% endif %}
-    
-
-    <ul class="item-detail">
-        <li>
-            <h2>Details</h2>
-        </li>
-        <li>
-            <p>
-                <b>
-                    Name: 
-                </b>
-                {{ item.name }}
-            </p>
-        </li>
-        <li>
-            <p>
-                <b>
-                    Description: 
-                </b>
-                {{ item.description }}
-            </p>
-        </li>
-        <li>
-            <p>
-                <b>
-                    Quality: 
-                </b>
-                {{ item.Quality.name }}
-            </p>
-        </li>
-        <li>
-            <p>
-                <b>
-                    Seller: 
-                </b>
-                {{ item.AccountInformation.user_account.first_name }} {{ item.AccountInformation.user_account.last_name }}
-            </p>
-        </li>
-        <li>
-            <p>
-                <b>
-                    Added for sale: 
-                </b>
-                {{ item.bidding_start }}
-            </p>
-        </li>
-        <li>
-            <p>
-                <b>
-                    Sale ends: 
-                </b>
-                {{ item.bidding_end }}
-            </p>
-        </li>
-        <li>
-            <p>
-                <b>
-                    Starting price: 
-                </b>
-                {{ item.starting_price }}
-            </p>
-        </li>
-        <li>
-            <p>
-                <b>
-                    Buyout price: 
-                </b>
-                {{ item.buyout_price }}
-            </p>
-        </li>
-        <li>
-            <p>
-                <b>
-                    Contact seller: 
-                </b>
-                {{ item.AccountInformation.email_address }}
-            </p>
-        </li>
-    </ul>
-
-    {% include 'bid/item_list.html' %}
-
-    {% if current_user.is_authenticated  and current_user.id != item.AccountInformation.id %}
-        {% include 'bid/new.html' %}
-    {% endif %}
-
-</div> -->
 {% endblock %}

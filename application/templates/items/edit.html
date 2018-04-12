@@ -5,7 +5,7 @@
 {% if current_user.id == item.AccountInformation.id %}
 
 
-<form class="table-A" method="POST" action="{{ url_for('item_update', item_id=item.id) }}">
+<form class="item-edit detail-form" method="POST" action="{{ url_for('item_update', item_id=item.id) }}">
     <table>
         <tr>
             <td>

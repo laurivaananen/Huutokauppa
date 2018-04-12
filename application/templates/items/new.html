@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form class="table-A" method="POST" action="{{ url_for('items_create') }}">
+<form class="item-new detail-form" method="POST" action="{{ url_for('items_create') }}">
     <table>
         <tr>
             <td>
@@ -95,8 +95,11 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
-                <input class="btn new-item-btn" type="submit" value="Add a new item"/>
+            <td>
+                
+            </td>
+            <td>
+                <input class="btn btn-green" type="submit" value="New item"/>
             </td>
         </tr>
     </table>

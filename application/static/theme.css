@@ -4,10 +4,6 @@
     padding: 0;
 }
 
-.form-error {
-    color: rgb(255, 30, 0);
-}
-
 /* Main grid container */
 
 body {
@@ -17,7 +13,7 @@ body {
     font-weight: normal;
     color: #111;
     display: grid;
-    grid-template-rows: 3em 1fr;
+    grid-template-rows: 3em auto 1fr;
     grid-template-columns: 1fr 1fr;
 }
 
@@ -73,134 +69,95 @@ nav a:hover {
 
 /* Item detail */
 
-.item-detail {
+.item-toolbar {
     grid-row: 2 / 3;
+    grid-column: 1 / 2;
+    align-self: start;
+    padding: 6em 3em 0 6em;
+}
+
+.bid-new {
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+    align-self: start;
+    padding: 6em 6em 0 3em;
+}
+
+.bid-new input {
+    height: 3em;
+}
+
+.item-detail {
+    grid-row: 3 / 4;
     grid-column: 1 / 2;
     padding: 6em 3em 0 6em;
     align-self: start;
 }
 
 .bid-table-item {
-    grid-row: 2 / 3;
+    grid-row: 3 / 4;
     grid-column: 2 / 3;
     padding: 6em 6em 0 3em;
     align-self: start;
 }
 
 
+/* Item new */
 
-
-
-
-
-
-/* .item-detail-container {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: 30% auto;
-    align-items: start;
-} */
-
-.item-editor {
+.item-new {
+    grid-row: 2 / -1;
     grid-column: 1 / -1;
-    grid-row: 1 / 2;
-    padding-left: 2em;
-    margin: auto 0;
-}
-
-.new-bid {
-    padding-top: 2em;
-    grid-column: 2 / -1;
-    grid-row: 1 / 2;
-    padding-left: 2em;
-}
-
-.new-bid .btn{
-    margin-top:1em;
-    background-color: rgb(42, 182, 0);
-}
-
-.delete-item-form {
-    display: inline;
-}
-
-/* .item-detail-container ul {
-    list-style: none;
-    padding-left: 2em;
-}
-
-.item-detail-container h2 {
-    padding-bottom: 1em;
-}
-
-.item-detail-container .item-detail {
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-}
-
-.item-detail-container .bid-list {
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
-} */
-
-.btn {
-    background-color: #222;
-    color: #fff;
-    text-decoration: none;
-    font-size: 20px;
-    font: bold 18px arial;
-    border: 0;
-    border: 0;
-    padding: 1rem 1rem;
-}
-
-.edit-item {
-    background-color: rgb(255, 136, 0);
-}
-
-.delete-item {
-    background-color: rgb(255, 30, 0);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* New Item form */
-
-.table-A {
-    padding-top: 6em;
     margin: 0 auto;
-}
-
-.table-A ul, .table-A td {
-    padding-left: 2em;
-    list-style: none;
-}
-
-.table-A tr {
-    height: 2em;
-}
-
-.new-item-btn {
-    margin-top:1em;
-    background-color: rgb(42, 182, 0);
+    padding-top: 6em;
+    align-self: start;
 }
 
 
-.green-btn {
-    margin-top:1em;
-    background-color: rgb(42, 182, 0);
+/* Item edit */
+
+.item-edit {
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+    margin: 0 auto;
+    padding-top: 6em;
+    align-self: start;
 }
+
+
+/* User new */
+
+.user-new {
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+    margin: 0 auto;
+    padding-top: 6em;
+    align-self: start;
+}
+
+
+/* User login */
+
+.user-login {
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+    margin: 0 auto;
+    padding-top: 6em;
+    align-self: start;
+}
+
+
+/* User Detail */
+
+.user-detail {
+    grid-row: 2 / 4;
+    grid-column: 1 / -1;
+    padding: 6em 30% 0 30%;
+    align-self: start;
+}
+
+
+
+
 
 /* Index */
 
@@ -252,4 +209,65 @@ DETAIL ELEMENTS
 
 .detail-table a:hover {
     color: rgb(255, 102, 0);
+}
+
+
+/* Detail form */
+
+.detail-form tr {
+    height: 3em;
+    padding: 0;
+    margin: 0;
+}
+
+.detail-form td:first-child {
+    padding-right: 2em;
+}
+
+.detail-form input {
+    width: 12em;
+}
+
+
+/* Button */
+
+.btn {
+    border: none;
+    background-color: rgb(255, 81, 0);
+    text-decoration: none;
+    font: normal 16px arial;
+    height: 3em;
+    width: 7em;
+    line-height: 3em;
+    display: block;
+    text-align: center;
+    color: #fff;
+}
+
+.btn-blue {
+    background-color: rgb(0, 153, 255);
+}
+
+.btn-blue:hover {
+    background-color: rgb(0, 179, 255);
+}
+
+.btn-red:hover {
+    background-color: rgb(255, 102, 0);
+}
+
+.btn-green {
+    background-color: rgb(0, 230, 85);
+}
+
+.btn-green:hover {
+    background-color: rgb(0, 255, 85);
+}
+
+/* Error form*/
+
+.form-error {
+    list-style: none;
+    padding-left: 1em;
+    color: rgb(255, 30, 0);
 }
