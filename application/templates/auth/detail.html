@@ -1,22 +1,65 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <table class="user-detail detail-table">
+
+<!-- Add to account balance if you are the account owner -->
+{% if current_user.id == account_information.id %}
+<form class="account-deposit" method="POST" action="{{ url_for('account_deposit') }}">
+    <table>
         <tr>
-            <th>Username</th>
-            <td>{{ account_information.user_account.user_name }}</td>
+            <th><h2>Deposit money to your account</h2></th>
+            <td></td>
         </tr>
         <tr>
-            <th>Email</th>
-            <td>{{ account_information.email_address }}</td>
+            <td>
+                {{ form.amount }}
+            </td>
+            <td>
+                {% if form.amount.errors %}
+                <ul>
+                    
+                    {% for error in form.amount.errors %}
+                    <li class="form-error">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                {% endif %}
+            </td>
         </tr>
         <tr>
-            <th>Items on sale</th>
-            <td>{{ account_information.items_count(account_information.id) }}</td>
+            <td>
+                <input class="btn btn-green" type="submit" value="Deposit"/>
+            </td>
         </tr>
-        <tr>
-            <th>Bids</th>
-            <td>{{ account_information.bids_count(account_information.id) }}</td>
-        </tr>
+    </table>
+</form>
+{% endif %}
+
+
+
+<!-- User account details -->
+<table class="user-detail detail-table">
+    <tr>
+        <th>Username</th>
+        <td>{{ account_information.user_account.user_name }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ account_information.email_address }}</td>
+    </tr>
+    <tr>
+        <th>Items on sale</th>
+        <td>{{ account_information.items_count(account_information.id) }}</td>
+    </tr>
+    <tr>
+        <th>Bids</th>
+        <td>{{ account_information.bids_count(account_information.id) }}</td>
+    </tr>
+    {% if current_user.id == account_information.id %}
+    <tr>
+        <th>Account Balance</th>
+        <td>{{ account_information.account_balance }}</td>
+    </tr>
+    {% endif %}
     </table>
 {% endblock %}

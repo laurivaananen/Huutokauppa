@@ -1,10 +1,10 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
 from application import app, db
 from application.extensions import get_or_create
 from application.auth.models import UserAccount, AccountInformation, Country, City, PostalCode, StreetAddress
-from application.auth.forms import LoginForm, UserSignupForm
+from application.auth.forms import LoginForm, UserSignupForm, AccountDepositForm
 
 @app.route("/auth/login", methods = ["GET", "POST"])
 def auth_login():
@@ -77,4 +77,21 @@ def auth_usersignup():
 def user_detail(user_id):
     account_information = AccountInformation.query.get(user_id)
 
-    return render_template("auth/detail.html", account_information=account_information)
+    return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm())
+
+@login_required
+@app.route("/user/deposit", methods=["POST"])
+def account_deposit():
+
+    account_information = AccountInformation.query.get(current_user.id)
+
+    form = AccountDepositForm(request.form)
+
+    if not form.validate():
+        return render_template("auth/detail.html", account_information=account_information, form=form)
+
+    account_information.account_balance += form.amount.data
+
+    db.session().commit()
+
+    return redirect(url_for("user_detail", user_id=account_information.id))

@@ -3,25 +3,25 @@
 {% block body %}
 
 <!-- Toolbar to edit or delete item fi you are the owner -->
+{% if current_user.id == item.AccountInformation.id %}
 <table class="item-toolbar">
     <tr>
-        {% if current_user.id == item.AccountInformation.id %}
         <td>
             <a class="item-edit-btn btn btn-blue" href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
         </td>
         <td>
             <input class="item-delete-btn btn btn-red" type="submit" value="Delete">
         </td>
-        {% endif %}
     </tr>
 </table>
+{% endif %}
 
 
 <!-- Toolbar to add a bid if you are not the owner -->
+{% if current_user.id != item.AccountInformation.id %}
 <form class="bid-new" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
     <table>
         <tr>
-            {% if current_user.id != item.AccountInformation.id %}
             <td>
                 {{ form.amount }}
             </td>
@@ -42,10 +42,10 @@
             <td>
                 <input class="btn btn-green" type="submit" value="Bid"/>
             </td>
-            {% endif %}
         </tr>
     </table>
 </form>
+{% endif %}
 
 
 <!-- Item details and bids of the item -->

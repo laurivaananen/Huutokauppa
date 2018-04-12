@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, validators
+from wtforms import PasswordField, StringField, validators, IntegerField
 
 class LoginForm(FlaskForm):
     # first_name = StringField("First name", [validators.InputRequired()])
@@ -21,6 +21,12 @@ class UserSignupForm(FlaskForm):
     city = StringField("City", [validators.InputRequired()])
     postal_code = StringField("Postal code", [validators.InputRequired()])
     street_address = StringField("Street address", [validators.InputRequired()])
+
+    class Meta:
+        csrf = False
+
+class AccountDepositForm(FlaskForm):
+    amount = IntegerField("Amount", [validators.NumberRange(min=1)])
 
     class Meta:
         csrf = False
