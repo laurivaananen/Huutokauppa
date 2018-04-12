@@ -1,7 +1,50 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div class="item-detail-container">
+
+
+<table class="item-detail detail-table">
+    <tr>
+        <th>Name</th>
+        <td>{{ item.name }}</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>{{ item.description }}</td>
+    </tr>
+    <tr>
+        <th>Quality</th>
+        <td>{{ item.quality }}</td>
+    </tr>
+    <tr>
+        <th>Seller</th>
+        <td>{{ item.AccountInformation.user_account.user_name }}</td>
+    </tr>
+    <tr>
+        <th>Auction ends</th>
+        <td>{{ item.bidding_end }}</td>
+    </tr>
+    <tr>
+        <th>Current price</th>
+        <td>{{ item.starting_price }}</td>
+    </tr>
+    <tr>
+        <th>Contact seller</th>
+        <td>{{ item.AccountInformation.email_address }}</td>
+    </tr>
+</table>
+
+<table class="bid-table-item detail-table">
+    {% for bid in item.bids %}
+    <tr>
+        <th>{{ bid.AccountInformation.user_account.user_name }}</th>
+        <td>{{ bid.amount }}</td>
+        <td>{{ bid.date_created }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- <div class="item-detail-container">
 
     {% if current_user.id == item.AccountInformation.id %}
         <div class="item-editor">
@@ -12,6 +55,7 @@
             </form>
         </div>
     {% endif %}
+    
 
     <ul class="item-detail">
         <li>
@@ -97,5 +141,5 @@
         {% include 'bid/new.html' %}
     {% endif %}
 
-</div>
+</div> -->
 {% endblock %}

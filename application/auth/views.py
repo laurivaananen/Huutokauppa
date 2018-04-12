@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 
 from application import app, db
 from application.extensions import get_or_create
@@ -70,3 +70,11 @@ def auth_usersignup():
 
     login_user(user_account)
     return redirect(url_for("index"))
+
+
+@login_required
+@app.route("/user/<user_id>", methods=["GET", "POST"])
+def user_detail(user_id):
+    account_information = AccountInformation.query.get(user_id)
+
+    return render_template("auth/detail.html", account_information=account_information)

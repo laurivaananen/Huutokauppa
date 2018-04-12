@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <table class="user-detail detail-table">
+        <tr>
+            <th>Username</th>
+            <td>{{ account_information.user_account.user_name }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ account_information.email_address }}</td>
+        </tr>
+        <tr>
+            <th>Items on sale</th>
+            <td>{{ account_information.items.length }}</td>
+        </tr>
+        <tr>
+            <th>Bids</th>
+            <td>{{ account_information.bids.length }}</td>
+        </tr>
+    </table>
+{% endblock %}

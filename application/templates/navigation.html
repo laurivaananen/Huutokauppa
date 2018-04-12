@@ -1,11 +1,23 @@
-<ul>
-    <li>
-        <a class="navigation-item" href="{{ url_for('items_index') }}">Items</a>
-    </li>
 
-    {% if current_user.is_authenticated %}
-    <li>
-        <a class="navigation-item" href="{{ url_for('items_form') }}">New Item</a>
-    </li>
-    {% endif %}
-</ul>
+
+<a class="nav-index" href="{{ url_for('index') }}">Huutokauppa</a>
+
+
+
+{% if current_user.is_authenticated %}
+    <a class="nav-user" href="{{ url_for('user_detail', user_id=current_user.id) }}" >{{ current_user.user_account.user_name }}</p>
+{% endif %}
+
+<a class="nav-item-list" href="{{ url_for('items_index') }}">Items</a>
+
+{% if current_user.is_authenticated %}
+    <a class="nav-item-new" href="{{ url_for('items_form') }}">New Item</a>
+{% endif %}
+
+{% if current_user.is_authenticated %}
+    <a class="nav-auth-logout" href="{{ url_for('auth_logout') }}">Logout</a>
+{% else %}
+    <a class="nav-auth-login" href="{{ url_for('auth_login') }}">Login</a>
+{% endif %}
+
+<a class="nav-auth-signup" href="{{ url_for('auth_usersignup') }}">Sign Up</a>

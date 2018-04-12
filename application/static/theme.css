@@ -8,25 +8,98 @@
     color: rgb(255, 30, 0);
 }
 
+/* Main grid container */
+
 body {
     background-color: #eee;
     font-family: Arial;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: normal;
     color: #111;
-}
-
-.grid-container {
     display: grid;
-    grid-template-columns: 15% 85%;
+    grid-template-rows: 3em 1fr;
+    grid-template-columns: 1fr 1fr;
 }
 
-.item-detail-container {
+
+
+
+/* Navigation */
+
+nav {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    background-color: rgb(255, 81, 0);
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 2fr repeat(5, 1fr);
+    grid-template-areas: "index . user item-new item-list auth-log auth-signup";
+}
+
+nav a {
+    text-decoration: none;
+    color: #eee;
+    display: block;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    line-height: 3em;
+    overflow-wrap: normal;
+}
+
+nav a:hover {
+    background-color: rgb(255, 102, 0);
+}
+
+.nav-index {grid-area: index;}
+.nav-user {grid-area: user;}
+.nav-item-list {grid-area: item-list;}
+.nav-item-new {grid-area: item-new;}
+.nav-auth-login {grid-area: auth-log;}
+.nav-auth-logout {grid-area: auth-log;}
+.nav-auth-signup {grid-area: auth-signup;}
+
+
+
+/* Item table */
+
+.item-table {
+    grid-row: 2 / 3;
+    grid-column: 1 / -1;
+    padding: 6em 6em 0 6em;
+    align-self: start;
+}
+
+
+/* Item detail */
+
+.item-detail {
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+    padding: 6em 3em 0 6em;
+    align-self: start;
+}
+
+.bid-table-item {
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+    padding: 6em 6em 0 3em;
+    align-self: start;
+}
+
+
+
+
+
+
+
+
+/* .item-detail-container {
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: 30% auto;
     align-items: start;
-}
+} */
 
 .item-editor {
     grid-column: 1 / -1;
@@ -51,7 +124,7 @@ body {
     display: inline;
 }
 
-.item-detail-container ul {
+/* .item-detail-container ul {
     list-style: none;
     padding-left: 2em;
 }
@@ -68,7 +141,7 @@ body {
 .item-detail-container .bid-list {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
-}
+} */
 
 .btn {
     background-color: #222;
@@ -89,98 +162,17 @@ body {
     background-color: rgb(255, 30, 0);
 }
 
-/* Header */
 
-header {
-    grid-column: 1 / 5;
-    grid-row: 1 / 2;
-    background-color: rgb(33, 60, 77);
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-areas: "index user . . logout signup";
-}
 
-header a, header p {
-    display: block;
-    text-align: center;
-    padding-top: 3vh;
-    height: 8vh;
-    text-decoration: none;
-    color: #eee;
-}
 
-header a:hover {
-    background-color: azure;
-    color: rgb(33, 60, 77);
-}
 
-header .index {
-    grid-area: index;
-}
 
-header .user {
-    grid-area: user;
-}
 
-header .logout {
-    grid-area: logout;
-}
 
-header .signup {
-    grid-area: signup;
-}
 
-/* Navigation */
 
-nav ul {
-    background-color: #ddd;
-    height: 92vh;
-}
 
-nav a {
-    display: block;
-    text-decoration: none;
-    text-align: left;
-    padding: 1em 1em;
-    color: #222;
-}
 
-nav a:hover {
-    background-color: #222;
-    color: #ddd;
-
-}
-
-.items-table {
-    align-self: start;
-    overflow: scroll;
-    grid-row: 2 / 3;
-    grid-column: 2 / 3;
-    text-decoration: none;
-    padding: 10% 10%;
-    border-spacing: 0px;
-}
-
-.items-table tr {
-    padding: 50px;
-    height: 15px;
-}
-
-.items-table th {
-    height: 50px;
-    padding-left: 30px;
-    text-align: left;
-}
-
-.items-table td {
-    padding-left: 30px;
-    height: 50px;
-}
-
-.items-table tr:nth-child(even) {
-    background-color: #ddd;
-}
 
 
 /* New Item form */
@@ -205,17 +197,59 @@ nav a:hover {
 }
 
 
-
-.important {
-    text-decoration: none;
-    color: rgb(255, 136, 0);
-}
-
-.important:hover {
-    color: rgb(255, 102, 0);
-}
-
 .green-btn {
     margin-top:1em;
     background-color: rgb(42, 182, 0);
+}
+
+/* Index */
+
+.index-message {
+    display:grid;
+    background-color: teal;
+}
+
+
+
+
+
+/*
+
+DETAIL ELEMENTS
+
+*/
+
+
+
+
+/* Detail table */
+
+.detail-table {
+    text-decoration: none;
+    border-spacing: 0px;
+}
+
+.detail-table tr {
+    height: 3em;
+}
+
+.detail-table tr:nth-child(even) {
+    background-color: #ddd;
+}
+
+.detail-table th {
+    text-align: left;
+}
+
+.detail-table th:first-child, .detail-table td:first-child {
+    padding-left: 2em;
+}
+
+.detail-table a {
+    text-decoration: none;
+    color: rgb(255, 81, 0);
+}
+
+.detail-table a:hover {
+    color: rgb(255, 102, 0);
 }
