@@ -122,11 +122,19 @@ nav a:hover {
 
 /* Item edit */
 
-.item-edit {
-    grid-row: 2 / -1;
+.item-edit-top-span {
+    grid-row: 2 / 3;
+    grid-column: 1 / -1;
+    align-self: start;
+    margin: 0 auto;
+    padding-top: 6em;;
+}
+
+.item-edit-bottom-span {
+    grid-row: 3 / 4;
     grid-column: 1 / -1;
     margin: 0 auto;
-    padding-top: 6em;
+    padding-top: 2em;
     align-self: start;
 }
 
