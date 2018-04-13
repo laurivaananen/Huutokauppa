@@ -55,6 +55,9 @@
 <!-- Item details of the item -->
 <table class="item-detail detail-table">
     <tr>
+        <th><h1>Details</h1></th>
+    </tr>
+    <tr>
         <th>Name</th>
         <td>{{ item.name }}</td>
     </tr>
@@ -76,7 +79,7 @@
     </tr>
     <tr>
         <th>Current price</th>
-        <td>{{ item.starting_price }}</td>
+        <td>{{ item.bid_latest(item.id) }}</td>
     </tr>
     <tr>
         <th>Contact seller</th>
@@ -86,6 +89,14 @@
 
  <!-- Bids of ht item -->
 <table class="bid-table-item detail-table">
+    <tr>
+        <th><h1>Bids</h1></th>
+    </tr>
+    {% if not item.bid_order(item.id) %}
+    <tr>
+        <td><p class="info-text">There are no bids on this item currently</p></td>
+    </tr>
+    {% endif %}
     {% for bid in item.bid_order(item.id) %}
     <tr>
         <th>{{ bid.user_name }}</th>
