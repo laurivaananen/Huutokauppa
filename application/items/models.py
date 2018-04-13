@@ -42,7 +42,7 @@ class Item(Base):
     def bid_latest(item_id):
         stmt = text("SELECT MAX(Bid.amount) AS bid_latest FROM Item"
                     " INNER JOIN Bid on Bid.item_id = Item.id"
-                    " WHERE Item.id = :item_id").params(item_id=item_id)
+                    " WHERE Item.id = :item_id;").params(item_id=item_id)
 
         res = db.engine.execute(stmt)
 
@@ -50,7 +50,7 @@ class Item(Base):
 
         if response["bid_latest"] is None:
             stmt = text("SELECT Item.starting_price AS starting_price FROM Item"
-                        " WHERE Item.id = :item_id").params(item_id=item_id)
+                        " WHERE Item.id = :item_id;").params(item_id=item_id)
 
             res = db.engine.execute(stmt)
 
@@ -65,7 +65,7 @@ class Item(Base):
                     " INNER JOIN Bid ON Bid.item_id = Item.id"
                     " INNER JOIN AccountInformation ON Bid.account_information_id = AccountInformation.id"
                     " INNER JOIN UserAccount ON UserAccount.account_information = AccountInformation.id"
-                    " WHERE Item.id = :item_id"
+                    " WHERE Item.id = :item_id;"
                     " ORDER BY Bid.amount DESC").params(item_id=item_id)
 
         res = db.engine.execute(stmt)

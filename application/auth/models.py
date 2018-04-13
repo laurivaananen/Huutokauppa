@@ -84,7 +84,7 @@ class AccountInformation(Base):
     def items_count(user_id=1):
         stmt = text("SELECT COUNT(Item.id) AS item_count FROM Item"
                     " INNER JOIN AccountInformation ON AccountInformation.id = Item.account_information_id"
-                    " WHERE AccountInformation.id = :user_id").params(user_id=user_id)
+                    " WHERE AccountInformation.id = :user_id;").params(user_id=user_id)
         res = db.engine.execute(stmt)
 
         result = res.fetchone()
@@ -95,7 +95,7 @@ class AccountInformation(Base):
     def bids_count(user_id=1):
         stmt = text("SELECT COUNT(Bid.id) AS bid_count FROM Bid"
                     " INNER JOIN AccountInformation ON AccountInformation.id = Bid.account_information_id"
-                    " WHERE AccountInformation.id = :user_id").params(user_id=user_id)
+                    " WHERE AccountInformation.id = :user_id;").params(user_id=user_id)
         res = db.engine.execute(stmt)
 
         result = res.fetchone()
@@ -108,7 +108,7 @@ class AccountInformation(Base):
                     " LEFT JOIN Item ON Item.account_information_id = AccountInformation.id"
                     " INNER JOIN UserAccount on UserAccount.account_information = AccountInformation.id"
                     " GROUP BY AccountInformation.id"
-                    " ORDER BY item_count DESC")
+                    " ORDER BY item_count DESC;")
 
         res = db.engine.execute(stmt)
         
