@@ -104,7 +104,7 @@ class AccountInformation(Base):
 
     @staticmethod
     def top_sellers():
-        stmt = text("SELECT UserAccount.id AS user_id, UserAccount.user_name AS user_name, COUNT(Item.id) AS item_count FROM AccountInformation"
+        stmt = text("SELECT UserAccount.id AS user_id, UserAccount.user_name AS user_name, COUNT(Item.id) AS item_count FROM \"AccountInformation\""
                     " LEFT JOIN Item ON Item.account_information_id = AccountInformation.id"
                     " INNER JOIN UserAccount on UserAccount.account_information = AccountInformation.id"
                     " GROUP BY AccountInformation.id"
