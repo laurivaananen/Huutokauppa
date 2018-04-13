@@ -2,6 +2,7 @@
 
 {% block body %}
 
+{% if current_user.is_authenticated %}
 <!-- Toolbar to edit or delete item fi you are the owner -->
 {% if current_user.id == item.AccountInformation.id %}
 <table class="item-toolbar">
@@ -46,9 +47,10 @@
     </table>
 </form>
 {% endif %}
+{% endif %}
 
 
-<!-- Item details and bids of the item -->
+<!-- Item details of the item -->
 <table class="item-detail detail-table">
     <tr>
         <th>Name</th>
@@ -80,10 +82,11 @@
     </tr>
 </table>
 
+ <!-- Bids of ht item -->
 <table class="bid-table-item detail-table">
-    {% for bid in item.bids %}
+    {% for bid in item.bid_order(item.id) %}
     <tr>
-        <th>{{ bid.AccountInformation.user_account.user_name }}</th>
+        <th>{{ bid.user_name }}</th>
         <td>{{ bid.amount }}</td>
         <td>{{ bid.date_created }}</td>
     </tr>

@@ -1,5 +1,6 @@
 from application import db
 from application.models import Base
+from sqlalchemy.sql import text
 
 class Item(Base):
 
@@ -36,6 +37,44 @@ class Item(Base):
         self.quality = quality
         self.description = description
         self.bidding_end = bidding_end
+
+    @staticmethod
+    def bid_latest(item_id):
+        stmt = text("SELECT MAX(Bid.amount) AS bid_latest FROM Item"
+                    " INNER JOIN Bid on Bid.item_id = Item.id"
+                    " WHERE Item.id = :item_id").params(item_id=item_id)
+
+        res = db.engine.execute(stmt)
+
+        response = res.fetchone()
+
+        if response["bid_latest"] is None:
+            stmt = text("SELECT Item.starting_price AS starting_price FROM Item"
+                        " WHERE Item.id = :item_id").params(item_id=item_id)
+
+            res = db.engine.execute(stmt)
+
+            response = res.fetchone()
+            return response["starting_price"]
+
+        return response["bid_latest"]
+
+    @staticmethod
+    def bid_order(item_id):
+        stmt = text("SELECT Bid.amount AS amount, UserAccount.user_name AS user_name, Bid.date_created AS date_created FROM Item"
+                    " INNER JOIN Bid ON Bid.item_id = Item.id"
+                    " INNER JOIN AccountInformation ON Bid.account_information_id = AccountInformation.id"
+                    " INNER JOIN UserAccount ON UserAccount.account_information = AccountInformation.id"
+                    " WHERE Item.id = :item_id"
+                    " ORDER BY Bid.amount DESC").params(item_id=item_id)
+
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"amount":row["amount"], "user_name":row["user_name"], "date_created":row["date_created"]})
+
+        return response
 
 class Image(Base):
 
