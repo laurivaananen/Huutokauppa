@@ -2,7 +2,10 @@
 
 {% block body %}
 
-<table class="item-table detail-table">
+<h1 class="item-list-h1 item-list-top-left">Items</h1>
+
+{% if items %}
+<table class="item-table detail-table item-list-bottom-span">
     <tr>
         <th>Item</th>
         <th>Current Price</th>
@@ -28,4 +31,7 @@
     {% endif %}
     {% endfor %}
 </table>
+{% else %}
+<p class="no-items info-text item-list-bottom-span">No items added yet</p>
+{% endif %}
 {% endblock %}

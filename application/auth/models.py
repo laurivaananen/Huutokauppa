@@ -118,6 +118,23 @@ class AccountInformation(Base):
 
         return response
 
+
+    @staticmethod
+    def top_bidders():
+        stmt = text("SELECT user_account.id AS user_id, user_account.user_name AS user_name, COUNT(bid.id) AS bid_count FROM account_information"
+                    " LEFT JOIN bid ON bid.account_information_id = account_information.id"
+                    " INNER JOIN user_account on user_account.account_information_id = account_information.id"
+                    " GROUP BY user_account.id"
+                    " ORDER BY bid_count DESC;")
+
+        res = db.engine.execute(stmt)
+        
+        response = []
+        for row in res:
+            response.append({"user_id":row[0], "user_name":row[1], "bid_count":row[2]})
+
+        return response
+
 class Country(Base):
 
     __tablename__ = "country"

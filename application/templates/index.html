@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <h1 class="top-sellers-h1">Top sellers</h1>
+    <h1 class="top-sellers-h1 index-top-left">Top sellers</h1>
 
-    <table class="top-sellers detail-table">
+    {% if top_sellers %}
+    <table class="top-sellers detail-table index-bottom-left">
         <tr>
             <th>Username</th>
             <th>Items</th>
@@ -15,5 +16,27 @@
         </tr>
         {% endfor %}
     </table>
+    {% else %}
+    <p class="no-sellers info-text index-bottom-left">No sellers yet</p>
+    {% endif %}
+
+    <h1 class="top-bidders-h1 index-top-right">Top bidders</h1>
+
+    {% if top_bidders %}
+    <table class="top-bidders detail-table index-bottom-right">
+        <tr>
+            <th>Username</th>
+            <th>Bids</th>
+        </tr>
+        {% for bidder in top_bidders %}
+        <tr>
+            <th><a href="{{ url_for('user_detail', user_id=bidder.user_id) }}">{{ bidder.user_name }}</a></th>
+            <td>{{ bidder.bid_count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="no-bidders info-text index-bottom-right">No bidders yet</p>
+    {% endif %}
     
 {% endblock %}

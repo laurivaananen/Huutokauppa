@@ -59,10 +59,17 @@ nav a:hover {
 
 /* Item table */
 
-.item-table {
+.item-list-top-left {
     grid-row: 2 / 3;
+    grid-column: 1 / 2;
+    padding: 6em 0 0 10%;
+    align-self: start;
+}
+
+.item-list-bottom-span {
+    grid-row: 3 / 4;
     grid-column: 1 / -1;
-    padding: 6em 6em 0 6em;
+    padding: 6em 6em 0 5%;
     align-self: start;
 }
 
@@ -165,17 +172,31 @@ nav a:hover {
 
 /* Index */
 
-.top-sellers-h1 {
+.index-top-left {
     grid-row: 2 / 3;
     grid-column: 1 / 2;
-    padding: 6em 0 0 30%;
+    padding: 6em 10% 0 30%;
     align-self: start;
 }
 
-.top-sellers {
+.index-bottom-left {
     grid-row: 3 / 4;
     grid-column: 1 / 2;
-    padding: 6em 0 0 30%;
+    padding: 6em 10% 0 30%;
+    align-self: start;
+}
+
+.index-top-right {
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+    padding: 6em 30% 0 10%;
+    align-self: start;
+}
+
+.index-bottom-right {
+    grid-row: 3 / 4;
+    grid-column: 2 / 3;
+    padding: 6em 30% 0 10%;
     align-self: start;
 }
 
@@ -277,10 +298,19 @@ DETAIL ELEMENTS
     background-color: rgb(0, 255, 85);
 }
 
+
 /* Error form*/
 
 .form-error {
     list-style: none;
     padding-left: 1em;
     color: rgb(255, 30, 0);
+}
+
+
+/* Info text */
+
+.info-text {
+    color: #555;
+    font-style: italic;
 }
