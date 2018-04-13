@@ -3,13 +3,13 @@ from application.models import Base
 
 class Bid(Base):
 
-    __tablename__ = "Bid"
+    __tablename__ = "bid"
 
     amount = db.Column(db.Integer, nullable=False)
 
-    account_information_id = db.Column(db.Integer, db.ForeignKey('AccountInformation.id'), nullable=False)
+    account_information_id = db.Column(db.Integer, db.ForeignKey('account_information.id'), nullable=False)
 
-    item_id = db.Column(db.Integer, db.ForeignKey('Item.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
 
     def __init__ (self, amount, account_information_id, item_id):
         self.amount = amount

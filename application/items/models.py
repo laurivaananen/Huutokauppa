@@ -4,7 +4,7 @@ from sqlalchemy.sql import text
 
 class Item(Base):
 
-    __tablename__ = 'Item'
+    __tablename__ = 'item'
 
     starting_price = db.Column(db.Integer, nullable=False)
     buyout_price = db.Column(db.Integer, nullable=False)
@@ -20,13 +20,13 @@ class Item(Base):
     hidden = db.Column(db.Boolean, default=False)
     sold = db.Column(db.Boolean, nullable=False)
 
-    quality = db.Column(db.Integer(), db.ForeignKey("Quality.id"), nullable=False)
+    quality_id = db.Column(db.Integer(), db.ForeignKey("quality.id"), nullable=False)
 
-    images = db.relationship("Image", backref='Item', lazy=True)
+    images = db.relationship("Image", backref='item', lazy=True)
 
-    bids = db.relationship("Bid", backref='Item', lazy=True)
+    bids = db.relationship("Bid", backref='item', lazy=True)
 
-    account_information_id = db.Column(db.Integer, db.ForeignKey('AccountInformation.id'), nullable=False)
+    account_information_id = db.Column(db.Integer, db.ForeignKey('account_information.id'), nullable=False)
 
     def __init__(self, name, buyout_price, starting_price, quality, description, bidding_end, account_information_id):
         self.name = name
@@ -34,23 +34,23 @@ class Item(Base):
         self.starting_price = starting_price
         self.sold = False
         self.account_information_id = account_information_id
-        self.quality = quality
+        self.quality_id = quality
         self.description = description
         self.bidding_end = bidding_end
 
     @staticmethod
     def bid_latest(item_id):
-        stmt = text("SELECT MAX(Bid.amount) AS bid_latest FROM Item"
-                    " INNER JOIN Bid on Bid.item_id = Item.id"
-                    " WHERE Item.id = :item_id;").params(item_id=item_id)
+        stmt = text("SELECT MAX(bid.amount) AS bid_latest FROM item"
+                    " INNER JOIN bid on bid.item_id = item.id"
+                    " WHERE item.id = :item_id;").params(item_id=item_id)
 
         res = db.engine.execute(stmt)
 
         response = res.fetchone()
 
         if response["bid_latest"] is None:
-            stmt = text("SELECT Item.starting_price AS starting_price FROM Item"
-                        " WHERE Item.id = :item_id;").params(item_id=item_id)
+            stmt = text("SELECT item.starting_price AS starting_price FROM item"
+                        " WHERE item.id = :item_id;").params(item_id=item_id)
 
             res = db.engine.execute(stmt)
 
@@ -61,12 +61,12 @@ class Item(Base):
 
     @staticmethod
     def bid_order(item_id):
-        stmt = text("SELECT Bid.amount AS amount, UserAccount.user_name AS user_name, Bid.date_created AS date_created FROM Item"
-                    " INNER JOIN Bid ON Bid.item_id = Item.id"
-                    " INNER JOIN AccountInformation ON Bid.account_information_id = AccountInformation.id"
-                    " INNER JOIN UserAccount ON UserAccount.account_information = AccountInformation.id"
-                    " WHERE Item.id = :item_id;"
-                    " ORDER BY Bid.amount DESC").params(item_id=item_id)
+        stmt = text("SELECT bid.amount AS amount, user_account.user_name AS user_name, bid.date_created AS date_created FROM item"
+                    " INNER JOIN bid ON bid.item_id = item.id"
+                    " INNER JOIN account_information ON bid.account_information_id = account_information.id"
+                    " INNER JOIN user_account ON user_account.account_information_id = account_information.id"
+                    " WHERE item.id = :item_id"
+                    " ORDER BY bid.amount DESC").params(item_id=item_id)
 
         res = db.engine.execute(stmt)
 
@@ -78,24 +78,24 @@ class Item(Base):
 
 class Image(Base):
 
-    __tablename__ = "Image"
+    __tablename__ = "image"
 
     file_path = db.Column(db.String(144), nullable=False)
 
-    item = db.Column(db.Integer, db.ForeignKey('Item.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
 
     def __init__(self, file_path, item):
         self.file_path = file_path
-        self.item = item
+        self.item_id = item
 
 
 class Quality(Base):
 
-    __tablename__ = "Quality"
+    __tablename__ = "quality"
 
     name = db.Column(db.String(144), nullable=False)
 
-    items = db.relationship("Item", backref="Quality", lazy=True)
+    items = db.relationship("Item", backref="quality", lazy=True, uselist=False)
 
     def __init__(self, name):
         self.name = name

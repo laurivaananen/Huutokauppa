@@ -4,14 +4,16 @@
 
 {% if current_user.is_authenticated %}
 <!-- Toolbar to edit or delete item fi you are the owner -->
-{% if current_user.id == item.AccountInformation.id %}
+{% if current_user.id == item.account_information.id %}
 <table class="item-toolbar">
     <tr>
         <td>
             <a class="item-edit-btn btn btn-blue" href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
         </td>
         <td>
-            <input class="item-delete-btn btn btn-red" type="submit" value="Delete">
+            <form class="item-delete" method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
+                <input class="item-delete-btn btn btn-red" type="submit" value="Delete">
+            </form>
         </td>
     </tr>
 </table>
@@ -19,7 +21,7 @@
 
 
 <!-- Toolbar to add a bid if you are not the owner -->
-{% if current_user.id != item.AccountInformation.id %}
+{% if current_user.id != item.account_information.id %}
 <form class="bid-new" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
     <table>
         <tr>
@@ -62,11 +64,11 @@
     </tr>
     <tr>
         <th>Quality</th>
-        <td>{{ item.quality }}</td>
+        <td>{{ item.quality.name }}</td>
     </tr>
     <tr>
         <th>Seller</th>
-        <td>{{ item.AccountInformation.user_account.user_name }}</td>
+        <td>{{ item.account_information.user_account.user_name }}</td>
     </tr>
     <tr>
         <th>Auction ends</th>
@@ -78,7 +80,7 @@
     </tr>
     <tr>
         <th>Contact seller</th>
-        <td>{{ item.AccountInformation.email_address }}</td>
+        <td>{{ item.account_information.email_address }}</td>
     </tr>
 </table>
 

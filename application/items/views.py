@@ -35,7 +35,7 @@ def item_edit(item_id):
 def item_update(item_id):
 
     item = Item.query.get(item_id)
-    if current_user.id == item.AccountInformation.id:
+    if current_user.id == item.account_information.id:
         form = ItemForm(request.form)
         item.name = form.name.data
 
@@ -47,9 +47,9 @@ def item_update(item_id):
         if form.bidding_end.data >= item.bidding_end:
             item.bidding_end = form.bidding_end.data
 
-        if item.Quality.name != form.quality.data:
+        if item.quality.name != form.quality.data:
             quality = get_or_create(db.session, Quality, name=form.quality.data)
-            item.quality = quality.id
+            item.quality_id = quality.id
 
         db.session().commit()
 
@@ -60,7 +60,7 @@ def item_update(item_id):
 def item_delete(item_id):
 
     item = Item.query.get(item_id)
-    if current_user.id == item.AccountInformation.id:
+    if current_user.id == item.account_information.id:
         db.session().delete(item)
         db.session().commit()
 

@@ -5,21 +5,21 @@ from sqlalchemy.sql import text
 
 class UserAccount(Base):
 
-    __tablename__ = "UserAccount"
+    __tablename__ = "user_account"
 
     user_name = db.Column(db.String(144), nullable=False)
     first_name = db.Column(db.String(144), nullable=False)
     last_name = db.Column(db.String(144), nullable=False)
 
-    #account_informations = db.relationship("AccountInformation", backref='UserAccount', lazy=True)
+    #account_informations = db.relationship("account_information", backref='user_account', lazy=True)
 
-    account_information = db.Column(db.Integer, db.ForeignKey('AccountInformation.id'), nullable=False)
+    account_information_id = db.Column(db.Integer, db.ForeignKey('account_information.id'), nullable=False)
 
     def __init__(self,user_name, first_name, last_name, account_information):
         self.user_name = user_name
         self.first_name = first_name
         self.last_name = last_name
-        self.account_information = account_information
+        self.account_information_id = account_information
 
     def get_id(self):
         return self.id
@@ -35,7 +35,7 @@ class UserAccount(Base):
 
 class AccountInformation(Base):
 
-    __tablename__ = "AccountInformation"
+    __tablename__ = "account_information"
 
     email_address = db.Column(db.String(144), nullable=False)
     password = db.Column(db.String(144), nullable=False)
@@ -43,16 +43,16 @@ class AccountInformation(Base):
     account_balance = db.Column(db.Integer(), nullable=False)
     banned = db.Column(db.Boolean(), nullable=False)
 
-    user_account = db.relationship("UserAccount", backref='AccountInformation', lazy=True, uselist=False)
+    user_account = db.relationship("UserAccount", backref='account_information', lazy=True, uselist=False)
 
 
-    country = db.Column(db.Integer, db.ForeignKey('Country.id'), nullable=False)
-    city = db.Column(db.Integer, db.ForeignKey('City.id'), nullable=False)
-    postal_code = db.Column(db.Integer, db.ForeignKey('PostalCode.id'), nullable=False)
-    street_address = db.Column(db.Integer, db.ForeignKey('StreetAddress.id'), nullable=False)
+    country_id = db.Column(db.Integer, db.ForeignKey('country.id'), nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
+    postal_code_id = db.Column(db.Integer, db.ForeignKey('postal_code.id'), nullable=False)
+    street_address_id = db.Column(db.Integer, db.ForeignKey('street_address.id'), nullable=False)
 
-    items = db.relationship('Item', backref='AccountInformation', lazy=True)
-    bids = db.relationship('Bid', backref='AccountInformation', lazy=True)
+    items = db.relationship('Item', backref='account_information', lazy=True)
+    bids = db.relationship('Bid', backref='account_information', lazy=True)
 
     def __init__(self, email_address, password, phone_number, country, city, postal_code, street_address):
         self.email_address = email_address
@@ -61,10 +61,10 @@ class AccountInformation(Base):
         self.account_balance = 0
         self.banned = False
 
-        self.country = country
-        self.city = city
-        self.postal_code = postal_code
-        self.street_address = street_address
+        self.country_id = country
+        self.city_id = city
+        self.postal_code_id = postal_code
+        self.street_address_id = street_address
 
 
     def get_id(self):
@@ -82,9 +82,9 @@ class AccountInformation(Base):
 
     @staticmethod
     def items_count(user_id=1):
-        stmt = text("SELECT COUNT(Item.id) AS item_count FROM Item"
-                    " INNER JOIN AccountInformation ON AccountInformation.id = Item.account_information_id"
-                    " WHERE AccountInformation.id = :user_id;").params(user_id=user_id)
+        stmt = text("SELECT COUNT(item.id) AS item_count FROM item"
+                    " INNER JOIN account_information ON account_information.id = item.account_information_id"
+                    " WHERE account_information.id = :user_id;").params(user_id=user_id)
         res = db.engine.execute(stmt)
 
         result = res.fetchone()
@@ -93,9 +93,9 @@ class AccountInformation(Base):
 
     @staticmethod
     def bids_count(user_id=1):
-        stmt = text("SELECT COUNT(Bid.id) AS bid_count FROM Bid"
-                    " INNER JOIN AccountInformation ON AccountInformation.id = Bid.account_information_id"
-                    " WHERE AccountInformation.id = :user_id;").params(user_id=user_id)
+        stmt = text("SELECT COUNT(bid.id) AS bid_count FROM bid"
+                    " INNER JOIN account_information ON account_information.id = bid.account_information_id"
+                    " WHERE account_information.id = :user_id;").params(user_id=user_id)
         res = db.engine.execute(stmt)
 
         result = res.fetchone()
@@ -104,10 +104,10 @@ class AccountInformation(Base):
 
     @staticmethod
     def top_sellers():
-        stmt = text("SELECT UserAccount.id AS user_id, UserAccount.user_name AS user_name, COUNT(Item.id) AS item_count FROM \"AccountInformation\""
-                    " LEFT JOIN Item ON Item.account_information_id = AccountInformation.id"
-                    " INNER JOIN UserAccount on UserAccount.account_information = AccountInformation.id"
-                    " GROUP BY AccountInformation.id"
+        stmt = text("SELECT user_account.id AS user_id, user_account.user_name AS user_name, COUNT(item.id) AS item_count FROM account_information"
+                    " LEFT JOIN item ON item.account_information_id = account_information.id"
+                    " INNER JOIN user_account on user_account.account_information_id = account_information.id"
+                    " GROUP BY account_information.id"
                     " ORDER BY item_count DESC;")
 
         res = db.engine.execute(stmt)
@@ -120,14 +120,14 @@ class AccountInformation(Base):
 
 class Country(Base):
 
-    __tablename__ = "Country"
+    __tablename__ = "country"
 
 
     name = db.Column(db.String(144), nullable=False)
 
 
 
-    account_informations = db.relationship("AccountInformation", backref='Country', lazy=True)
+    account_informations = db.relationship("AccountInformation", backref='country', lazy=True)
 
     def __init__(self, name):
         self.name = name
@@ -135,39 +135,39 @@ class Country(Base):
 
 class City(Base):
 
-    __tablename__ = "City"
+    __tablename__ = "city"
 
 
     name = db.Column(db.String(144), nullable=False)
 
-    account_informations = db.relationship("AccountInformation", backref='City', lazy=True)
-    # business_acounts = db.relationship("BusinessAccount", backref='City', lazy=True)
+    account_informations = db.relationship("AccountInformation", backref='city', lazy=True)
+    # business_acounts = db.relationship("BusinessAccount", backref='city', lazy=True)
 
     def __init__(self, name):
         self.name = name
 
 class PostalCode(Base):
 
-    __tablename__ = "PostalCode"
+    __tablename__ = "postal_code"
 
 
     name = db.Column(db.String(144), nullable=False)
 
-    account_informations = db.relationship("AccountInformation", backref='PostalCode', lazy=True)
-    # business_acounts = db.relationship("BusinessAccount", backref='PostalCode', lazy=True)
+    account_informations = db.relationship("AccountInformation", backref='postal_code', lazy=True)
+    # business_acounts = db.relationship("BusinessAccount", backref='postal_code', lazy=True)
 
     def __init__(self, name):
         self.name = name
 
 class StreetAddress(Base):
 
-    __tablename__ = "StreetAddress"
+    __tablename__ = "street_address"
 
 
     name = db.Column(db.String(144), nullable=False)
 
-    account_informations = db.relationship("AccountInformation", backref='StreetAddress', lazy=True)
-    # business_acounts = db.relationship("BusinessAccount", backref='StreetAddress', lazy=True)
+    account_informations = db.relationship("AccountInformation", backref='street_address', lazy=True)
+    # business_acounts = db.relationship("BusinessAccount", backref='street_address', lazy=True)
 
     def __init__(self, name):
         self.name = name
