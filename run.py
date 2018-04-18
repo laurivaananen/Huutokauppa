@@ -6,6 +6,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 
+from datetime import datetime
+
 
 jobstores = {
     'default': SQLAlchemyJobStore(url='sqlite:///jobs.db')
@@ -20,13 +22,14 @@ job_defaults = {
 }
 scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=utc)
 
-def printer():
-    print("\nHello World!\n")
+
+def printer(text):
+    print("\n{}\n".format(text))
 
 scheduler.start()
 
-scheduler.add_job(printer, 'interval', seconds=15, id='my_job_id', replace_existing=True)
+scheduler.add_job(printer, 'date', run_date=datetime(2018, 4, 18, 15, 38, 20, 0, utc), id='my_job_id', replace_existing=True, kwargs={"text":"HelloWOrld"})
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
