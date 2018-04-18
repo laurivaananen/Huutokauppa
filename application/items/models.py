@@ -1,6 +1,8 @@
 from application import db
 from application.models import Base
 from sqlalchemy.sql import text
+import datetime
+import pytz
 
 class Item(Base):
 
@@ -11,7 +13,7 @@ class Item(Base):
     name = db.Column(db.String(144), nullable=False)
     description = db.Column(db.String(4096), nullable=False)
     bidding_start = db.Column(db.DateTime, default=db.func.current_timestamp())
-    bidding_end = db.Column(db.Date, nullable=False)
+    bidding_end = db.Column(db.DateTime, nullable=False)
 
     def get_bidding_end(self):
         from datetime import datetime
@@ -37,6 +39,13 @@ class Item(Base):
         self.quality_id = quality
         self.description = description
         self.bidding_end = bidding_end
+
+    def datetime_from_utc(self):
+        helsinki = pytz.timezone("Europe/Helsinki")
+        utc_bidding_end = pytz.utc.localize(self.bidding_end)
+
+        return utc_bidding_end.astimezone(helsinki).strftime("%Y-%m-%d %H:%M")
+
 
     @staticmethod
     def bid_latest(item_id):

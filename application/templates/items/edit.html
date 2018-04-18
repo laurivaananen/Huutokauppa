@@ -40,20 +40,33 @@
         </tr>
         <tr>
             <td>
-                {{ form.bidding_end.label }}
+                {{ form.bidding_end.bidding_end_date.label }}<span class="info-text"> (yyyy-mm-dd)</span>
             </td>
             <td>
-                {{ form.bidding_end }}
+                {{ form.bidding_end.bidding_end_date(placeholder=form.get_current_date()) }}
             </td>
             <td>
                 <ul>
-                    {% for error in form.bidding_end.errors %}
-                    <li>{{ error }}</li>
+                    {% for error in form.bidding_end.bidding_end_date.errors %}
+                    <li class="form-error">{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
         </tr>
         <tr>
+            <td>
+                {{ form.bidding_end.bidding_end_time.label }}<span class="info-text"> (hh:mm)</span>
+            </td>
+            <td>
+                {{ form.bidding_end.bidding_end_time(placeholder=form.get_current_time()) }}
+            <td>
+                <ul>
+                    {% for error in form.bidding_end.bidding_end_time.errors %}
+                    <li class="form-error">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td>
                 {{ form.name.label }}
@@ -89,8 +102,8 @@
                 {{ form.quality.label }}
             </td>
             <td>
-                <input type="text" name="{{ form.quality.name }}" id="{{ form.quality.id }}" value="{{ item.quality.name }}">
-                <!-- {{ form.quality }} -->
+                <!-- <input type="text" name="{{ form.quality.name }}" id="{{ form.quality.id }}" value="{{ item.quality.name }}"> -->
+                {{ form.quality(value=item.quality.name) }}
             </td>
             <td>
                 <ul>

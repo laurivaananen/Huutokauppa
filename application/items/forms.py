@@ -1,5 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, BooleanField, DateField, validators, ValidationError, TextAreaField
+# from datetime import datetime, date, time
+import datetime
+from pytz import utc, timezone
+import pytz
+from wtforms import StringField, IntegerField, BooleanField, DateField, validators, ValidationError, TextAreaField, SelectField, FormField
+
+class DateTimeForm(FlaskForm):
+    bidding_end_date = StringField("Bidding end date", [validators.regexp(r'^\d{4}-\d{2}-\d{2}$', message="You need to give the date in a correct format (yyyy-mm-dd)")])
+
+    bidding_end_time = StringField("Bidding end time", [validators.regexp(r'^\d{2}:\d{2}$', message="You need to give the time in a correct format (hh:mm)")])
+
+    class Meta:
+        csrf = False
 
 class ItemForm(FlaskForm):
     
@@ -12,7 +24,30 @@ class ItemForm(FlaskForm):
             if field.data < form.starting_price.data:
                 raise ValidationError("Buyout price has to be bigger then starting price")
 
-    bidding_end = DateField("Bidding end date", [validators.InputRequired()])
+    # bidding_end = DateField("Bidding end date", [validators.InputRequired()])
+
+    # bidding_end =  FormField(DateTimeForm)
+
+    # bidding_end_date = StringField("Bidding end date", [validators.regexp(r'^\d{4}-\d{2}-\d{2}$', message="You need to give the date in a correct format (yyyy-mm-dd)")])
+
+    # bidding_end_time = StringField("Bidding end time", [validators.regexp(r'^\d{2}:\d{2}$', message="You need to give the time in a correct format (hh:mm)")])
+
+    bidding_end = FormField(DateTimeForm)
+
+    @staticmethod
+    def get_current_date():
+        helsinki = timezone("Europe/Helsinki")
+        return datetime.datetime.now(tz=helsinki).strftime("%Y-%m-%d")
+
+    @staticmethod
+    def get_current_time():
+        helsinki = timezone("Europe/Helsinki")
+        return datetime.datetime.now(tz=helsinki).strftime("%H:%M")
+
+    
+
+
+
     description = TextAreaField("Item description", [validators.Length(min=1, max=4096)])
     quality = StringField("Item quality", [validators.InputRequired()])
 

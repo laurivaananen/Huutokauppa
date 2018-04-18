@@ -10,3 +10,4 @@ pip-delete-this-directory.txt
 *.py[cod]
 *$py.class
 items.db
+jobs.db
