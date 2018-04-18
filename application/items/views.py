@@ -30,12 +30,7 @@ def item_edit(item_id):
 
     item = Item.query.get(item_id)
 
-    form = ItemForm()
-
-    form.name.data = item.name
-    form.bidding_end.bidding_end_date.data = item.datetime_from_utc().split(" ")[0]
-    form.bidding_end.bidding_end_time.data = item.datetime_from_utc().split(" ")[1]
-
+    form = ItemForm(obj=item)
 
     return render_template("items/edit.html", item=item, form=form)
 
@@ -43,18 +38,17 @@ def item_edit(item_id):
 @app.route("/items/update/<item_id>/", methods=["POST"])
 def item_update(item_id):
 
+    form = ItemForm(request.form)
+
+    if not (form.name.validate(form) and form.description.validate(form) and form.quality.validate(form)):
+        return render_template("items/edit.html", form=form)
+
     item = Item.query.get(item_id)
     if current_user.id == item.account_information.id:
-        form = ItemForm(request.form)
+        
         item.name = form.name.data
 
-        if form.buyout_price.data >= item.buyout_price:
-            item.buyout_price = form.buyout_price.data
-
         item.description = form.description.data
-
-        if form.bidding_end.data >= item.bidding_end:
-            item.bidding_end = form.bidding_end.data
 
         if item.quality.name != form.quality.data:
             quality = get_or_create(db.session, Quality, name=form.quality.data)

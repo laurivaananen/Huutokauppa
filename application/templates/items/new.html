@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form class="item-new detail-form" method="POST" action="{{ url_for('items_create') }}">
+<p class="info-text item-new-top-span">You can't change prices or auction end datetime after you have created an item</p>
+
+<form class="item-new detail-form item-new-bottom-span" method="POST" action="{{ url_for('items_create') }}">
     <table>
         <tr>
             <td>
