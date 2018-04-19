@@ -5,6 +5,10 @@ from application.items.models import Item, Quality, Image
 from application.items.forms import ItemForm
 from application.extensions import get_or_create
 from application.bid.forms import BidForm
+from application.bid.models import Bid
+import datetime
+from pytz import utc
+import pytz
 
 @app.route("/items", methods=["GET"])
 def items_index():
@@ -19,8 +23,9 @@ def items_form():
 def item_detail(item_id):
 
     item = Item.query.get(item_id)
+    bids = Bid.query.filter_by(item_id=item_id)
 
-    return render_template("items/detail.html", item=item, form=BidForm())
+    return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
 
 @login_required
 @app.route("/items/edit/<item_id>/", methods=["GET"])
@@ -28,24 +33,25 @@ def item_edit(item_id):
 
     item = Item.query.get(item_id)
 
-    return render_template("items/edit.html", item=item, form=ItemForm(obj=item))
+    form = ItemForm(obj=item)
+
+    return render_template("items/edit.html", item=item, form=form)
 
 @login_required
 @app.route("/items/update/<item_id>/", methods=["POST"])
 def item_update(item_id):
 
+    form = ItemForm(request.form)
+
+    if not (form.name.validate(form) and form.description.validate(form) and form.quality.validate(form)):
+        return render_template("items/edit.html", form=form)
+
     item = Item.query.get(item_id)
     if current_user.id == item.account_information.id:
-        form = ItemForm(request.form)
+        
         item.name = form.name.data
 
-        if form.buyout_price.data >= item.buyout_price:
-            item.buyout_price = form.buyout_price.data
-
         item.description = form.description.data
-
-        if form.bidding_end.data >= item.bidding_end:
-            item.bidding_end = form.bidding_end.data
 
         if item.quality.name != form.quality.data:
             quality = get_or_create(db.session, Quality, name=form.quality.data)
@@ -76,13 +82,23 @@ def items_create():
 
     quality = get_or_create(db.session, Quality, name=form.quality.data)
 
+    helsinki = pytz.timezone("Europe/Helsinki")
+
+    bidding_end = "{} {}".format(form.bidding_end.bidding_end_date.data, form.bidding_end.bidding_end_time.data)
+
+    bidding_end = datetime.datetime.strptime(bidding_end, "%Y-%m-%d %H:%M")
+
+    bidding_end = helsinki.localize(bidding_end)
+
+    bidding_end = bidding_end.astimezone(utc)
+
     item = Item(starting_price = form.starting_price.data,
                 buyout_price = form.buyout_price.data,
                 name = form.name.data,
                 account_information_id = current_user.id,
                 quality = quality.id,
                 description = form.description.data,
-                bidding_end = form.bidding_end.data)
+                bidding_end = bidding_end)
 
     db.session().add(item)
     db.session().commit()
