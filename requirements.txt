@@ -1,3 +1,4 @@
+APScheduler==3.5.1
 astroid==1.6.2
 click==6.7
 Flask==0.12.2
@@ -13,8 +14,10 @@ MarkupSafe==1.0
 mccabe==0.6.1
 psycopg2==2.7.4
 pylint==1.8.3
+pytz==2018.4
 six==1.11.0
 SQLAlchemy==1.2.5
+tzlocal==1.5.1
 Werkzeug==0.14.1
 wrapt==1.10.11
 WTForms==2.1
