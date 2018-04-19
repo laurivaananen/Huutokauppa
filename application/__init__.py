@@ -40,6 +40,12 @@ if not os.environ.get("HEROKU"):
     scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=pytz.utc)
     scheduler.start()
 
+    def printer(text="Here"):
+        print("\n\n{}\n\n".format(text))
+
+    scheduler.add_job(printer, 'interval', minutes=1, replace_existing=True, id="Original_id", kwargs={"text":"This is a local job"})
+
+
 
 # Oman sovelluksen toiminnallisuudet
 from application import views
