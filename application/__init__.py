@@ -14,6 +14,20 @@ else:
 
 db = SQLAlchemy(app)
 
+# Celery
+from application.tasks import make_celery
+
+app.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
+app.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
+app.config.update()
+
+celery = make_celery(app)
+
+@celery.task()
+def printer(text="Here"):
+    print(text)
+
+
 # Oman sovelluksen toiminnallisuudet
 from application import views
 

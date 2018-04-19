@@ -3,6 +3,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality, Image
 from application.items.forms import ItemForm
+from application.items.tasks import sell_item
 from application.extensions import get_or_create
 from application.bid.forms import BidForm
 from application.bid.models import Bid
@@ -24,6 +25,8 @@ def item_detail(item_id):
 
     item = Item.query.get(item_id)
     bids = Bid.query.filter_by(item_id=item_id)
+
+    sell_item.delay(item_id)
 
     return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
 
