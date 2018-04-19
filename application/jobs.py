@@ -13,13 +13,14 @@ if os.environ.get("HEROKU"):
     @scheduler.scheduled_job('interval', minutes=2)
     def timed_job():
         print('This job is run every three minutes.')
-
-    scheduler.start()
-    scheduler.shutdown()
-    scheduler.add_job(printer, 'interval', minutes=1, id="heye", kwargs={"text":"This is a heroku job"})
     print("\n\n{}\n\n".format("Starting a scheduler"))
     scheduler.start()
     print("\n\n{}\n\n".format("Scheduler started!"))
+    scheduler.shutdown()
+    scheduler.add_job(printer, 'interval', minutes=1, id="heye", kwargs={"text":"This is a heroku job"})
+    
+    scheduler.start()
+    
     scheduler.print_jobs()
 
 else:
