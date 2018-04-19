@@ -16,7 +16,7 @@ if os.environ.get("HEROKU"):
     #     print('This job is run every weekday at 5pm.')
 
     scheduler.start()
-    scheduler.add_job(printer, 'interval', minutes=1, replace_existing=True, kwargs={"text":"This is a heroku job"})
+    scheduler.add_job(printer, 'interval', minutes=1, kwargs={"text":"This is a heroku job"})
 
 else:
     from application import scheduler
