@@ -15,7 +15,9 @@ if os.environ.get("HEROKU"):
         print('This job is run every three minutes.')
 
     scheduler.start()
+    scheduler.shutdown()
     scheduler.add_job(printer, 'interval', minutes=1, kwargs={"text":"This is a heroku job"})
+    scheduler.start()
 
 else:
     print("\n\n{}\n\n".format("Something happened"))
