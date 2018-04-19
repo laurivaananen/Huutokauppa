@@ -40,6 +40,9 @@ class Item(Base):
         self.description = description
         self.bidding_end = bidding_end
 
+    def sell(self):
+        self.sold = True
+
     def datetime_from_utc(self):
         helsinki = pytz.timezone("Europe/Helsinki")
 
