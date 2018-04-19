@@ -22,12 +22,6 @@ def items_form():
 
 @app.route("/items/<item_id>/", methods=["GET"])
 def item_detail(item_id):
-    from application.jobs import scheduler, printer
-    scheduler.shutdown()
-
-    scheduler.add_job(printer, 'interval', minutes=1, id="heyeaa", kwargs={"text":"This is a heroku job"})
-    
-    scheduler.start()
 
     item = Item.query.get(item_id)
     bids = Bid.query.filter_by(item_id=item_id)
