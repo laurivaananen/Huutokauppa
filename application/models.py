@@ -12,9 +12,9 @@ class Base(db.Model):
     
     
     id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, default=current_datetime())
-    date_modified = db.Column(db.DateTime, default=current_datetime(),
-                              onupdate=current_datetime())
+    date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    date_modified = db.Column(db.DateTime, default=datetime.datetime.utcnow,
+                              onupdate=datetime.datetime.utcnow)
 
 
     def date_created_from_utc(self):
