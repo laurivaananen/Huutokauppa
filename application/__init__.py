@@ -1,5 +1,4 @@
 # Flask-sovellus
-print("first")
 from flask import Flask
 app = Flask(__name__)
 
@@ -18,13 +17,14 @@ db = SQLAlchemy(app)
 # Scheduler
 
 if not os.environ.get("HEROKU"):
+    print("\n\n{}\n\n".format("NOT ON A HEROKU ENVIRONMENT"))
     from apscheduler.schedulers.background import BackgroundScheduler
     from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
     from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 
     import datetime
     import pytz
-    
+
     jobstores = {
         'default': SQLAlchemyJobStore(url="sqlite:///application/items.db")
     }
@@ -52,6 +52,8 @@ from application.bid import models, views
 from application.auth import models
 from application.auth import views
 
+from application import jobs
+
 # Kirjautuminen
 from application.auth.models import UserAccount, AccountInformation
 from os import urandom
@@ -67,8 +69,6 @@ login_manager.login_message = "Please login to use this functionality"
 @login_manager.user_loader
 def load_user(user_id):
     return AccountInformation.query.get(user_id)
-
-print("stil here")
 
 try:
     db.create_all()

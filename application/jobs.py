@@ -20,4 +20,4 @@ if os.environ.get("HEROKU"):
 
 else:
     from application import scheduler
-    scheduler.add_job(printer, 'interval', minutes=1, replace_existing=True, id="Original_id", kwargs={"text":"This is a heroku job"})
+    scheduler.add_job(printer, 'interval', minutes=1, replace_existing=True, id="Original_id", kwargs={"text":"This is a local job"})
