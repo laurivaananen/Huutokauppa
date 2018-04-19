@@ -55,7 +55,7 @@ else:
     import pytz
 
     jobstores = {
-        'default': SQLAlchemyJobStore(url=os.environ.get("HEROKU"))
+        'default': SQLAlchemyJobStore(url=app.config["SQLALCHEMY_DATABASE_URI"])
     }
     executors = {
         'default': ThreadPoolExecutor(20),
