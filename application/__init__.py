@@ -45,6 +45,37 @@ if not os.environ.get("HEROKU"):
 
     scheduler.add_job(printer, 'interval', minutes=1, replace_existing=True, id="Original_id", kwargs={"text":"This is a local job"})
 
+else:
+    print("\n\n{}\n\n".format("ON A HEROKU ENVIRONMENT"))
+    from apscheduler.schedulers.background import BackgroundScheduler
+    from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+    from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
+
+    import datetime
+    import pytz
+
+    jobstores = {
+        'default': SQLAlchemyJobStore(url=os.environ.get("HEROKU"))
+    }
+    executors = {
+        'default': ThreadPoolExecutor(20),
+        'processpool': ProcessPoolExecutor(5)
+    }
+    job_defaults = {
+        'coalesce': False,
+        'max_instances': 3
+    }
+
+    scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=pytz.utc)
+    print("\n\nStarting Jobs\n\n")
+    scheduler.start()
+    print("\n\nStarted Jobs\n\n")
+
+    def printer(text="Here"):
+        print("\n\n{}\n\n".format(text))
+
+    scheduler.add_job(printer, 'interval', seconds=30, replace_existing=True, id="Original_id", kwargs={"text":"This is a heroku job"})
+
 
 
 # Oman sovelluksen toiminnallisuudet
