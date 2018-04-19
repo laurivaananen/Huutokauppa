@@ -1,4 +1,4 @@
-from application import app, db, scheduler
+from application import app, db
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality, Image
@@ -104,7 +104,7 @@ def items_create():
     db.session().add(item)
     db.session().commit()
 
-    sell_item_job(scheduler=scheduler, item_id=str(item.id), sell_datetime=bidding_end)
+    # sell_item_job(scheduler=scheduler, item_id=str(item.id), sell_datetime=bidding_end)
 
 
 

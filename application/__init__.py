@@ -17,33 +17,33 @@ db = SQLAlchemy(app)
 
 # Scheduler
 
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
+# from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+# from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 
-import datetime
-import pytz
+# import datetime
+# import pytz
 
 
-if os.environ.get("HEROKU"):
-    jobstores_url = os.environ.get("DATABASE_URL")
-else:
-    jobstores_url = "sqlite:///application/items.db"
+# if os.environ.get("HEROKU"):
+#     jobstores_url = os.environ.get("DATABASE_URL")
+# else:
+#     jobstores_url = "sqlite:///application/items.db"
 
-jobstores = {
-    'default': SQLAlchemyJobStore(url=jobstores_url)
-}
-executors = {
-    'default': ThreadPoolExecutor(20),
-    'processpool': ProcessPoolExecutor(5)
-}
-job_defaults = {
-    'coalesce': False,
-    'max_instances': 3
-}
+# jobstores = {
+#     'default': SQLAlchemyJobStore(url=jobstores_url)
+# }
+# executors = {
+#     'default': ThreadPoolExecutor(20),
+#     'processpool': ProcessPoolExecutor(5)
+# }
+# job_defaults = {
+#     'coalesce': False,
+#     'max_instances': 3
+# }
 
-scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=pytz.utc)
-scheduler.start()
+# scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=pytz.utc)
+# scheduler.start()
 
 
 # Oman sovelluksen toiminnallisuudet
