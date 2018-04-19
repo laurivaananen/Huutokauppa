@@ -8,6 +8,7 @@ from application.bid.forms import BidForm
 from application.bid.models import Bid
 import datetime
 from pytz import utc
+import pytz
 
 @app.route("/items", methods=["GET"])
 def items_index():
@@ -81,9 +82,15 @@ def items_create():
 
     quality = get_or_create(db.session, Quality, name=form.quality.data)
 
+    helsinki = pytz.timezone("Europe/Helsinki")
+
     bidding_end = "{} {}".format(form.bidding_end.bidding_end_date.data, form.bidding_end.bidding_end_time.data)
 
-    bidding_end = datetime.datetime.strptime(bidding_end, "%Y-%m-%d %H:%M").astimezone(utc)
+    bidding_end = datetime.datetime.strptime(bidding_end, "%Y-%m-%d %H:%M")
+
+    bidding_end = helsinki.localize(bidding_end)
+
+    bidding_end = bidding_end.astimezone(utc)
 
     item = Item(starting_price = form.starting_price.data,
                 buyout_price = form.buyout_price.data,

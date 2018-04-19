@@ -43,7 +43,7 @@ class Item(Base):
     def datetime_from_utc(self):
         helsinki = pytz.timezone("Europe/Helsinki")
 
-        bidding_end_utc = self.bidding_end.replace(tzinfo=pytz.utc)
+        bidding_end_utc = pytz.utc.localize(self.bidding_end)
 
         return bidding_end_utc.astimezone(helsinki).strftime("%Y-%m-%d %H:%M")
 
