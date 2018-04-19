@@ -5,6 +5,7 @@ from application.items.models import Item, Quality, Image
 from application.items.forms import ItemForm
 from application.extensions import get_or_create
 from application.bid.forms import BidForm
+from application.bid.models import Bid
 import datetime
 from pytz import utc
 
@@ -21,8 +22,9 @@ def items_form():
 def item_detail(item_id):
 
     item = Item.query.get(item_id)
+    bids = Bid.query.filter_by(item_id=item_id)
 
-    return render_template("items/detail.html", item=item, form=BidForm())
+    return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
 
 @login_required
 @app.route("/items/edit/<item_id>/", methods=["GET"])

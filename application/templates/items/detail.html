@@ -97,11 +97,11 @@
         <td><p class="info-text">There are no bids on this item currently</p></td>
     </tr>
     {% endif %}
-    {% for bid in item.bid_order(item.id) %}
+    {% for bid in bids %}
     <tr>
-        <th>{{ bid.user_name }}</th>
+        <th>{{ bid.account_information.user_account.user_name }}</th>
         <td>{{ bid.amount }}</td>
-        <td>{{ bid.date_created }}</td>
+        <td>{{ bid.date_created_from_utc() }}</td>
     </tr>
     {% endfor %}
 </table>
