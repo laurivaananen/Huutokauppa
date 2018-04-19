@@ -12,10 +12,11 @@ from application.bid.forms import BidForm
 def bid_create(item_id):
     form = BidForm(request.form)
     item = Item.query.get(item_id)
+    bids = Bid.query.filter_by(item_id=item_id)
 
     if not form.validate(item.bid_latest(item.id)):
         
-        return render_template("items/detail.html", item=item, form=form)
+        return render_template("items/detail.html", item=item, form=form, bids=bids)
 
     amount = form.amount.data
 
