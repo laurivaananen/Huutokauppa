@@ -8,17 +8,20 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 if os.environ.get("HEROKU"):
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+    app.config["CELERY_BROKER_URL"] = os.environ.get("REDIS_URL")
+    app.config["CELERY_RESULT_BACKEND"] = os.environ.get("REDIS_URL")
 else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
     app.config["SQLALCHEMY_ECHO"] = True
+    app.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
+    app.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
 
 db = SQLAlchemy(app)
 
 # Celery
 from application.tasks import make_celery
 
-app.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
-app.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
+
 app.config.update()
 
 celery = make_celery(app)
