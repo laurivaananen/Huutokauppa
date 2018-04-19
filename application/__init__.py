@@ -52,7 +52,7 @@ from application.bid import models, views
 from application.auth import models
 from application.auth import views
 
-from application import jobs
+# from application import jobs
 
 # Kirjautuminen
 from application.auth.models import UserAccount, AccountInformation
