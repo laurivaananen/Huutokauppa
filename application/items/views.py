@@ -3,7 +3,6 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality, Image
 from application.items.forms import ItemForm
-from application.items.jobs import sell_item_job
 from application.extensions import get_or_create
 from application.bid.forms import BidForm
 from application.bid.models import Bid
@@ -103,9 +102,5 @@ def items_create():
 
     db.session().add(item)
     db.session().commit()
-
-    # sell_item_job(scheduler=scheduler, item_id=str(item.id), sell_datetime=bidding_end)
-
-
 
     return redirect(url_for("items_index"))
