@@ -11,3 +11,8 @@ pip-delete-this-directory.txt
 *$py.class
 items.db
 jobs.db
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
