@@ -1,5 +1,5 @@
 # Flask-sovellus
-from flask import Flask
+from flask import Flask, redirect
 application = Flask(__name__)
 
 # Tietokanta
@@ -9,16 +9,31 @@ db = SQLAlchemy(application)
 
 import os
 if os.environ.get("HEROKU"):
-    application.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
-    application.config["CELERY_BROKER_URL"] = os.environ.get("REDIS_URL")
-    application.config["CELERY_RESULT_BACKEND"] = os.environ.get("REDIS_URL")
-else:
-    application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
-<<<<<<< 718b4574c1622dc7686ba99ae557849182e23b00
+
+    @application.route("/", methods=["POST", "GET"])
+    def b_route():
+        return redirect("http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/")
+
+    @application.route('/<path:dummy>', methods=["POST", "GET"])
+    def redirect_to_aws(dummy):
+        return redirect("http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/")
+
+elif os.environ.get("AWS") == "huutokauppa-sovellus":
+
+    user = os.environ.get("PSQL_USER")
+    password = os.environ.get("PSQL_PASSWORD")
+    host = os.environ.get("PSQL_HOST")
+    port = os.environ.get("PSQL_PORT")
+    database = os.environ.get("PSQL_DATABASE")
+
+    application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://{}:{}@{}:{}/{}".format(user, password, host, port, database)
+
     application.config["SQLALCHEMY_ECHO"] = True
-    application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
-    application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
-=======
+    # application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
+    # application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
+
+
+
 
 
     from application import views
@@ -33,40 +48,39 @@ else:
 
 
 
-<<<<<<< cd1fe4cd014bdbf142128e0266910dfe0b2fd341
 
 
 
+else:
+    application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
 
->>>>>>> Added db earlier to init
 
-db = SQLAlchemy(application)
-=======
->>>>>>> Added db earlier to init
+    from application import views
+
+    from application.items import models
+    from application.items import views
+
+    from application.bid import models, views
+
+    from application.auth import models
+    from application.auth import views
+
+
 
 # Celery
-from application.tasks import make_celery
+# from application.tasks import make_celery
 
 
-application.config.update()
+# application.config.update()
 
-celery = make_celery(application)
+# celery = make_celery(application)
 
-@celery.task()
-def printer(text="Here"):
-    print(text)
+# @celery.task()
+# def printer(text="Here"):
+#     print(text)
 
 
 # Oman sovelluksen toiminnallisuudet
-from application import views
-
-from application.items import models
-from application.items import views
-
-from application.bid import models, views
-
-from application.auth import models
-from application.auth import views
 
 # Kirjautuminen
 from application.auth.models import UserAccount, AccountInformation
