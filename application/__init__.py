@@ -37,8 +37,21 @@ elif os.environ.get("AWS") == "huutokauppa-sovellus":
     # application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
     # application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
 
+    application.config["CELERY_BROKER_URL"] = "redis://flaskredis.jspvaj.0001.usw2.cache.amazonaws.com:6379/0"
+    application.config["CELERY_RESULT_BACKEND"] = "redis://flaskredis.jspvaj.0001.usw2.cache.amazonaws.com:6379/0"
 
 
+    # Celery
+    from application.tasks import make_celery
+
+
+    application.config.update()
+
+    celery = make_celery(application)
+
+    @celery.task()
+    def printer(text="Here"):
+        print(tex
 
 
 
@@ -64,8 +77,11 @@ else:
 
 
 
-    application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
-    application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
+    # application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
+    # application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
+
+    application.config["CELERY_BROKER_URL"] = "redis://flaskredis.jspvaj.0001.usw2.cache.amazonaws.com:6379/0"
+    application.config["CELERY_RESULT_BACKEND"] = "redis://flaskredis.jspvaj.0001.usw2.cache.amazonaws.com:6379/0"
 
 
 
