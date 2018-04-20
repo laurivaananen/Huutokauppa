@@ -11,3 +11,4 @@ def sell_item(item_id):
         db.session().close()
     except:
         pass
+

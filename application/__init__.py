@@ -8,6 +8,11 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy(application)
 
 import os
+
+
+
+
+
 if os.environ.get("HEROKU"):
 
     @application.route("/", methods=["POST", "GET"])
@@ -36,6 +41,9 @@ elif os.environ.get("AWS") == "huutokauppa-sovellus":
 
 
 
+
+
+
     from application import views
 
     from application.items import models
@@ -55,6 +63,26 @@ else:
     application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
 
 
+
+    application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
+    application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
+
+
+
+
+    # Celery
+    from application.tasks import make_celery
+
+
+    application.config.update()
+
+    celery = make_celery(application)
+
+    @celery.task()
+    def printer(text="Here"):
+        print(text)
+
+
     from application import views
 
     from application.items import models
@@ -67,20 +95,13 @@ else:
 
 
 
-# Celery
-# from application.tasks import make_celery
 
 
-# application.config.update()
-
-# celery = make_celery(application)
-
-# @celery.task()
-# def printer(text="Here"):
-#     print(text)
+    
 
 
-# Oman sovelluksen toiminnallisuudet
+
+
 
 # Kirjautuminen
 from application.auth.models import UserAccount, AccountInformation
