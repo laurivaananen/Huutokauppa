@@ -107,6 +107,7 @@ class AccountInformation(Base):
         stmt = text("SELECT user_account.id AS user_id, user_account.user_name AS user_name, COUNT(item.id) AS item_count FROM account_information"
                     " LEFT JOIN item ON item.account_information_id = account_information.id"
                     " INNER JOIN user_account on user_account.account_information_id = account_information.id"
+                    " WHERE item.sold = 1"
                     " GROUP BY user_account.id"
                     " ORDER BY item_count DESC;")
 
@@ -122,7 +123,7 @@ class AccountInformation(Base):
     @staticmethod
     def top_bidders():
         stmt = text("SELECT user_account.id AS user_id, user_account.user_name AS user_name, COUNT(bid.id) AS bid_count FROM account_information"
-                    " LEFT JOIN bid ON bid.account_information_id = account_information.id"
+                    " INNER JOIN bid ON bid.account_information_id = account_information.id"
                     " INNER JOIN user_account on user_account.account_information_id = account_information.id"
                     " GROUP BY user_account.id"
                     " ORDER BY bid_count DESC;")

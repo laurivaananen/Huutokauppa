@@ -7,7 +7,7 @@
     <table class="top-sellers detail-table index-bottom-left">
         <tr>
             <th>Username</th>
-            <th>Items</th>
+            <th>Sold Items</th>
         </tr>
         {% for seller in top_sellers %}
         <tr>
@@ -17,7 +17,7 @@
         {% endfor %}
     </table>
     {% else %}
-    <p class="no-sellers info-text index-bottom-left">No sellers yet</p>
+    <p class="no-sellers info-text index-bottom-left">No one has sold anything yet</p>
     {% endif %}
 
     <h1 class="top-bidders-h1 index-top-right">Top bidders</h1>
@@ -36,7 +36,7 @@
         {% endfor %}
     </table>
     {% else %}
-    <p class="no-bidders info-text index-bottom-right">No bidders yet</p>
+    <p class="no-bidders info-text index-bottom-right">No one has bid on anything yet</p>
     {% endif %}
     
 {% endblock %}

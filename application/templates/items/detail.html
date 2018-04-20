@@ -4,7 +4,7 @@
 
 {% if current_user.is_authenticated %}
 <!-- Toolbar to edit or delete item fi you are the owner -->
-{% if current_user.id == item.account_information.id %}
+{% if current_user.id == item.account_information.id and not item.sold %}
 <table class="item-toolbar">
     <tr>
         <td>
@@ -21,7 +21,7 @@
 
 
 <!-- Toolbar to add a bid if you are not the owner -->
-{% if current_user.id != item.account_information.id %}
+{% if current_user.id != item.account_information.id and not item.sold %}
 <form class="bid-new" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
     <table>
         <tr>

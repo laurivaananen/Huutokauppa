@@ -1,7 +1,7 @@
 from application import celery, db
 from application.items.models import Item
 
-@celery.task()
+@celery.task
 def sell_item(item_id):
     try:
         db.session().close()
