@@ -49,10 +49,6 @@ elif os.environ.get("AWS") == "huutokauppa-sovellus":
 
     celery = make_celery(application)
 
-    @celery.task()
-    def printer(text="Here"):
-        print(tex
-
 
 
 
