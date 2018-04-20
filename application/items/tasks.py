@@ -7,3 +7,4 @@ def sell_item(item_id):
         item = Item.query.get(item_id)
         item.sold = True
         db.session().commit()
+        db.session().close()
