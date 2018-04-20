@@ -69,10 +69,7 @@ elif os.environ.get("AWS") == "huutokauppa-sovellus":
 else:
     application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
 
-
-
-    # application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
-    # application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
+    application.config["SQLALCHEMY_ECHO"] = True
 
     application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
     application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"

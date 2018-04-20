@@ -22,11 +22,16 @@ class DateTimeForm(FlaskForm):
             except ValueError:
                 raise ValidationError("Please enter a correct datetime")
 
+            
+
             helsinki = pytz.timezone("Europe/Helsinki")
 
             bidding_end = helsinki.localize(bidding_end)
 
             bidding_end = bidding_end.astimezone(utc)
+
+            if datetime.datetime.now().astimezone(utc) > bidding_end:
+                raise ValidationError("Please enter a datetime that is in the future")
 
 
     class Meta:
