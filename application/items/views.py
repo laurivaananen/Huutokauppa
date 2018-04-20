@@ -1,4 +1,4 @@
-from application import app, db
+from application import application, db
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality, Image
@@ -11,16 +11,16 @@ import datetime
 from pytz import utc
 import pytz
 
-@app.route("/items", methods=["GET"])
+@application.route("/items", methods=["GET"])
 def items_index():
     return render_template("items/list.html", items=Item.query.all())
 
-@app.route("/items/new/")
+@application.route("/items/new/")
 @login_required
 def items_form():
     return render_template("items/new.html", form = ItemForm())
 
-@app.route("/items/<item_id>/", methods=["GET"])
+@application.route("/items/<item_id>/", methods=["GET"])
 def item_detail(item_id):
 
     item = Item.query.get(item_id)
@@ -31,7 +31,7 @@ def item_detail(item_id):
     return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
 
 @login_required
-@app.route("/items/edit/<item_id>/", methods=["GET"])
+@application.route("/items/edit/<item_id>/", methods=["GET"])
 def item_edit(item_id):
 
     item = Item.query.get(item_id)
@@ -41,7 +41,7 @@ def item_edit(item_id):
     return render_template("items/edit.html", item=item, form=form)
 
 @login_required
-@app.route("/items/update/<item_id>/", methods=["POST"])
+@application.route("/items/update/<item_id>/", methods=["POST"])
 def item_update(item_id):
 
     form = ItemForm(request.form)
@@ -64,7 +64,7 @@ def item_update(item_id):
 
     return redirect(url_for("item_detail", item_id=item.id))
 
-@app.route("/items/delete/<item_id>/", methods=["POST"])
+@application.route("/items/delete/<item_id>/", methods=["POST"])
 @login_required
 def item_delete(item_id):
 
@@ -75,7 +75,7 @@ def item_delete(item_id):
 
     return redirect(url_for("items_index"))
 
-@app.route("/items/", methods=["POST"])
+@application.route("/items/", methods=["POST"])
 @login_required
 def items_create():
     form = ItemForm(request.form)

@@ -1,4 +1,4 @@
-from application import app, db
+from application import application, db
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 from application.bid.models import Bid
@@ -8,7 +8,7 @@ from application.bid.forms import BidForm
 
 
 @login_required
-@app.route("/bid/create/<item_id>", methods=["POST"])
+@application.route("/bid/create/<item_id>", methods=["POST"])
 def bid_create(item_id):
     form = BidForm(request.form)
     item = Item.query.get(item_id)

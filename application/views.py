@@ -1,8 +1,8 @@
 from flask import render_template
-from application import app
+from application import application
 from application.auth.models import AccountInformation
 
-@app.route("/")
+@application.route("/")
 def index():
     top_sellers = AccountInformation.top_sellers()
     top_bidders = AccountInformation.top_bidders()

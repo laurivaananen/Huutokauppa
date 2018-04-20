@@ -1,12 +1,12 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 
-from application import app, db
+from application import application, db
 from application.extensions import get_or_create
 from application.auth.models import UserAccount, AccountInformation, Country, City, PostalCode, StreetAddress
 from application.auth.forms import LoginForm, UserSignupForm, AccountDepositForm
 
-@app.route("/auth/login", methods = ["GET", "POST"])
+@application.route("/auth/login", methods = ["GET", "POST"])
 def auth_login():
     if request.method == "GET":
         return render_template("auth/loginform.html", form = LoginForm())
@@ -26,12 +26,12 @@ def auth_login():
     return redirect(url_for("index"))
 
 
-@app.route("/auth/logout", methods = ["GET", "POST"])
+@application.route("/auth/logout", methods = ["GET", "POST"])
 def auth_logout():
     logout_user()
     return redirect(url_for("index"))
 
-@app.route("/auth/user/signup", methods = ["GET", "POST"])
+@application.route("/auth/user/signup", methods = ["GET", "POST"])
 def auth_usersignup():
     if request.method == "GET":
         return render_template("auth/usersignupform.html", form = UserSignupForm())
@@ -73,14 +73,14 @@ def auth_usersignup():
 
 
 @login_required
-@app.route("/user/<user_id>", methods=["GET", "POST"])
+@application.route("/user/<user_id>", methods=["GET", "POST"])
 def user_detail(user_id):
     account_information = AccountInformation.query.get(user_id)
 
     return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm())
 
 @login_required
-@app.route("/user/deposit", methods=["POST"])
+@application.route("/user/deposit", methods=["POST"])
 def account_deposit():
 
     account_information = AccountInformation.query.get(current_user.id)
