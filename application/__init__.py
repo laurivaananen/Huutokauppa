@@ -85,11 +85,6 @@ else:
 
     celery = make_celery(application)
 
-    @celery.task()
-    def printer(text="Here"):
-        print(text)
-
-
     from application import views
 
     from application.items import models
