@@ -71,8 +71,11 @@ else:
 
     application.config["SQLALCHEMY_ECHO"] = True
 
-    application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
-    application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
+    application.config["CELERY_BROKER_URL"] = os.environ.get("REDIS_URL")
+    application.config["CELERY_RESULT_BACKEND"] = os.environ.get("REDIS_URL")
+
+    # application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
+    # application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
 
 
 
