@@ -36,7 +36,7 @@ The application is hosted in AWS Elastic Beanstalk because you can't do certain 
 
 [User stories](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/userstories.md)
 
-# Sovelluksen toiminta
+#cd Sovelluksen toiminta
 
 Tällä hetkellä sovelluksessa pystyy:
 
