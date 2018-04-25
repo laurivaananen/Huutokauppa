@@ -42,7 +42,7 @@ Tällä hetkellä sovelluksessa pystyy:
 
 * Tehdä käyttäjätilin ja kirjautumaan sillä sisään
 * Laittaa uuden tavaran kauppaan myyntiin, sekä muokata sen tietoja tai poistaa sen kokonaan
-* Kun valitsemase huutamisaika loppuu niin tavara myydään (tämä ominaisuus toimii vielä vain lokaalissa versiossa)
+* Kun valitsemase huutamisaika loppuu niin tavara myydään
 * Selata muiden lisäämiä tavaroita sekä huutamaan niitä
 * Katsoa muiden profiileja
 * Lisätä omaan käyttäjätiliin rahaa(rahalla ei tällä hetkellä voi tehdä vielä mitään)

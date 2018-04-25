@@ -28,7 +28,13 @@ class Item(Base):
 
     bids = db.relationship("Bid", backref='item', lazy=True)
 
-    account_information_id = db.Column(db.Integer, db.ForeignKey('account_information.id'), nullable=False)
+    account_information_id = db.Column(db.Integer, db.ForeignKey("account_information.id"))
+
+    account_information = db.relationship("AccountInformation", back_populates="items", foreign_keys="Item.account_information_id")
+
+    buyer_account_information_id = db.Column(db.Integer, db.ForeignKey('account_information.id'))
+
+    buyer_account_information = db.relationship("AccountInformation", back_populates="bought_items", foreign_keys="Item.buyer_account_information_id")
 
     def __init__(self, name, buyout_price, starting_price, quality, description, bidding_end, account_information_id):
         self.name = name
@@ -47,11 +53,27 @@ class Item(Base):
 
         return bidding_end_utc.astimezone(helsinki).strftime("%Y-%m-%d %H:%M")
 
+    @staticmethod
+    def highest_bid(item_id):
+        stmt = text("SELECT bid.id AS bid_id, bid.amount, bid.account_information_id, bid.item_id FROM item"
+                    " INNER JOIN bid ON bid.item_id = item.id"
+                    " WHERE item.id = :item_id"
+                    " ORDER BY bid.amount DESC").params(item_id=item_id)
+
+        res = db.engine.execute(stmt)
+
+        response = res.fetchone()
+
+        if response:
+            return response["bid_id"]
+
+        return None
+
 
     @staticmethod
     def bid_latest(item_id):
         stmt = text("SELECT MAX(bid.amount) AS bid_latest FROM item"
-                    " INNER JOIN bid on bid.item_id = item.id"
+                    " INNER JOIN bid ON bid.item_id = item.id"
                     " WHERE item.id = :item_id;").params(item_id=item_id)
 
         res = db.engine.execute(stmt)

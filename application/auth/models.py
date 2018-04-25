@@ -1,6 +1,6 @@
 from application import db
 from application.models import Base
-
+from application.items.models import Item
 from sqlalchemy.sql import text
 
 class UserAccount(Base):
@@ -10,8 +10,6 @@ class UserAccount(Base):
     user_name = db.Column(db.String(144), nullable=False)
     first_name = db.Column(db.String(144), nullable=False)
     last_name = db.Column(db.String(144), nullable=False)
-
-    #account_informations = db.relationship("account_information", backref='user_account', lazy=True)
 
     account_information_id = db.Column(db.Integer, db.ForeignKey('account_information.id'), nullable=False)
 
@@ -51,7 +49,8 @@ class AccountInformation(Base):
     postal_code_id = db.Column(db.Integer, db.ForeignKey('postal_code.id'), nullable=False)
     street_address_id = db.Column(db.Integer, db.ForeignKey('street_address.id'), nullable=False)
 
-    items = db.relationship('Item', backref='account_information', lazy=True)
+    items = db.relationship('Item', back_populates='account_information', lazy=True, foreign_keys="Item.account_information_id")
+    bought_items = db.relationship('Item', back_populates='buyer_account_information', lazy=True, foreign_keys="Item.buyer_account_information_id")
     bids = db.relationship('Bid', backref='account_information', lazy=True)
 
     def __init__(self, email_address, password, phone_number, country, city, postal_code, street_address):
