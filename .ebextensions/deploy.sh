@@ -13,8 +13,6 @@ fi
 
 # copy celery app config
 copy_ext $SCRIPT_PATH/files/celeryd.conf /opt/python/etc/celeryd.conf 0755 root root
-# copy celery config
-copy_ext $SCRIPT_PATH/files/celery_config.py /opt/python/current/app/celery_config.py 0755 root root
 # copy restart hook to different hooks folders
 copy_ext $SCRIPT_PATH/files/99_restart_services.sh /opt/elasticbeanstalk/hooks/appdeploy/enact/99_restart_services.sh 0755 root root
 copy_ext $SCRIPT_PATH/files/99_restart_services.sh /opt/elasticbeanstalk/hooks/configdeploy/enact/99_restart_services.sh 0755 root root
