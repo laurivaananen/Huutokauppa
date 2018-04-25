@@ -69,6 +69,17 @@ class Item(Base):
 
         return None
 
+    def latest_bid(self):
+        stmt = text("SELECT MAX(bid.amount) AS bid_latest FROM item"
+                    " INNER JOIN bid ON bid.item_id = item.id"
+                    " WHERE item.id = :item_id;").params(item_id=self.id)
+
+        res = db.engine.execute(stmt)
+
+        response = res.fetchone()
+
+        return response["bid_latest"]
+
 
     @staticmethod
     def bid_latest(item_id):

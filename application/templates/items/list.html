@@ -15,7 +15,7 @@
         <th>Seller</th>
     </tr>
     {% for item in items %}
-    {% if not item.sold %}
+    {% if (item.sold == False) and (item.hidden == False) %}
     <tr>
         <td>
             <a class="important" href="{{ url_for('item_detail', item_id=item.id) }}">

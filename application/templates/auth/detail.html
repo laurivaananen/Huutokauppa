@@ -3,7 +3,7 @@
 {% block body %}
 
 <!-- Add to account balance if you are the account owner -->
-{% if current_user.id == account_information.id %}
+<!-- {% if current_user.id == account_information.id %}
 <form class="account-deposit" method="POST" action="{{ url_for('account_deposit') }}">
     <table>
         <tr>
@@ -33,7 +33,7 @@
         </tr>
     </table>
 </form>
-{% endif %}
+{% endif %} -->
 
 
 
@@ -63,36 +63,65 @@
     {% endif %}
 </table>
 
-{% if account_information.items %}
-<table class="user-items detail-table">
-    
-    <tr>
-        <th>Item name</th>
-    </tr>
-    {% for item in account_information.items %}
-    <tr>
-        <td>{{ item.name }}</td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-    <p>You have no items on sale</p>
+{% if current_user.id == account_information.id%}
+    {% if items %}
+        <table class="user-items detail-table">
+            
+            <tr>
+                <th>Item name</th>
+                <th>Starting price</th>
+                <th>Latest bid</th>
+                <th>Bidding end</th>
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.starting_price }}</td>
+
+                {% if item.latest_bid() %}
+                    <td>{{ item.latest_bid() }}</td>
+                {% else %}
+                    <td class="info-text">No bids yet</td>
+                {% endif %}
+
+                {% if item.sold %}
+                    <td class="info-text">Sold</td>
+                {% elif item.hidden %}
+                    <td class="info-text">Bidding time over</td>
+                {% else %}
+                    <td>{{ item.datetime_from_utc() }}</td>
+                {% endif %}
+
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>You have no items on sale</p>
+        {% endif %}
 {% endif %}
 
-{% if account_information.bought_items %}
-<table class="user-bought-items detail-table">
-    
-    <tr>
-        <th>Item name</th>
-    </tr>
-    {% for item in account_information.bought_items %}
-    <tr>
-        <td>{{ item.name }}</td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-    <p>You haven't bought any items yet</p>
+{% if current_user.id == account_information.id%}
+    {% if bought_items %}
+    <table class="user-bought-items detail-table">
+
+        <tr>
+            <th>Item name</th>
+            <th>Starting Price</th>
+            <th>You paid</th>
+            <th>Sold at</th>
+        </tr>
+        {% for item_bought in bought_items %}
+        <tr>
+            <td>{{ item_bought.name }}</td>
+            <td>{{ item_bought.starting_price }}</td>
+            <td>{{ item_bought.latest_bid() }}</td>
+            <td>{{ item_bought.datetime_from_utc() }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p>You haven't bought any items yet</p>
+    {% endif %}
 {% endif %}
 
 {% endblock %}

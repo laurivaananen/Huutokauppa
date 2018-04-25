@@ -5,6 +5,7 @@ from application import application, db
 from application.extensions import get_or_create
 from application.auth.models import UserAccount, AccountInformation, Country, City, PostalCode, StreetAddress
 from application.auth.forms import LoginForm, UserSignupForm, AccountDepositForm
+from application.items.models import Item
 
 @application.route("/auth/login", methods = ["GET", "POST"])
 def auth_login():
@@ -72,12 +73,21 @@ def auth_usersignup():
     return redirect(url_for("index"))
 
 
-@login_required
+
 @application.route("/user/<user_id>", methods=["GET", "POST"])
+@login_required
 def user_detail(user_id):
     account_information = AccountInformation.query.get(user_id)
 
-    return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm())
+    items = None
+    bought_items = None
+
+    if current_user.is_authenticated() and current_user.id == account_information.id:
+        items = account_information.items
+        bought_items = account_information.bought_items
+        
+
+    return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm(), items=items, bought_items=bought_items)
 
 @login_required
 @application.route("/user/deposit", methods=["POST"])
