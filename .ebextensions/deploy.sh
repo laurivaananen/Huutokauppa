@@ -18,6 +18,9 @@ copy_ext $SCRIPT_PATH/files/99_restart_services.sh /opt/elasticbeanstalk/hooks/a
 copy_ext $SCRIPT_PATH/files/99_restart_services.sh /opt/elasticbeanstalk/hooks/configdeploy/enact/99_restart_services.sh 0755 root root
 copy_ext $SCRIPT_PATH/files/99_restart_services.sh /opt/elasticbeanstalk/hooks/restartappserver/enact/99_restart_services.sh 0755 root root
 
+# make celeryd.sh executable
+chmod +x /opt/python/current/app/scripts/celeryd.sh
+
 # include celeryd.conf into the supervisord.conf
 script_add_line /opt/python/etc/supervisord.conf "include" "[include]"
 script_add_line /opt/python/etc/supervisord.conf "celeryd.conf" "files=celeryd.conf "
