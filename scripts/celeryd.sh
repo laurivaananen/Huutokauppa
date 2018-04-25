@@ -6,4 +6,4 @@ cd /opt/python/current/app
 # Note: exec is important here - this way supervisord will control
 # the python script and not the bash script
 #
-exec /opt/python/run/venv/bin/celery worker -A application -l info --config=celery_config
+exec /opt/python/run/venv/bin/celery worker -A /opt/python/current/app/application -l info --config=/opt/python/current/app/celery_config
