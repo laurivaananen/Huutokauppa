@@ -47,6 +47,12 @@
         <th>Email</th>
         <td>{{ account_information.email_address }}</td>
     </tr>
+    {% if current_user.id == account_information.id %}
+    <tr>
+        <th>Phone number</th>
+        <td>{{ account_information.phone_number }}</td>
+    </tr>
+    {% endif %}
     <tr>
         <th>Items on sale</th>
         <td>{{ account_information.items_count(account_information.id) }}</td>
@@ -59,6 +65,25 @@
     <tr>
         <th>Account Balance</th>
         <td>{{ account_information.account_balance }}</td>
+    </tr>
+    <tr>
+        <th colspan="2" class="info-text">Billing information</th>
+    </tr>
+    <tr>
+        <th>Country</th>
+        <td>{{ account_information.country.name }}</td>
+    </tr>
+    <tr>
+        <th>City</th>
+        <td>{{ account_information.city.name }}</td>
+    </tr>
+    <tr>
+        <th>Postal code</th>
+        <td>{{ account_information.postal_code.name }}</td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>{{ account_information.street_address.name }}</td>
     </tr>
     {% endif %}
 </table>
@@ -75,7 +100,9 @@
             </tr>
             {% for item in items %}
             <tr>
-                <td>{{ item.name }}</td>
+                <td>
+                    <a class="important" href="{{ url_for('item_detail', item_id=item.id) }}">{{ item.name }}</a>
+                </td>
                 <td>{{ item.starting_price }}</td>
 
                 {% if item.latest_bid() %}
@@ -96,7 +123,7 @@
             {% endfor %}
         </table>
         {% else %}
-            <p>You have no items on sale</p>
+            <p class="info-text">You have no items on sale</p>
         {% endif %}
 {% endif %}
 
@@ -120,7 +147,7 @@
         {% endfor %}
     </table>
     {% else %}
-        <p>You haven't bought any items yet</p>
+        <p class="info-text">You haven't bought any items yet</p>
     {% endif %}
 {% endif %}
 

@@ -85,7 +85,6 @@ def user_detail(user_id):
     if current_user.is_authenticated() and current_user.id == account_information.id:
         items = account_information.items
         bought_items = account_information.bought_items
-        
 
     return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm(), items=items, bought_items=bought_items)
 

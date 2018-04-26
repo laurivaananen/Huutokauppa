@@ -174,14 +174,14 @@ nav a:hover {
 .user-detail {
     grid-row: 3 / 4;
     grid-column: 1 / 2;
-    padding: 6em 30% 0 30%;
+    padding: 6em 5% 0 10%;
     align-self: start;
 }
 
 .user-bought-items {
     grid-row: 3 / 4;
     grid-column: 2 / 3;
-    padding: 6em 30% 0 30%;
+    padding: 6em 10% 0 5%;
     align-self: start;
 }
 
