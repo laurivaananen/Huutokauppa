@@ -1,0 +1,14 @@
+{% macro time_left_macro(time_left) -%}
+<p>
+    {% if time_left.hours > 0 %}
+        {{ time_left.hours }}h
+    {% endif %}
+    {% if time_left.minutes > 0 %}
+        {{ time_left.minutes }}m
+    {% endif %}
+    {% if time_left.seconds > 0 %}
+        {{ time_left.seconds }}s
+    {% endif %}
+</p>
+
+{%- endmacro %}

@@ -53,6 +53,52 @@ class Item(Base):
 
         return bidding_end_utc.astimezone(helsinki).strftime("%Y-%m-%d %H:%M")
 
+    def bidding_time_left(self):
+        import math
+        time_now = pytz.utc.localize(datetime.datetime.utcnow())
+        bidding_time_end = pytz.utc.localize(self.bidding_end)
+        time_difference = bidding_time_end - time_now
+        time_difference_seconds = int(math.floor(time_difference.total_seconds()))
+
+        print("\n\n\n")
+        print(time_now)
+        print(bidding_time_end)
+        print(int(math.floor(time_difference.total_seconds())))
+        print(time_difference.seconds)
+
+        time_left_hour = time_difference_seconds
+
+        hour = datetime.timedelta(hours=1)
+        time_difference_hours = 0
+        time_difference_minutes = 0
+        if(time_difference_seconds > hour.seconds):
+            time_left_hour = time_difference_seconds % hour.seconds
+
+            time_difference_round = time_difference_seconds - time_left_hour
+            time_difference_hours = int(time_difference_round / hour.seconds)
+            print("Hours: {}".format(time_difference_hours))
+
+        time_left_minute = time_left_hour
+
+        minute = datetime.timedelta(minutes=1)
+        if(time_left_hour > minute.seconds):
+
+            time_left_minute = time_left_hour % minute.seconds
+
+            time_difference_round = time_left_hour - time_left_minute
+            time_difference_minutes = int(time_difference_round / minute.seconds)
+            print("Minutes: {}".format(time_difference_minutes))
+
+        time_difference_seconds = time_left_minute
+        print("Seconds: {}".format(time_left_minute))
+
+        print("Bidding ends in: {} hours {} minutes {} seconds"
+              .format(time_difference_hours, time_difference_minutes, time_difference_seconds))
+
+        print("\n\n\n")
+
+        return {"hours": time_difference_hours, "minutes": time_difference_minutes, "seconds": time_difference_seconds}
+
     @staticmethod
     def highest_bid(item_id):
         stmt = text("SELECT bid.id AS bid_id, bid.amount, bid.account_information_id, bid.item_id FROM item"

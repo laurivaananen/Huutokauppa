@@ -24,7 +24,14 @@
         </td>
         <td>{{ item.bid_latest(item.id) }}</td>
         <td>{{ item.buyout_price }}</td>
-        <td>{{ item.datetime_from_utc() }}</td>
+
+        {% if item.bidding_time_left().hours > 23 %}
+            <td>{{ item.datetime_from_utc() }}</td>
+        {% else %}
+            {% from 'items/time_left_macro.html' import time_left_macro %}
+            <td>{{ time_left_macro(item.bidding_time_left()) }}</td>
+        {% endif %}
+        
         <td>{{ item.quality.name }}</td>
         <td>{{ item.account_information.user_account.user_name }}</td>
     </tr>

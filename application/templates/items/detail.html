@@ -73,13 +73,38 @@
         <th>Seller</th>
         <td>{{ item.account_information.user_account.user_name }}</td>
     </tr>
+    {% if item.bidding_time_left().hours > 23 %}
+        <tr>
+            <th>Auction ends</th>
+            <td>{{ item.datetime_from_utc() }}</td>
+        </tr>
+    {% elif item.bidding_time_left().hours <= 0 and item.bidding_time_left().minutes <= 0 and item.bidding_time_left().seconds <= 0 %}
+        <tr>
+            <th>Auction has ended</th>
+            {% if item.sold %}
+                <td class="info-text">Sold</td>
+            {% else %}
+                <td class="info-text">Nobody bought this item</td>
+            {% endif %}
+        </tr>
+    {% else %}
+        <tr>
+            <th>Auction ends in</th>
+            {% from 'items/time_left_macro.html' import time_left_macro %}
+            <td>{{ time_left_macro(item.bidding_time_left()) }}</td>
+        </tr>
+    {% endif %}
     <tr>
-        <th>Auction ends</th>
-        <td>{{ item.datetime_from_utc() }}</td>
+        <th>Starting price</th>
+        <td>{{ item.starting_price }}</td>
     </tr>
     <tr>
-        <th>Current price</th>
-        <td>{{ item.bid_latest(item.id) }}</td>
+        <th>Latest bid</th>
+        {% if item.latest_bid() %}
+        <td>{{ item.latest_bid() }}</td>
+        {% else %}
+        <td class="info-text">No bids yet</td>
+        {% endif %}
     </tr>
     <tr>
         <th>Contact seller</th>
