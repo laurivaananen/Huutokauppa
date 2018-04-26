@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<main id="index">
+<div class="float-div">
     <h1 class="top-sellers-h1 index-top-left">Top sellers</h1>
 
     {% if top_sellers %}
@@ -17,9 +19,11 @@
         {% endfor %}
     </table>
     {% else %}
-    <p class="no-sellers info-text index-bottom-left">No one has sold anything yet</p>
+    <p class="info-text empty-table">No one has sold anything yet</p>
     {% endif %}
+</div>
 
+<div class="float-div">
     <h1 class="top-bidders-h1 index-top-right">Top bidders</h1>
 
     {% if top_bidders %}
@@ -36,7 +40,10 @@
         {% endfor %}
     </table>
     {% else %}
-    <p class="no-bidders info-text index-bottom-right">No one has bid on anything yet</p>
+    <p class="info-text empty-table">No one has bid on anything yet</p>
     {% endif %}
+</div>
+
+</main>
     
 {% endblock %}

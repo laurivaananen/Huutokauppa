@@ -2,10 +2,14 @@
 
 {% block body %}
 
+<main id="item-detail">
+
 {% if current_user.is_authenticated %}
 <!-- Toolbar to edit or delete item fi you are the owner -->
 {% if current_user.id == item.account_information.id and not item.sold %}
-<table class="item-toolbar">
+<div class="float-div item-toolbar">
+<h2 class="table-header">Toolbar</h2>
+<table>
     <tr>
         <td>
             <a class="item-edit-btn btn btn-blue" href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
@@ -17,11 +21,14 @@
         </td>
     </tr>
 </table>
+</div>
 {% endif %}
 
 
 <!-- Toolbar to add a bid if you are not the owner -->
 {% if current_user.id != item.account_information.id and not item.sold %}
+<div class="float-div item-bid">
+<h2 class="table-header">Bid</h2>
 <form class="bid-new" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
     <table>
         <tr>
@@ -48,15 +55,15 @@
         </tr>
     </table>
 </form>
+</div>
 {% endif %}
 {% endif %}
 
 
 <!-- Item details of the item -->
-<table class="item-detail detail-table">
-    <tr>
-        <th><h1>Details</h1></th>
-    </tr>
+<div class="float-div item-details">
+<h2 class="table-header">Details</h1>
+<table class="detail-table">
     <tr>
         <th>Name</th>
         <td>{{ item.name }}</td>
@@ -71,7 +78,7 @@
     </tr>
     <tr>
         <th>Seller</th>
-        <td>{{ item.account_information.user_account.user_name }}</td>
+        <td><a href="{{ url_for('user_detail', user_id=item.account_information_id) }}">{{ item.account_information.user_account.user_name }}</a></td>
     </tr>
     {% if item.bidding_time_left().hours > 23 %}
         <tr>
@@ -111,25 +118,33 @@
         <td>{{ item.account_information.email_address }}</td>
     </tr>
 </table>
+</div>
 
  <!-- Bids of ht item -->
-<table class="bid-table-item detail-table">
+<div class="float-div item-bids">
+<h2 class="table-header">Bids</h2>
+<table class="detail-table-vertical">
+    {% if item.bid_order(item.id) %}
     <tr>
-        <th><h1>Bids</h1></th>
+        <th>User</th>
+        <th>Amount</th>
+        <th>Date</th>
     </tr>
-    {% if not item.bid_order(item.id) %}
-    <tr>
-        <td><p class="info-text">There are no bids on this item currently</p></td>
-    </tr>
-    {% endif %}
+    
+    
+    
     {% for bid in bids %}
     <tr>
-        <th>{{ bid.account_information.user_account.user_name }}</th>
+        <td><a href="{{ url_for('user_detail', user_id=bid.account_information_id) }}">{{ bid.account_information.user_account.user_name }}</a></td>
         <td>{{ bid.amount }}</td>
         <td>{{ bid.date_created_from_utc() }}</td>
     </tr>
     {% endfor %}
+    {% else %}
+        <p class="info-text empty-table">No bids</p>
+    {% endif %}
 </table>
+</div>
 
-
+</main>
 {% endblock %}

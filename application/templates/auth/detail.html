@@ -1,6 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<main id="user-detail">
+<h1>{{ account_information.user_account.first_name }} {{ account_information.user_account.last_name }}</h1>
 
 <!-- Add to account balance if you are the account owner -->
 <!-- {% if current_user.id == account_information.id %}
@@ -35,10 +37,14 @@
 </form>
 {% endif %} -->
 
-
-
 <!-- User account details -->
-<table class="user-detail detail-table">
+<div class="user-detail-div">
+<h2>Account details</h2>
+<table class="user-detail-table detail-table">
+    <tr>
+        <th>Name</th>
+        <td>{{ account_information.user_account.first_name }} {{ account_information.user_account.last_name }}</td>
+    </tr>
     <tr>
         <th>Username</th>
         <td>{{ account_information.user_account.user_name }}</td>
@@ -66,9 +72,12 @@
         <th>Account Balance</th>
         <td>{{ account_information.account_balance }}</td>
     </tr>
-    <tr>
-        <th colspan="2" class="info-text">Billing information</th>
-    </tr>
+</table>
+</div>
+
+<div class="user-mailing-detail-div">
+<h2>Mailing Address</h2>
+<table class="detail-table">
     <tr>
         <th>Country</th>
         <td>{{ account_information.country.name }}</td>
@@ -87,10 +96,13 @@
     </tr>
     {% endif %}
 </table>
+</div>
 
 {% if current_user.id == account_information.id%}
+<div class="float-div user-items-div">
+    <h2>Your items</h2>
     {% if items %}
-        <table class="user-items detail-table">
+        <table class="user-items detail-table-vertical">
             
             <tr>
                 <th>Item name</th>
@@ -138,13 +150,16 @@
             {% endfor %}
         </table>
         {% else %}
-            <p class="info-text">You have no items on sale</p>
+            <p class="info-text empty-table">You have no items on sale</p>
         {% endif %}
+</div>
 {% endif %}
 
 {% if current_user.id == account_information.id%}
+<div class="float-div user-items-bought-div">
+    <h2>You have bought</h2>
     {% if bought_items %}
-    <table class="user-bought-items detail-table">
+    <table class="user-bought-items detail-table-vertical">
 
         <tr>
             <th>Item name</th>
@@ -164,8 +179,11 @@
         {% endfor %}
     </table>
     {% else %}
-        <p class="info-text">You haven't bought any items yet</p>
+        <p class="info-text empty-table">You haven't bought any items yet</p>
     {% endif %}
+</div>
 {% endif %}
+
+</main>
 
 {% endblock %}

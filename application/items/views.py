@@ -25,7 +25,7 @@ def items_form():
 def item_detail(item_id):
 
     item = Item.query.get(item_id)
-    bids = Bid.query.filter_by(item_id=item_id)
+    bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc())
 
     return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
 
