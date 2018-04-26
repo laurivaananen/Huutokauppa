@@ -8,8 +8,8 @@
 <table class="item-table detail-table item-list-bottom-span">
     <tr>
         <th>Item</th>
-        <th>Current Price</th>
-        <th>Buyout Price</th>
+        <th>Starting price</th>
+        <th>Latest bid</th>
         <th>Auction ends</th>
         <th>Quality</th>
         <th>Seller</th>
@@ -22,8 +22,12 @@
                 {{ item.name }}
             </a>
         </td>
-        <td>{{ item.bid_latest(item.id) }}</td>
-        <td>{{ item.buyout_price }}</td>
+        <td>{{ item.starting_price }}</td>
+        {% if item.latest_bid() %}
+            <td>{{ item.latest_bid() }}</td>
+        {% else %}
+            <td class="info-text">No bids yet</td>
+        {% endif %}
 
         {% if item.bidding_time_left().hours > 23 %}
             <td>{{ item.datetime_from_utc() }}</td>
@@ -31,9 +35,9 @@
             {% from 'items/time_left_macro.html' import time_left_macro %}
             <td>{{ time_left_macro(item.bidding_time_left()) }}</td>
         {% endif %}
-        
+
         <td>{{ item.quality.name }}</td>
-        <td>{{ item.account_information.user_account.user_name }}</td>
+        <td><a href="{{ url_for('user_detail', user_id=item.account_information_id) }}">{{ item.account_information.user_account.user_name }}</a></td>
     </tr>
     {% endif %}
     {% endfor %}

@@ -11,9 +11,10 @@ import datetime
 from pytz import utc
 import pytz
 
-@application.route("/items", methods=["GET"])
+@application.route("/items/", methods=["GET"])
 def items_index():
-    return render_template("items/list.html", items=Item.query.all())
+    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc())
+    return render_template("items/list.html", items=items)
 
 @application.route("/items/new/")
 @login_required

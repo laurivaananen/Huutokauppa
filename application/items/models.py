@@ -60,12 +60,6 @@ class Item(Base):
         time_difference = bidding_time_end - time_now
         time_difference_seconds = int(math.floor(time_difference.total_seconds()))
 
-        print("\n\n\n")
-        print(time_now)
-        print(bidding_time_end)
-        print(int(math.floor(time_difference.total_seconds())))
-        print(time_difference.seconds)
-
         time_left_hour = time_difference_seconds
 
         hour = datetime.timedelta(hours=1)
@@ -76,7 +70,6 @@ class Item(Base):
 
             time_difference_round = time_difference_seconds - time_left_hour
             time_difference_hours = int(time_difference_round / hour.seconds)
-            print("Hours: {}".format(time_difference_hours))
 
         time_left_minute = time_left_hour
 
@@ -87,15 +80,8 @@ class Item(Base):
 
             time_difference_round = time_left_hour - time_left_minute
             time_difference_minutes = int(time_difference_round / minute.seconds)
-            print("Minutes: {}".format(time_difference_minutes))
 
         time_difference_seconds = time_left_minute
-        print("Seconds: {}".format(time_left_minute))
-
-        print("Bidding ends in: {} hours {} minutes {} seconds"
-              .format(time_difference_hours, time_difference_minutes, time_difference_seconds))
-
-        print("\n\n\n")
 
         return {"hours": time_difference_hours, "minutes": time_difference_minutes, "seconds": time_difference_seconds}
 
@@ -155,7 +141,7 @@ class Item(Base):
                     " INNER JOIN account_information ON bid.account_information_id = account_information.id"
                     " INNER JOIN user_account ON user_account.account_information_id = account_information.id"
                     " WHERE item.id = :item_id"
-                    " ORDER BY bid.amount DESC").params(item_id=item_id)
+                    " ORDER BY bid.amount ASC").params(item_id=item_id)
 
         res = db.engine.execute(stmt)
 

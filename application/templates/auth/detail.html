@@ -97,6 +97,7 @@
                 <th>Starting price</th>
                 <th>Latest bid</th>
                 <th>Bidding end</th>
+                <th>Buyer</th>
             </tr>
             {% for item in items %}
             <tr>
@@ -116,7 +117,19 @@
                 {% elif item.hidden %}
                     <td class="info-text">Bidding time over</td>
                 {% else %}
+
+                {% if item.bidding_time_left().hours > 23 %}
                     <td>{{ item.datetime_from_utc() }}</td>
+                {% else %}
+                    {% from 'items/time_left_macro.html' import time_left_macro %}
+                    <td>{{ time_left_macro(item.bidding_time_left()) }}</td>
+                {% endif %}
+                {% endif %}
+
+                {% if item.sold %}
+                    <td><a href="{{ url_for('user_detail', user_id=item.buyer_account_information_id) }}">{{ item.buyer_account_information.user_account.user_name }}</a></td>
+                {% else %}
+                    <td>-</td>
                 {% endif %}
 
             </tr>
@@ -139,7 +152,9 @@
         </tr>
         {% for item_bought in bought_items %}
         <tr>
-            <td>{{ item_bought.name }}</td>
+            <td>
+                <a class="important" href="{{ url_for('item_detail', item_id=item_bought.id) }}">{{ item_bought.name }}</a>
+            </td>
             <td>{{ item_bought.starting_price }}</td>
             <td>{{ item_bought.latest_bid() }}</td>
             <td>{{ item_bought.datetime_from_utc() }}</td>
