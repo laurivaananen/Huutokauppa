@@ -109,13 +109,13 @@
                 {% if item.latest_bid() %}
                     <td>{{ item.latest_bid() }}</td>
                 {% else %}
-                    <td class="info-text">No bids yet</td>
+                    <td class="info-text">No bids</td>
                 {% endif %}
 
                 {% if item.sold %}
                     <td class="info-text">Sold</td>
                 {% elif item.hidden %}
-                    <td class="info-text">Bidding time over</td>
+                    <td class="info-text">{{ item.datetime_from_utc() }}</td>
                 {% else %}
 
                 {% if item.bidding_time_left().hours > 23 %}
@@ -128,8 +128,10 @@
 
                 {% if item.sold %}
                     <td><a href="{{ url_for('user_detail', user_id=item.buyer_account_information_id) }}">{{ item.buyer_account_information.user_account.user_name }}</a></td>
+                {% elif item.hidden %}
+                    <td class="info-text">Unsold</td>
                 {% else %}
-                    <td>-</td>
+                    <td class="info-text">-</td>
                 {% endif %}
 
             </tr>

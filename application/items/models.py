@@ -24,9 +24,9 @@ class Item(Base):
 
     quality_id = db.Column(db.Integer(), db.ForeignKey("quality.id"), nullable=False)
 
-    images = db.relationship("Image", backref='item', lazy=True)
+    images = db.relationship("Image", backref='item', lazy=True, cascade="all, delete-orphan")
 
-    bids = db.relationship("Bid", backref='item', lazy=True)
+    bids = db.relationship("Bid", backref='item', lazy=True, cascade="all, delete-orphan")
 
     account_information_id = db.Column(db.Integer, db.ForeignKey("account_information.id"))
 
