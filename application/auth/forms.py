@@ -8,12 +8,11 @@ class LoginForm(FlaskForm):
     email_address = StringField("Email address")
     password = PasswordField("Password")
 
-    # def validate_email_address(form, field):
-    #     user = AccountInformation.query.filter_by(email_address=form.email_address.data,
-    #                             password=form.password.data).first()
+    def validate_email_address(form, field):
+        user = AccountInformation.query.filter_by(email_address=form.email_address.data).first()
 
-    #     if not user:
-    #         raise ValidationError("Wrong password or email address")
+        if not user:
+            raise ValidationError("Wrong password or email address")
 
     class Meta:
         csrf = False

@@ -15,12 +15,13 @@ def auth_login():
     form = LoginForm(request.form)
 
     if form.validate_on_submit():
-        user = AccountInformation.query.filter_by(email_address=form.email_address.data).first_or_404()
-        if user.is_correct_password(form.password.data):
+        user = AccountInformation.query.filter_by(email_address=form.email_address.data).first()
+        if user and user.is_correct_password(form.password.data):
             login_user(user)
             return redirect(url_for("index"))
         else:
-            return redirect(url_for('auth_login'))
+            form.email_address.errors.append("Wrong password or email address")
+            render_template('auth/loginform.html', form=form)
     return render_template('auth/loginform.html', form=form)
 
 @application.route("/auth/logout", methods = ["GET", "POST"])
