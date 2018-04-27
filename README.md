@@ -34,7 +34,7 @@ The application is hosted in AWS Elastic Beanstalk because you can't do certain 
 
 [Live version in AWS Elastic Beanstalk](http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/)
 
-[Database graph](https://raw.githubusercontent.com/laurivaananen/Huutokauppa/master/documentation/tietokantakaavio.jpg)
+[Database graph](https://raw.githubusercontent.com/laurivaananen/Huutokauppa/master/documentation/tietokantakaavio.png)
 
 [User stories](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/userstories.md)
 
@@ -42,6 +42,7 @@ The application is hosted in AWS Elastic Beanstalk because you can't do certain 
 
 Tällä hetkellä sovelluksessa pystyy:
 
+* Responsiivinen ulkoasu. Sivu mukautuu selainikkunan kokoon, kun sitä pienentää tai suurentaa sivuttain
 * Tehdä käyttäjätilin ja kirjautumaan sillä sisään
 * Oman käyttäjätilin sivuilla näkee omat tavarat mitä olet laittanut myyntiin sekä omat tavarat mitä olet ostanut.
 * Laittaa uuden tavaran kauppaan myyntiin, sekä muokata sen tietoja tai poistaa sen kokonaan
@@ -53,6 +54,6 @@ Tällä hetkellä sovelluksessa pystyy:
 * Linkki admin paneeliin: http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/admin/
 * HUOM! Sinun pitää olla kirjautunut käyttäjällä, jolla on admin oikeudet, jotta näet admin paneelin.
 * Sivulla on valmiiksi tehty admin käyttäjä
-  * sähköposti: *admin@email.com*
-  * salasana: *based_god*
+  * sähköposti: admin@email.com
+  * salasana: based_god
 * Admin käyttäjä voi halutessaan antaa muille käyttäjille admin oikeudet
