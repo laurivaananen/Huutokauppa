@@ -67,7 +67,7 @@ class AccountInformation(Base):
         self.is_admin = False
 
     def set_password(self, plaintext):
-        self._password = bcrypt.generate_password_hash(plaintext)
+        self._password = bcrypt.generate_password_hash(plaintext).decode('utf-8')
 
     def is_correct_password(self, plaintext):
         return bcrypt.check_password_hash(self._password, plaintext)
