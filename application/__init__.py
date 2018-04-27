@@ -1,6 +1,11 @@
 # Flask-sovellus
 from flask import Flask, redirect
 application = Flask(__name__)
+application.config["BCRYPT_LOG_ROUNDS"] = 12
+
+# Bcrypt
+from flask_bcrypt import Bcrypt
+bcrypt = Bcrypt(application)
 
 # Tietokanta
 from flask_sqlalchemy import SQLAlchemy
@@ -110,6 +115,8 @@ from application.auth.models import UserAccount, AccountInformation
 from os import urandom
 application.config["SECRET_KEY"] = urandom(32)
 
+
+
 from flask_login import LoginManager
 login_manager = LoginManager()
 login_manager.init_app(application)
@@ -119,9 +126,26 @@ login_manager.login_message = "Please login to use this functionality"
 
 @login_manager.user_loader
 def load_user(user_id):
-    return AccountInformation.query.get(user_id)
+    # return User.query.filter(User.id==userid).first()
+    return AccountInformation.query.filter(AccountInformation.id==user_id).first()
+    # return AccountInformation.query.get(user_id)
+
+from application.items.models import Quality
+
 
 try:
     db.create_all()
 except:
     pass
+
+@application.before_first_request
+def add_qualities():
+    if not Quality.query.all():
+        new = Quality(name="New")
+        used = Quality(name="Used")
+        refurbished = Quality(name="Refurbished")
+
+        db.session().add(new)
+        db.session().add(used)
+        db.session().add(refurbished)
+        db.session().commit()

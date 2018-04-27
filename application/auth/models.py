@@ -1,7 +1,8 @@
-from application import db
+from application import db, bcrypt
 from application.models import Base
 from application.items.models import Item
 from sqlalchemy.sql import text
+from sqlalchemy.ext.hybrid import hybrid_property
 
 class UserAccount(Base):
 
@@ -36,7 +37,7 @@ class AccountInformation(Base):
     __tablename__ = "account_information"
 
     email_address = db.Column(db.String(144), nullable=False)
-    password = db.Column(db.String(144), nullable=False)
+    _password = db.Column(db.String(128))
     phone_number = db.Column(db.String(144), nullable=False)
     account_balance = db.Column(db.Integer(), nullable=False)
     banned = db.Column(db.Boolean(), nullable=False)
@@ -53,9 +54,12 @@ class AccountInformation(Base):
     bought_items = db.relationship('Item', back_populates='buyer_account_information', lazy=True, foreign_keys="Item.buyer_account_information_id")
     bids = db.relationship('Bid', backref='account_information', lazy=True)
 
-    def __init__(self, email_address, password, phone_number, country, city, postal_code, street_address):
+    
+
+    def __init__(self, email_address, phone_number, country, city, postal_code, street_address):
         self.email_address = email_address
-        self.password = password
+        # self.password = password
+        # self._set_password(password)
         self.phone_number = phone_number
         self.account_balance = 0
         self.banned = False
@@ -64,6 +68,17 @@ class AccountInformation(Base):
         self.city_id = city
         self.postal_code_id = postal_code
         self.street_address_id = street_address
+
+    # @hybrid_property
+    # def password(self):
+    #     return self._password
+
+    # @password.setter
+    def set_password(self, plaintext):
+        self._password = bcrypt.generate_password_hash(plaintext)
+
+    def is_correct_password(self, plaintext):
+        return bcrypt.check_password_hash(self._password, plaintext)
 
 
     def get_id(self):

@@ -13,7 +13,8 @@ import pytz
 
 @application.route("/items/", methods=["GET"])
 def items_index():
-    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc())
+    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).all()
+    print("\n\n\n{}\n\n\n".format(items))
     return render_template("items/list.html", items=items)
 
 @application.route("/items/new/")

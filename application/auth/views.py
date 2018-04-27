@@ -14,17 +14,26 @@ def auth_login():
 
     form = LoginForm(request.form)
 
-    if not form.validate():
-        return render_template("auth/loginform.html", form=form)
+    # if not form.validate():
+    #     return render_template("auth/loginform.html", form=form)
 
-    user = AccountInformation.query.filter_by(email_address=form.email_address.data,
-                                password=form.password.data).first()
+    if form.validate_on_submit():
+        user = AccountInformation.query.filter_by(email_address=form.email_address.data).first_or_404()
+        if user.is_correct_password(form.password.data):
+            login_user(user)
+            return redirect(url_for("index"))
+        else:
+            return redirect(url_for('auth_login'))
+    return render_template('auth/loginform.html', form=form)
+
+    # user = AccountInformation.query.filter_by(email_address=form.email_address.data,
+    #                             password=form.password.data).first()
 
     # if not user:
     #     return render_template("auth/loginform.html", form=form, error="No such email address or password")
 
-    login_user(user)
-    return redirect(url_for("index"))
+    # login_user(user)
+    # return redirect(url_for("index"))
 
 
 @application.route("/auth/logout", methods = ["GET", "POST"])
@@ -49,12 +58,13 @@ def auth_usersignup():
     street_address = get_or_create(db.session, StreetAddress, name=form.street_address.data)
 
     account_information = AccountInformation(email_address = form.email_address.data,
-                                             password = form.password.data,
                                              phone_number = form.phone_number.data,
                                              country = country.id,
                                              city = city.id,
                                              postal_code = postal_code.id,
                                              street_address = street_address.id)
+
+    account_information.set_password(form.password.data)
 
     db.session.add(account_information)
     db.session.flush()
