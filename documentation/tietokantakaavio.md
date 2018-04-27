@@ -1,1 +1,1 @@
-https://raw.githubusercontent.com/laurivaananen/Huutokauppa/master/documentation/tietokantakaavio.jpg
+https://raw.githubusercontent.com/laurivaananen/Huutokauppa/master/documentation/tietokantakaavio.png

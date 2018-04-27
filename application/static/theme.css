@@ -62,7 +62,7 @@ nav a:hover {
 
 #item-list {
     display: grid;
-    padding: 200px 5% 50px 5%;
+    padding: 6em 3em;
 }
 
 #item-list h1 {
@@ -77,10 +77,11 @@ nav a:hover {
 #item-detail {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-areas: ". item-bid"
+    grid-template-areas: "item-toolbar item-bid"
                          "item-details item-bids";
-    grid-gap: 5%;
-    padding: 200px 5% 200px 5%;
+    grid-column-gap: 3em;
+    grid-row-gap: 3em;
+    padding: 6em 3em;
     align-items: start;
 }
 
@@ -94,6 +95,10 @@ nav a:hover {
 
 #item-detail .item-bids {
     grid-area: item-bids;
+}
+
+#item-detail .item-toolbar {
+    grid-area: item-toolbar;
 }
 
 #item-detail .item-toolbar .detail-form {
@@ -111,7 +116,7 @@ nav a:hover {
     display: grid;
     grid-template-columns: 1fr;
     align-items: start;
-    padding: 100px 20% 200px 20%;
+    padding: 6em 3em;
 }
 
 
@@ -120,7 +125,7 @@ nav a:hover {
 #item-edit {
     display: grid;
     grid-template-columns: 1fr;
-    padding: 100px 20% 200px 20%;
+    padding: 6em 3em;
 }
 
 
@@ -129,7 +134,7 @@ nav a:hover {
 #user-signup {
     display: grid;
     grid-template-columns: 1fr;
-    padding: 100px 20% 200px 20%;
+    padding: 6em 6em;
 }
 
 
@@ -138,7 +143,7 @@ nav a:hover {
 #user-login {
     display: grid;
     grid-template-columns: 1fr;
-    padding: 100px 20% 200px 20%;
+    padding: 6em 3em;
 }
 
 
@@ -153,11 +158,10 @@ h2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: start;
-    grid-gap: 5% 5%;
+    grid-column-gap: 3em;
+    grid-row-gap: 3em;
     background-color: #fff;
-    padding: 5%;
-    padding-top: 15%;
-    padding-bottom: 15%;
+    padding: 6em 3em 6em 3em;
 }
 
 #user-detail h1 {
@@ -194,8 +198,9 @@ h2 {
 #index {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 5%;
-    padding: 40% 5% 15% 5%;
+    grid-column-gap: 3em;
+    grid-row-gap: 3em;
+    padding: 6em 3em 6em 3em;
     align-items: start;
 }
 
@@ -465,7 +470,7 @@ a[class=btn]:hover {
     /* Item list */
 
     #item-list {
-        padding: 50px 5% 50px 5%;
+        padding: 6em 3em;;
     }
 
     /* Item Detail */
@@ -473,16 +478,17 @@ a[class=btn]:hover {
     #item-detail {
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-areas: "."
+        grid-template-areas: "item-toolbar"
                              "item-details"
                              "item-bid"
                              "item-bids";
-        grid-gap: 5%;
-        padding: 20px 5% 200px 5%;
+        grid-column-gap: 3em;
+        grid-row-gap: 3em;
+        padding: 6em 3em;
     }
 
     #item-new {
-        padding: 5% 5% 200px 5%;
+        padding: 6em 3em;
     }
     
 
