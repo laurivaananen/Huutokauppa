@@ -6,11 +6,11 @@ import pytz
 from wtforms import StringField, IntegerField, BooleanField, DateField, validators, ValidationError, TextAreaField, SelectField, FormField
 
 class DateTimeForm(FlaskForm):
-    bidding_end_date = StringField("Bidding end date", [validators.regexp(r'^\d{4}-\d{2}-\d{2}$', message="You need to give the date in a correct format (yyyy-mm-dd)")])
+    bidding_end_date = StringField("Bidding end date (yyyy-mm-dd)", [validators.InputRequired(), validators.regexp(r'^\d{4}-\d{2}-\d{2}$', message="You need to give the date in a correct format (yyyy-mm-dd)")])
 
 
 
-    bidding_end_time = StringField("Bidding end time", [validators.regexp(r'^\d{2}:\d{2}$', message="You need to give the time in a correct format (hh:mm)")])
+    bidding_end_time = StringField("Bidding end time (hh:mm)", [validators.InputRequired(), validators.regexp(r'^\d{2}:\d{2}$', message="You need to give the time in a correct format (hh:mm)")])
 
 
     def validate_bidding_end_time(form, field):
@@ -39,8 +39,8 @@ class DateTimeForm(FlaskForm):
 
 class ItemForm(FlaskForm):
     
-    name = StringField("Item name", [validators.Length(min=2, max=144)])
-    starting_price = IntegerField("Starting price", [validators.NumberRange(min=1)])
+    name = StringField("Item name", [validators.InputRequired(), validators.Length(max=144)])
+    starting_price = IntegerField("Starting price", [validators.InputRequired(), validators.NumberRange(min=1)])
     buyout_price = IntegerField("Buyout price", [validators.InputRequired(), validators.NumberRange(min=5)])
 
     def validate_buyout_price(form, field):
@@ -65,8 +65,9 @@ class ItemForm(FlaskForm):
 
 
 
-    description = TextAreaField("Item description", [validators.Length(min=1, max=4096)])
-    quality = StringField("Item quality", [validators.InputRequired(), validators.Length(min=1, max=144)])
+    description = TextAreaField("Item description", [validators.InputRequired(), validators.Length(max=4096)])
+    # quality = StringField("Item quality", [validators.InputRequired(), validators.Length(min=1, max=144)])
+    quality = SelectField("Quality", coerce=int)
 
 
     class Meta:

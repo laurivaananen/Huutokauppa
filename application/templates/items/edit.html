@@ -3,65 +3,28 @@
 {% block body %}
 
 {% if current_user.id == item.account_information.id %}
+<main id="item-edit">
 
+<div class="float-div">
+<h2 class="table-header">Edit item</h2>
+<form class="detail-form" method="POST" action="{{ url_for('item_update', item_id=item.id) }}">
+    {{ form.name.label }}
+    {{ form.name }}
+    <p class="error">{{ form.name.errors[0] }}</p>
 
-<form class="item-edit detail-form item-edit-bottom-span" method="POST" action="{{ url_for('item_update', item_id=item.id) }}">
-    <table>
-        <tr>
-            <td>
-                {{ form.name.label }}
-            </td>
-            <td>
-                {{ form.name }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.name.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.description.label }}
-            </td>
-            <td>
-                {{ form.description }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.description.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.quality.label }}
-            </td>
-            <td>
-                <!-- <input type="text" name="{{ form.quality.name }}" id="{{ form.quality.id }}" value="{{ item.quality.name }}"> -->
-                {{ form.quality(value=item.quality.name) }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.quality.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input class="btn green-btn" type="submit" value="Add a new item"/>
-            </td>
-        </tr>
-    </table>
+    {{ form.description.label }}
+    {{ form.description }}
+    <p class="error">{{ form.description.errors[0] }}</p>
+
+    {{ form.quality.label }}
+    {{ form.quality(value=item.quality.name) }}
+    <p class="error">{{ form.quality.errors[0] }}</p>
+
+    <input class="btn" type="submit" value="Update item"/>
 </form>
 {% else %}
 <p class="info-text item-edit-top-span">You are not authorized to edit this information</p>
 {% endif %}
-
+</div>
+</main>
 {% endblock %}

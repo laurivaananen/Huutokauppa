@@ -1,122 +1,41 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<p class="info-text item-new-top-span">You can't change prices or auction end datetime after you have created an item</p>
+<main id="item-new">
+<div class="float-div">
+<h1 class="table-header">New item</h1>
+<form class="detail-form" method="POST" action="{{ url_for('items_create') }}">
 
-<form class="item-new detail-form item-new-bottom-span" method="POST" action="{{ url_for('items_create') }}">
-    <table>
-        <tr>
-            <td>
-                {{ form.starting_price.label }}
-            </td>
-            <td>
-                {{ form.starting_price }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.starting_price.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.buyout_price.label }}
-            </td>
-            <td>
-                {{ form.buyout_price }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.buyout_price.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.bidding_end.bidding_end_date.label }}<span class="info-text"> (yyyy-mm-dd)</span>
-            </td>
-            <td>
-                {{ form.bidding_end.bidding_end_date(placeholder=form.get_current_date()) }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.bidding_end.bidding_end_date.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.bidding_end.bidding_end_time.label }}<span class="info-text"> (hh:mm)</span>
-            </td>
-            <td>
-                {{ form.bidding_end.bidding_end_time(placeholder=form.get_current_time()) }}
-            <td>
-                <ul>
-                    {% for error in form.bidding_end.bidding_end_time.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.name.label }}
-            </td>
-            <td>
-                {{ form.name }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.name.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.description.label }}
-            </td>
-            <td>
-                {{ form.description }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.description.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.quality.label }}
-            </td>
-            <td>
-                {{ form.quality }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.quality.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                
-            </td>
-            <td>
-                <input class="btn btn-green" type="submit" value="New item"/>
-            </td>
-        </tr>
-    </table>
+    {{ form.starting_price.label }}
+    {{ form.starting_price }}
+    <p class="error">{{ form.starting_price.errors[0] }}</p>
+    
+    {{ form.buyout_price.label }}
+    {{ form.buyout_price }}
+    <p class="error">{{ form.buyout_price.errors[0] }}</p>
+
+    {{ form.bidding_end.bidding_end_date.label }}
+    {{ form.bidding_end.bidding_end_date(placeholder=form.get_current_date()) }}
+    <p class="error">{{ form.bidding_end.bidding_end_time.errors[0] }}</p>
+
+    {{ form.bidding_end.bidding_end_time.label }}
+    {{ form.bidding_end.bidding_end_time(placeholder=form.get_current_time()) }}
+    <p class="error">{{ form.bidding_end.bidding_end_time.errors[0] }}</p>
+
+    {{ form.name.label }}
+    {{ form.name }}
+    <p class="error">{{ form.name.errors[0] }}</p>
+
+    {{ form.description.label }}
+    {{ form.description }}
+    <p class="error">{{ form.description.errors[0] }}</p>
+
+    {{ form.quality.label }}
+    {{ form.quality }}
+    <p class="error">{{ form.quality.errors[0] }}</p>
+
+    <input class="btn" type="submit" value="New item"/>
 </form>
+</div>
+</main>
 {% endblock %}

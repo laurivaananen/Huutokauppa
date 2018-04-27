@@ -20,8 +20,8 @@ def auth_login():
     user = AccountInformation.query.filter_by(email_address=form.email_address.data,
                                 password=form.password.data).first()
 
-    if not user:
-        return render_template("auth/loginform.html", form=form, error="No such email address or password")
+    # if not user:
+    #     return render_template("auth/loginform.html", form=form, error="No such email address or password")
 
     login_user(user)
     return redirect(url_for("index"))
@@ -77,7 +77,7 @@ def auth_usersignup():
 @application.route("/user/<user_id>", methods=["GET", "POST"])
 @login_required
 def user_detail(user_id):
-    account_information = AccountInformation.query.get(user_id)
+    account_information = AccountInformation.query.get_or_404(user_id)
 
     items = None
     bought_items = None

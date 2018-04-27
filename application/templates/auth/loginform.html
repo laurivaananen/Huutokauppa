@@ -1,44 +1,20 @@
 {% extends "layout.html" %}
 
 {% block body %}
-{{ error }}
+<main id="user-login">
+<div class="float-div">
+<h2 class="table-header">Login</h2>
 <form class="user-login detail-form" method="POST" action="{{ url_for('auth_login')}}">
-    <table>
-        <tr>
-            <td>
-                {{ form.email_address.label }}
-            </td>
-            <td>
-                {{ form.email_address }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.email_address.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.password.label }}
-            </td>
-            <td>
-                {{ form.password }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.password.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input class="btn green-btn" type="submit" value="Login"/>
-            </td>
-        </tr>
-    </table>
+    {{ form.email_address.label }}
+    {{ form.email_address }}
+    <p class="error">{{ form.email_address.errors[0] }}</p>
+
+    {{ form.password.label }}
+    {{ form.password }}
+    <p class="error">{{ form.password.errors[0] }}</p>
+
+    <input class="btn" type="submit" value="Login"/>
 </form>
+</div>
+</main>
 {% endblock %}

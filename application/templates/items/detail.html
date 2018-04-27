@@ -9,18 +9,13 @@
 {% if current_user.id == item.account_information.id and not item.sold %}
 <div class="float-div item-toolbar">
 <h2 class="table-header">Toolbar</h2>
-<table>
-    <tr>
-        <td>
-            <a class="item-edit-btn btn btn-blue" href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
-        </td>
-        <td>
-            <form class="item-delete" method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
-                <input class="item-delete-btn btn btn-red" type="submit" value="Delete">
-            </form>
-        </td>
-    </tr>
-</table>
+    <div class="buttons">
+    <a class="btn" href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
+
+    <form class="detail-form" method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
+        <input class="btn inline" type="submit" value="Delete">
+    </form>
+    </div>
 </div>
 {% endif %}
 
@@ -29,8 +24,12 @@
 {% if current_user.id != item.account_information.id and not item.sold %}
 <div class="float-div item-bid">
 <h2 class="table-header">Bid</h2>
-<form class="bid-new" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
-    <table>
+<form class="detail-form" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
+    {{ form.amount.label}}
+    {{ form.amount(placeholder="Bid amount") }}
+    <p class="error">{{ form.amount.errors[0] }}</p>
+    <input class="btn" type="submit" value="Bid"/>
+    <!-- <table>
         <tr>
             <td>
                 {{ form.amount }}
@@ -53,7 +52,7 @@
                 <input class="btn btn-green" type="submit" value="Bid"/>
             </td>
         </tr>
-    </table>
+    </table> -->
 </form>
 </div>
 {% endif %}

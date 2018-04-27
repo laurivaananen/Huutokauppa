@@ -1,164 +1,56 @@
 {% extends "layout.html" %}
 
 {% block body %}
-{{ error }}
-<form class="user-new detail-form" method="POST" action="{{ url_for('auth_usersignup')}}">
-    <table>
-        <tr>
-            <td>
-                {{ form.first_name.label }}
-            </td>
-            <td>
-                {{ form.first_name }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.first_name.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.last_name.label }}
-            </td>
-            <td>
-                {{ form.last_name }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.last_name.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.user_name.label }}
-            </td>
-            <td>
-                {{ form.user_name }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.user_name.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.email_address.label }}
-            </td>
-            <td>
-                {{ form.email_address }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.email_address.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.phone_number.label }}
-            </td>
-            <td>
-                {{ form.phone_number }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.phone_number.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.password.label }}
-            </td>
-            <td>
-                {{ form.password }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.password.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.country.label }}
-            </td>
-            <td>
-                {{ form.country }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.country.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.city.label }}
-            </td>
-            <td>
-                {{ form.city }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.city.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.postal_code.label }}
-            </td>
-            <td>
-                {{ form.postal_code }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.postal_code.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.street_address.label }}
-            </td>
-            <td>
-                {{ form.street_address }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.street_address.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input class="btn green-btn" type="submit" value="Login"/>
-            </td>
-        </tr>
-    </table>
+<main id="user-signup">
+<div class="float-div">
+<h1 class="table-header">Signup</h1>
+<form class="detail-form" method="POST" action="{{ url_for('auth_usersignup')}}">
+    {{ form.first_name.label }}
+    {{ form.first_name }}
+    <p class="error">{{ form.first_name.errors[0] }}</p>
+
+    {{ form.last_name.label }}
+    {{ form.last_name }}
+    <p class="error">{{ form.last_name.errors[0] }}</p>
+
+    {{ form.user_name.label }}
+    {{ form.user_name }}
+    <p class="error">{{ form.user_name.errors[0] }}</p>
+
+    {{ form.email_address.label }}
+    {{ form.email_address }}
+    <p class="error">{{ form.email_address.errors[0] }}</p>
+
+    {{ form.phone_number.label }}
+    {{ form.phone_number }}
+    <p class="error">{{ form.phone_number.errors[0] }}</p>
+
+    {{ form.password.label }}
+    {{ form.password }}
+    <p class="error">{{ form.password.errors[0] }}</p>
+
+    {{ form.repeat_password.label }}
+    {{ form.repeat_password }}
+    <p class="error">{{ form.repeat_password.errors[0] }}</p>
+    
+    {{ form.country.label }}
+    {{ form.country }}
+    <p class="error">{{ form.country.errors[0] }}</p>
+
+    {{ form.city.label }}
+    {{ form.city }}
+    <p class="error">{{ form.city.errors[0] }}</p>
+
+    {{ form.postal_code.label }}
+    {{ form.postal_code }}
+    <p class="error">{{ form.postal_code.errors[0] }}</p>
+
+    {{ form.street_address.label }}
+    {{ form.street_address }}
+    <p class="error">{{ form.street_address.errors[0] }}</p>
+
+    <input class="btn" type="submit" value="Signup"/>
 </form>
+</div>
+</main>
 {% endblock %}

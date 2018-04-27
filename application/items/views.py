@@ -19,12 +19,15 @@ def items_index():
 @application.route("/items/new/")
 @login_required
 def items_form():
-    return render_template("items/new.html", form = ItemForm())
+    form = ItemForm()
+    qualities = Quality.query.all()
+    form.quality.choices = [(quality.id, quality.name) for quality in qualities]
+    return render_template("items/new.html", form = form)
 
 @application.route("/items/<item_id>/", methods=["GET"])
 def item_detail(item_id):
 
-    item = Item.query.get(item_id)
+    item = Item.query.get_or_404(item_id)
     bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc())
 
     return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
@@ -37,6 +40,9 @@ def item_edit(item_id):
 
     form = ItemForm(obj=item)
 
+    qualities = Quality.query.all()
+    form.quality.choices = [(quality.id, quality.name) for quality in qualities]
+
     return render_template("items/edit.html", item=item, form=form)
 
 @login_required
@@ -45,19 +51,20 @@ def item_update(item_id):
 
     form = ItemForm(request.form)
 
-    if not (form.name.validate(form) and form.description.validate(form) and form.quality.validate(form)):
-        return render_template("items/edit.html", form=form)
+    qualities = Quality.query.all()
+    form.quality.choices = [(quality.id, quality.name) for quality in qualities]
 
-    item = Item.query.get(item_id)
+    if not (form.name.validate(form) and (form.description.validate(form)) and (form.quality.validate(form))):
+        return render_template("items/edit.html", form=form, item=Item.query.get(item_id))
+
+    item = Item.query.get_or_404(item_id)
     if current_user.id == item.account_information.id:
         
         item.name = form.name.data
 
         item.description = form.description.data
 
-        if item.quality.name != form.quality.data:
-            quality = get_or_create(db.session, Quality, name=form.quality.data)
-            item.quality_id = quality.id
+        item.quality_id = form.quality.data
 
         db.session().commit()
 
@@ -79,10 +86,15 @@ def item_delete(item_id):
 def items_create():
     form = ItemForm(request.form)
 
+    print(form)
+
+    qualities = Quality.query.all()
+    form.quality.choices = [(quality.id, quality.name) for quality in qualities]
+
     if not form.validate():
         return render_template("items/new.html", form=form)
 
-    quality = get_or_create(db.session, Quality, name=form.quality.data)
+    # quality = get_or_create(db.session, Quality, name=form.quality.data)
 
     helsinki = pytz.timezone("Europe/Helsinki")
 
@@ -98,7 +110,7 @@ def items_create():
                 buyout_price = form.buyout_price.data,
                 name = form.name.data,
                 account_information_id = current_user.id,
-                quality = quality.id,
+                quality = form.quality.data,
                 description = form.description.data,
                 bidding_end = bidding_end)
 

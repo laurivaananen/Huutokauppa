@@ -34,7 +34,7 @@ nav {
 
 nav a {
     text-decoration: none;
-    color: #eee;
+    color: #fff;
     display: block;
     padding: 0;
     margin: 0;
@@ -44,7 +44,8 @@ nav a {
 }
 
 nav a:hover {
-    background-color: rgb(34, 73, 95);
+    background-color: rgb(255, 217, 0);
+    color: rgb(50, 96, 139);
 }
 
 .nav-index {grid-area: index;}
@@ -80,6 +81,7 @@ nav a:hover {
                          "item-details item-bids";
     grid-gap: 5%;
     padding: 200px 5% 200px 5%;
+    align-items: start;
 }
 
 #item-detail .item-bid {
@@ -94,64 +96,49 @@ nav a:hover {
     grid-area: item-bids;
 }
 
+#item-detail .item-toolbar .detail-form {
+    display: inline-block;
+}
+
+#item-detail .item-toolbar .buttons{
+    padding-left: 20px;
+}
+
 
 /* Item new */
 
-.item-new-top-span {
-    grid-row: 2 / 3;
-    grid-column: 1 / -1;
-    align-self: start;
-    margin: 0 auto;
-    padding-top: 6em;;
-}
-
-.item-new-bottom-span {
-    grid-row: 3 / 4;
-    grid-column: 1 / -1;
-    margin: 0 auto;
-    padding-top: 2em;
-    align-self: start;
+#item-new {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding: 100px 20% 200px 20%;
 }
 
 
 /* Item edit */
 
-.item-edit-top-span {
-    grid-row: 2 / 3;
-    grid-column: 1 / -1;
-    align-self: start;
-    margin: 0 auto;
-    padding-top: 6em;;
-}
-
-.item-edit-bottom-span {
-    grid-row: 3 / 4;
-    grid-column: 1 / -1;
-    margin: 0 auto;
-    padding-top: 6em;
-    align-self: start;
+#item-edit {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 100px 20% 200px 20%;
 }
 
 
 /* User new */
 
-.user-new {
-    grid-row: 2 / -1;
-    grid-column: 1 / -1;
-    margin: 0 auto;
-    padding-top: 6em;
-    align-self: start;
+#user-signup {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 100px 20% 200px 20%;
 }
 
 
 /* User login */
 
-.user-login {
-    grid-row: 2 / -1;
-    grid-column: 1 / -1;
-    margin: 0 auto;
-    padding-top: 6em;
-    align-self: start;
+#user-login {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 100px 20% 200px 20%;
 }
 
 
@@ -209,6 +196,7 @@ h2 {
     grid-template-columns: 1fr 1fr;
     grid-gap: 5%;
     padding: 40% 5% 15% 5%;
+    align-items: start;
 }
 
 #index h1 {
@@ -231,13 +219,11 @@ DETAIL ELEMENTS
 /* Drop shadow div */
 
 .float-div {
-    /* background-color: mediumpurple; */
-    /* border: 2px solid #666; */
     overflow: hidden;
     width: auto;
     display: inline-block;
     border-radius: 20px;
-    box-shadow: 5px 5px 20px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 4px 16px 2px rgba(0, 0, 0, 0.2);
 }
 
 .float-div .empty-table {
@@ -297,35 +283,92 @@ DETAIL ELEMENTS
 
 
 /* Detail form */
-
-.detail-form tr {
-    height: 3em;
-    padding: 0;
-    margin: 0;
+.detail-form {
+    padding: 0 20px 20px 20px;
 }
 
-.detail-form td:first-child {
-    padding-right: 2em;
+.detail-form label {
+    display: block;
 }
 
-.detail-form input {
-    width: 12em;
+.detail-form input[type=text], .detail-form textarea, .detail-form input[type=password] {
+    display: inline-block;
+    width: 50%; /* Full width */
+    padding: 12px; 
+    border: 1px solid #ccc; /* Gray border */
+    border-radius: 4px; /* Rounded borders */
+    box-sizing: border-box; /* Make sure that padding and width stays in place */
+    margin-top: 0.5em; /* Add a top margin */
+    margin-bottom: 1em; /* Bottom margin */
+    resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
 }
+
+.detail-form input[type=text]:focus, .detail-form textarea:focus, .detail-form input[type=password]:focus {
+    border: 1px solid rgb(67, 120, 170);
+}
+
+.detail-form input[type=submit] {
+    background-color: rgb(50, 96, 139);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    font-family: 'Roboto';
+    font-size: 14px;
+}
+
+.detail-form input[type=submit]:hover {
+    background-color: rgb(255, 217, 0);
+    color: rgb(50, 96, 139);
+}
+
+.detail-form .inline{
+    display: inline-block;
+}
+
+.detail-form .error {
+    display: inline-block;
+    color: red;
+    padding-left: 20px;
+}
+
+.detail-form select {
+    display: inline-block;
+    width: 50%;
+    padding: 12px; 
+    border: 1px solid #ccc; /* Gray border */
+    border-radius: 4px; /* Rounded borders */
+    box-sizing: border-box; /* Make sure that padding and width stays in place */
+    margin-top: 0.5em; /* Add a top margin */
+    margin-bottom: 1em; /* Bottom margin */
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+
 
 
 /* Button */
 
-.btn {
+
+a[class=btn] {
+    background-color: rgb(50, 96, 139);
+    color: white;
+    padding: 12px 20px;
     border: none;
-    background-color: rgb(255, 81, 0);
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-style: none;
     text-decoration: none;
-    font: normal 16px arial;
-    height: 3em;
-    width: 7em;
-    line-height: 3em;
-    display: block;
-    text-align: center;
-    color: #fff;
+}
+
+a[class=btn]:hover {
+    background-color: rgb(255, 217, 0);
+    color: rgb(50, 96, 139);
 }
 
 .btn-blue {
@@ -436,6 +479,10 @@ DETAIL ELEMENTS
                              "item-bids";
         grid-gap: 5%;
         padding: 20px 5% 200px 5%;
+    }
+
+    #item-new {
+        padding: 5% 5% 200px 5%;
     }
     
 
