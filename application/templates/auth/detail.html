@@ -4,39 +4,6 @@
 <main id="user-detail">
 <h1>{{ account_information.user_account.first_name }} {{ account_information.user_account.last_name }}</h1>
 
-<!-- Add to account balance if you are the account owner -->
-<!-- {% if current_user.id == account_information.id %}
-<form class="account-deposit" method="POST" action="{{ url_for('account_deposit') }}">
-    <table>
-        <tr>
-            <th><h2>Deposit money to your account</h2></th>
-            <td></td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.amount }}
-            </td>
-            <td>
-                {% if form.amount.errors %}
-                <ul>
-                    
-                    {% for error in form.amount.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input class="btn btn-green" type="submit" value="Deposit"/>
-            </td>
-        </tr>
-    </table>
-</form>
-{% endif %} -->
-
 <!-- User account details -->
 <div class="user-detail-div">
 <h2>Account details</h2>
@@ -67,14 +34,10 @@
         <th>Bids</th>
         <td>{{ account_information.bids_count(account_information.id) }}</td>
     </tr>
-    {% if current_user.id == account_information.id %}
-    <tr>
-        <th>Account Balance</th>
-        <td>{{ account_information.account_balance }}</td>
-    </tr>
 </table>
 </div>
 
+{% if current_user.id == account_information.id %}
 <div class="user-mailing-detail-div">
 <h2>Mailing Address</h2>
 <table class="detail-table">
@@ -94,9 +57,9 @@
         <th>Address</th>
         <td>{{ account_information.street_address.name }}</td>
     </tr>
-    {% endif %}
 </table>
 </div>
+{% endif %}
 
 {% if current_user.id == account_information.id%}
 <div class="float-div user-items-div">

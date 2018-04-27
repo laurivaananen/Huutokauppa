@@ -9,10 +9,6 @@
     {{ form.starting_price.label }}
     {{ form.starting_price }}
     <p class="error">{{ form.starting_price.errors[0] }}</p>
-    
-    {{ form.buyout_price.label }}
-    {{ form.buyout_price }}
-    <p class="error">{{ form.buyout_price.errors[0] }}</p>
 
     {{ form.bidding_end.bidding_end_date.label }}
     {{ form.bidding_end.bidding_end_date(placeholder=form.get_current_date()) }}

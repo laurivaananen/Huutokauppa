@@ -117,7 +117,7 @@ application.config["SECRET_KEY"] = urandom(32)
 
 
 
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 login_manager = LoginManager()
 login_manager.init_app(application)
 
@@ -130,8 +130,60 @@ def load_user(user_id):
     return AccountInformation.query.filter(AccountInformation.id==user_id).first()
     # return AccountInformation.query.get(user_id)
 
-from application.items.models import Quality
 
+# Admin
+from flask_admin import Admin, AdminIndexView
+from flask_admin.contrib.sqla import ModelView
+from flask import url_for
+from application.items.models import Item
+from application.bid.models import Bid
+
+
+
+class SecureAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        if current_user.is_authenticated:
+            account_information = AccountInformation.query.get_or_404(current_user.id)
+            return account_information.is_admin
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('index'))
+
+
+class SecureModelView(ModelView):
+    def is_accessible(self):
+        if current_user.is_authenticated:
+            account_information = AccountInformation.query.get_or_404(current_user.id)
+            return account_information.is_admin
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('index'))
+
+
+class ItemModelView(SecureModelView):
+    form_ajax_refs = {
+        'bids': {
+            'fields': (Bid.amount, )
+        }
+    }
+
+
+class AccountInformationModelView(SecureModelView):
+    form_ajax_refs = {
+        'items': {
+            'fields': (Item.name, )
+        }
+    }
+
+admin = Admin(application, name="Huutokauppa", template_mode="bootstrap3", index_view=SecureAdminIndexView())
+admin.add_view(AccountInformationModelView(AccountInformation, db.session))
+admin.add_view(ItemModelView(Item, db.session))
+admin.add_view(SecureModelView(Bid, db.session))
+
+
+
+
+from application.items.models import Quality
 
 try:
     db.create_all()
@@ -148,4 +200,35 @@ def add_qualities():
         db.session().add(new)
         db.session().add(used)
         db.session().add(refurbished)
+        db.session().commit()
+
+@application.before_first_request
+def add_super_admin():
+    from application.extensions import get_or_create
+    from application.auth.models import Country, City, PostalCode, StreetAddress
+    if not AccountInformation.query.all():
+        country = get_or_create(db.session, Country, name="admin")
+        city = get_or_create(db.session, City, name="admin")
+        postal_code = get_or_create(db.session, PostalCode, name="admin")
+        street_address = get_or_create(db.session, StreetAddress, name="admin")
+
+        account_information = AccountInformation(email_address = "admin@email.com",
+                                             phone_number = "admin",
+                                             country = country.id,
+                                             city = city.id,
+                                             postal_code = postal_code.id,
+                                             street_address = street_address.id)
+
+        account_information.set_password("based_god")
+        account_information.is_admin = True
+
+        db.session.add(account_information)
+        db.session.flush()
+
+        user_account = UserAccount(user_name = "admin",
+                                account_information = account_information.id,
+                                first_name = "admin",
+                                last_name = "admin")
+
+        db.session().add(user_account)
         db.session().commit()

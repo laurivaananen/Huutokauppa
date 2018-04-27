@@ -32,6 +32,9 @@ class UserAccount(Base):
     def is_authenticated(self):
         return True
 
+    def __str__(self):
+        return self.user_name
+
 class AccountInformation(Base):
 
     __tablename__ = "account_information"
@@ -39,11 +42,10 @@ class AccountInformation(Base):
     email_address = db.Column(db.String(144), nullable=False)
     _password = db.Column(db.String(128))
     phone_number = db.Column(db.String(144), nullable=False)
-    account_balance = db.Column(db.Integer(), nullable=False)
     banned = db.Column(db.Boolean(), nullable=False)
+    is_admin = db.Column(db.Boolean(), nullable=False)
 
     user_account = db.relationship("UserAccount", backref='account_information', lazy=True, uselist=False)
-
 
     country_id = db.Column(db.Integer, db.ForeignKey('country.id'), nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
@@ -54,32 +56,21 @@ class AccountInformation(Base):
     bought_items = db.relationship('Item', back_populates='buyer_account_information', lazy=True, foreign_keys="Item.buyer_account_information_id")
     bids = db.relationship('Bid', backref='account_information', lazy=True)
 
-    
-
     def __init__(self, email_address, phone_number, country, city, postal_code, street_address):
         self.email_address = email_address
-        # self.password = password
-        # self._set_password(password)
         self.phone_number = phone_number
-        self.account_balance = 0
         self.banned = False
-
         self.country_id = country
         self.city_id = city
         self.postal_code_id = postal_code
         self.street_address_id = street_address
+        self.is_admin = False
 
-    # @hybrid_property
-    # def password(self):
-    #     return self._password
-
-    # @password.setter
     def set_password(self, plaintext):
         self._password = bcrypt.generate_password_hash(plaintext)
 
     def is_correct_password(self, plaintext):
         return bcrypt.check_password_hash(self._password, plaintext)
-
 
     def get_id(self):
         return self.id
@@ -92,6 +83,9 @@ class AccountInformation(Base):
     
     def is_authenticated(self):
         return True
+
+    def __str__(self):
+        return self.user_account.user_name
 
 
     @staticmethod
@@ -154,52 +148,55 @@ class Country(Base):
 
     __tablename__ = "country"
 
-
     name = db.Column(db.String(144), nullable=False)
-
-
 
     account_informations = db.relationship("AccountInformation", backref='country', lazy=True)
 
     def __init__(self, name):
         self.name = name
 
+    def __str__(self):
+        return self.name
+
 
 class City(Base):
 
     __tablename__ = "city"
 
-
     name = db.Column(db.String(144), nullable=False)
 
     account_informations = db.relationship("AccountInformation", backref='city', lazy=True)
-    # business_acounts = db.relationship("BusinessAccount", backref='city', lazy=True)
 
     def __init__(self, name):
         self.name = name
+
+    def __str__(self):
+        return self.name
 
 class PostalCode(Base):
 
     __tablename__ = "postal_code"
 
-
     name = db.Column(db.String(144), nullable=False)
 
     account_informations = db.relationship("AccountInformation", backref='postal_code', lazy=True)
-    # business_acounts = db.relationship("BusinessAccount", backref='postal_code', lazy=True)
 
     def __init__(self, name):
         self.name = name
+
+    def __str__(self):
+        return self.name
 
 class StreetAddress(Base):
 
     __tablename__ = "street_address"
 
-
     name = db.Column(db.String(144), nullable=False)
 
     account_informations = db.relationship("AccountInformation", backref='street_address', lazy=True)
-    # business_acounts = db.relationship("BusinessAccount", backref='street_address', lazy=True)
 
     def __init__(self, name):
         self.name = name
+
+    def __str__(self):
+        return self.name

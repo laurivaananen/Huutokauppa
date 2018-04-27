@@ -14,9 +14,6 @@ def auth_login():
 
     form = LoginForm(request.form)
 
-    # if not form.validate():
-    #     return render_template("auth/loginform.html", form=form)
-
     if form.validate_on_submit():
         user = AccountInformation.query.filter_by(email_address=form.email_address.data).first_or_404()
         if user.is_correct_password(form.password.data):
@@ -25,16 +22,6 @@ def auth_login():
         else:
             return redirect(url_for('auth_login'))
     return render_template('auth/loginform.html', form=form)
-
-    # user = AccountInformation.query.filter_by(email_address=form.email_address.data,
-    #                             password=form.password.data).first()
-
-    # if not user:
-    #     return render_template("auth/loginform.html", form=form, error="No such email address or password")
-
-    # login_user(user)
-    # return redirect(url_for("index"))
-
 
 @application.route("/auth/logout", methods = ["GET", "POST"])
 def auth_logout():
@@ -77,12 +64,8 @@ def auth_usersignup():
     db.session().add(user_account)
     db.session().commit()
 
-    
-
     login_user(user_account)
     return redirect(url_for("index"))
-
-
 
 @application.route("/user/<user_id>", methods=["GET", "POST"])
 @login_required
@@ -97,20 +80,3 @@ def user_detail(user_id):
         bought_items = account_information.bought_items
 
     return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm(), items=items, bought_items=bought_items)
-
-@login_required
-@application.route("/user/deposit", methods=["POST"])
-def account_deposit():
-
-    account_information = AccountInformation.query.get(current_user.id)
-
-    form = AccountDepositForm(request.form)
-
-    if not form.validate():
-        return render_template("auth/detail.html", account_information=account_information, form=form)
-
-    account_information.account_balance += form.amount.data
-
-    db.session().commit()
-
-    return redirect(url_for("user_detail", user_id=account_information.id))

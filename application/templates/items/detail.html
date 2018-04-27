@@ -23,36 +23,12 @@
 <!-- Toolbar to add a bid if you are not the owner -->
 {% if current_user.id != item.account_information.id and not item.sold %}
 <div class="float-div item-bid">
-<h2 class="table-header">Bid</h2>
+<h2 class="table-header">{{ item.name }}</h2>
 <form class="detail-form" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
     {{ form.amount.label}}
     {{ form.amount(placeholder="Bid amount") }}
     <p class="error">{{ form.amount.errors[0] }}</p>
     <input class="btn" type="submit" value="Bid"/>
-    <!-- <table>
-        <tr>
-            <td>
-                {{ form.amount }}
-            </td>
-            <td>
-                {% if form.amount.errors %}
-                <ul>
-                    
-                    {% for error in form.amount.errors %}
-                    <li class="form-error">{{ error }}</li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                Add your bid
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input class="btn btn-green" type="submit" value="Bid"/>
-            </td>
-        </tr>
-    </table> -->
 </form>
 </div>
 {% endif %}
@@ -129,9 +105,7 @@
         <th>Amount</th>
         <th>Date</th>
     </tr>
-    
-    
-    
+
     {% for bid in bids %}
     <tr>
         <td><a href="{{ url_for('user_detail', user_id=bid.account_information_id) }}">{{ bid.account_information.user_account.user_name }}</a></td>

@@ -9,7 +9,6 @@ class Item(Base):
     __tablename__ = 'item'
 
     starting_price = db.Column(db.Integer, nullable=False)
-    buyout_price = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(144), nullable=False)
     description = db.Column(db.String(4096), nullable=False)
     bidding_start = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -24,8 +23,6 @@ class Item(Base):
 
     quality_id = db.Column(db.Integer(), db.ForeignKey("quality.id"), nullable=False)
 
-    images = db.relationship("Image", backref='item', lazy=True, cascade="all, delete-orphan")
-
     bids = db.relationship("Bid", backref='item', lazy=True, cascade="all, delete-orphan")
 
     account_information_id = db.Column(db.Integer, db.ForeignKey("account_information.id"))
@@ -36,9 +33,8 @@ class Item(Base):
 
     buyer_account_information = db.relationship("AccountInformation", back_populates="bought_items", foreign_keys="Item.buyer_account_information_id")
 
-    def __init__(self, name, buyout_price, starting_price, quality, description, bidding_end, account_information_id):
+    def __init__(self, name, starting_price, quality, description, bidding_end, account_information_id):
         self.name = name
-        self.buyout_price = buyout_price
         self.starting_price = starting_price
         self.sold = False
         self.account_information_id = account_information_id
@@ -151,19 +147,6 @@ class Item(Base):
 
         return response
 
-class Image(Base):
-
-    __tablename__ = "image"
-
-    file_path = db.Column(db.String(144), nullable=False)
-
-    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-
-    def __init__(self, file_path, item):
-        self.file_path = file_path
-        self.item_id = item
-
-
 class Quality(Base):
 
     __tablename__ = "quality"
@@ -174,3 +157,6 @@ class Quality(Base):
 
     def __init__(self, name):
         self.name = name
+
+    def __str__(self):
+        return self.name

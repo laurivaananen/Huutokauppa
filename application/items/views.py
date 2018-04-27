@@ -1,7 +1,7 @@
 from application import application, db
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
-from application.items.models import Item, Quality, Image
+from application.items.models import Item, Quality
 from application.items.forms import ItemForm
 from application.items.tasks import sell_item
 from application.extensions import get_or_create
@@ -87,15 +87,11 @@ def item_delete(item_id):
 def items_create():
     form = ItemForm(request.form)
 
-    print(form)
-
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
 
     if not form.validate():
         return render_template("items/new.html", form=form)
-
-    # quality = get_or_create(db.session, Quality, name=form.quality.data)
 
     helsinki = pytz.timezone("Europe/Helsinki")
 
@@ -108,7 +104,6 @@ def items_create():
     bidding_end = bidding_end.astimezone(utc)
 
     item = Item(starting_price = form.starting_price.data,
-                buyout_price = form.buyout_price.data,
                 name = form.name.data,
                 account_information_id = current_user.id,
                 quality = form.quality.data,
