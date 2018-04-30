@@ -4,7 +4,7 @@
 <main id="item-new">
 <div class="float-div">
 <h1 class="table-header">New item</h1>
-<form class="detail-form" method="POST" action="{{ url_for('items_create') }}">
+<form class="detail-form" method="POST" enctype="multipart/form-data" action="{{ url_for('items_create') }}">
 
     {{ form.starting_price.label }}
     {{ form.starting_price }}
@@ -21,6 +21,10 @@
     {{ form.name.label }}
     {{ form.name }}
     <p class="error">{{ form.name.errors[0] }}</p>
+
+    {{ form.image.label }}
+    {{ form.image }}
+    <p class="error">{{ form.image.errors[0] }}</p>
 
     {{ form.description.label }}
     {{ form.description }}

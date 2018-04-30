@@ -10,6 +10,8 @@ from application.bid.models import Bid
 import datetime
 from pytz import utc
 import pytz
+from werkzeug.utils import secure_filename
+import os
 
 @application.route("/items/", methods=["GET"])
 def items_index():
@@ -134,6 +136,22 @@ def items_create():
     bidding_end = helsinki.localize(bidding_end)
 
     bidding_end = bidding_end.astimezone(utc)
+
+    # print("\n\n{}\n\n".format(form.image))
+    # print("\n\n{}\n\n".format(form.image.name))
+    # print("\n\n{}\n\n".format(request.files))
+    # print("\n\n{}\n\n".format(request.files.get("image")))
+    # print("\n\n{}\n\n".format(request.files.get("image").filename))
+    # print("\n\n{}\n\n".format(os.getcwd()))
+    # print("\n\n{}\n\n".format(application.config["UPLOAD_FOLDER"]))
+
+    image_file = request.files.get("image")
+
+    sec_filename = secure_filename(image_file.filename)
+
+    timecode = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+
+    image_file.save(os.path.join(application.config["UPLOAD_FOLDER"], "{}-{}".format(sec_filename, timecode)))
 
     item = Item(starting_price = form.starting_price.data,
                 name = form.name.data,

@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 # from datetime import datetime, date, time
+from flask_wtf.file import FileField
 import datetime
 from pytz import utc, timezone
 import pytz
@@ -36,8 +37,9 @@ class ItemForm(FlaskForm):
     
     name = StringField("Item name", [validators.InputRequired(), validators.Length(max=144)])
     starting_price = IntegerField("Starting price", [validators.InputRequired(), validators.NumberRange(min=1)])
-
     bidding_end = FormField(DateTimeForm)
+    image = FileField("Image")
+
 
     @staticmethod
     def get_current_date():

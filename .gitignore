@@ -16,3 +16,5 @@ jobs.db
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+/application/static/images/
+!/application/static/images/hello.jpg

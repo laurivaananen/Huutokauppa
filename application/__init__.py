@@ -79,6 +79,8 @@ else:
     application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
     application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
 
+    application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
+
 
 
 
