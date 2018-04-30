@@ -1,5 +1,5 @@
 from application import application, db
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, url_for, jsonify
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality
 from application.items.forms import ItemForm
@@ -13,9 +13,38 @@ import pytz
 
 @application.route("/items/", methods=["GET"])
 def items_index():
-    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).all()
-    print("\n\n\n{}\n\n\n".format(items))
-    return render_template("items/list.html", items=items)
+    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(1, 1, error_out=False)
+    next_page = None
+    if items.has_next:
+        next_page = items.next_num
+    return render_template("items/list.html", items=items, next_page=next_page)
+
+@application.route("/loaditems")
+def load_items():
+    
+    page = request.args.get('page', 1, type=int)
+    print("\n\n\nWE GOT PAGE: {}\n\n\n".format(request.args.get("page")))
+    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(page, 1, error_out=False)
+    # print("\n\n\n{}\n\n\n".format(items.items))
+
+    next_page = None
+    if items.has_next:
+        next_page = items.next_num
+        print("\n\n\nSNDING NEXT PAGE: {}\n\n\n".format(next_page))
+
+    
+
+    return jsonify(items=[{"name": item.name,
+                           "starting_price": item.starting_price,
+                           "id": item.id,
+                           "latest_bid": item.latest_bid(),
+                           "bidding_time_left": item.bidding_time_left(),
+                           "bidding_end": item.datetime_from_utc(),
+                           "quality": item.quality.name,
+                           "seller": item.account_information.user_account.user_name,
+                           "seller_id": item.account_information_id} for item in items.items],
+                           next_page=next_page)
+
 
 @application.route("/items/new/")
 @login_required
@@ -29,7 +58,7 @@ def items_form():
 def item_detail(item_id):
 
     item = Item.query.get_or_404(item_id)
-    bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc())
+    bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc()).limit(7)
 
     return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
 

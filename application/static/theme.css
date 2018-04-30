@@ -6,8 +6,14 @@
 
 /* Main grid container */
 
+html {
+    width: 100%;
+}
+
 body {
-    background-color: #fff;
+    /* background-color: rgb(255, 166, 125); */
+    /* background: linear-gradient(-45deg, red, yellow); */
+    background: linear-gradient(to right, #d5f7ff 0%,#6b7b8d 100%);
     font-family: 'Roboto', Arial;
     font-size: 16px;
     font-weight: normal;
@@ -70,6 +76,13 @@ nav a:hover {
     padding-bottom: 1em;
 }
 
+#load-items-button {
+    justify-self: center;
+    width: 8em;
+    margin-top: 2em;
+    /* padding: 1em 8em; */
+}
+
 
 /* Item detail */
 
@@ -82,10 +95,6 @@ nav a:hover {
     grid-row-gap: 3em;
     padding: 6em 3em;
     align-items: start;
-}
-
-#item-detail .item-bid {
-    grid-area: item-bid;
 }
 
 #item-detail .item-details {
@@ -107,6 +116,8 @@ nav a:hover {
 #item-detail .item-toolbar .buttons{
     padding-left: 20px;
 }
+
+
 
 
 /* Item new */
@@ -228,6 +239,7 @@ DETAIL ELEMENTS
     display: inline-block;
     border-radius: 20px;
     box-shadow: 4px 4px 16px 2px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
 }
 
 .float-div .empty-table {
@@ -315,7 +327,7 @@ DETAIL ELEMENTS
     border: 1px solid rgb(180, 219, 255);
 }
 
-.detail-form input[type=submit] {
+.detail-form input[type=submit], input[type=button] {
     background-color: rgb(50, 96, 139);
     color: white;
     padding: 12px 20px;
@@ -327,7 +339,7 @@ DETAIL ELEMENTS
     font-size: 14px;
 }
 
-.detail-form input[type=submit]:hover {
+.detail-form input[type=submit]:hover, input[type=button]:hover {
     background-color: rgb(255, 145, 0);
     color: #fff;
 }
@@ -395,6 +407,13 @@ a[class=btn]:hover {
     color: #555;
     font-style: italic;
 }
+
+/* Too long */
+
+/* .too-long {
+    background: linear-gradient(0deg, #777777 0%, rgb(255, 255, 255) 15%);
+    mix-blend-mode: saturation;
+} */
 
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */

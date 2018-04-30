@@ -8,7 +8,7 @@
 <h1>Items</h1>
 
 {% if items %}
-<table class="detail-table-vertical">
+<table class="detail-table-vertical" id="item-ajax-table">
     <tr>
         <th>Item</th>
         <th>Starting price</th>
@@ -17,7 +17,7 @@
         <th>Quality</th>
         <th>Seller</th>
     </tr>
-    {% for item in items %}
+    {% for item in items.items %}
     {% if (item.sold == False) and (item.hidden == False) %}
     <tr>
         <td>
@@ -49,5 +49,6 @@
 <p class="info-text empty-table">No items added yet</p>
 {% endif %}
 </div>
+<input class="btn" type="button" id="load-items-button" name="{{ next_page }}" value="Load More">
 </main>
 {% endblock %}
