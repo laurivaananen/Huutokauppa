@@ -45,16 +45,16 @@ class AccountInformation(Base):
     banned = db.Column(db.Boolean(), nullable=False)
     is_admin = db.Column(db.Boolean(), nullable=False)
 
-    user_account = db.relationship("UserAccount", backref='account_information', lazy=True, uselist=False)
+    user_account = db.relationship("UserAccount", backref='account_information', lazy=True, uselist=False, cascade="all, delete-orphan")
 
     country_id = db.Column(db.Integer, db.ForeignKey('country.id'), nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
     postal_code_id = db.Column(db.Integer, db.ForeignKey('postal_code.id'), nullable=False)
     street_address_id = db.Column(db.Integer, db.ForeignKey('street_address.id'), nullable=False)
 
-    items = db.relationship('Item', back_populates='account_information', lazy=True, foreign_keys="Item.account_information_id")
-    bought_items = db.relationship('Item', back_populates='buyer_account_information', lazy=True, foreign_keys="Item.buyer_account_information_id")
-    bids = db.relationship('Bid', backref='account_information', lazy=True)
+    items = db.relationship('Item', back_populates='account_information', lazy=True, foreign_keys="Item.account_information_id", cascade="all, delete-orphan")
+    bought_items = db.relationship('Item', back_populates='buyer_account_information', lazy=True, foreign_keys="Item.buyer_account_information_id", cascade="all, delete-orphan")
+    bids = db.relationship('Bid', backref='account_information', lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, email_address, phone_number, country, city, postal_code, street_address):
         self.email_address = email_address

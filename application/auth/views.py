@@ -68,6 +68,73 @@ def auth_usersignup():
     login_user(user_account)
     return redirect(url_for("index"))
 
+@application.route("/user/edit/<user_id>/", methods=["GET", "POST"])
+@login_required
+def user_edit(user_id):
+    account_information = AccountInformation.query.get_or_404(user_id)
+
+    if current_user.id == account_information.id:
+        if request.method == "GET":
+
+            if current_user.is_authenticated() and current_user.id == account_information.id:
+                form = UserSignupForm(obj=account_information)
+                form.first_name.data = account_information.user_account.first_name
+                form.last_name.data = account_information.user_account.last_name
+                form.user_name.data = account_information.user_account.user_name
+                return render_template("auth/edit.html", form=form)
+
+            items = account_information.items
+            bought_items = account_information.bought_items
+
+            return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm(), items=items, bought_items=bought_items)
+        else:
+            form = UserSignupForm(request.form)
+
+        form.password.validators = []
+        form.repeat_password.validators = []
+        form.email_address.validators = []
+
+        if not form.validate():
+            return render_template("auth/edit.html", form=form)
+
+        country = get_or_create(db.session, Country, name=form.country.data)
+        city = get_or_create(db.session, City, name=form.city.data)
+        postal_code = get_or_create(db.session, PostalCode, name=form.postal_code.data)
+        street_address = get_or_create(db.session, StreetAddress, name=form.street_address.data)
+        
+        account_information.phone_number = form.phone_number.data
+        account_information.country = country
+        account_information.city = city
+        account_information.postal_code = postal_code
+        account_information.street_address = street_address
+
+        db.session.add(account_information)
+        db.session.flush()
+
+        user_account = account_information.user_account
+        user_account.user_name = form.user_name.data
+        user_account.first_name = form.first_name.data
+        user_account.last_name = form.last_name.data
+
+        db.session().add(user_account)
+        db.session().commit()
+
+        items = account_information.items
+        bought_items = account_information.bought_items
+
+        return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm(), items=items, bought_items=bought_items)   
+
+@application.route("/user/delete/<user_id>/", methods=["POST"])
+@login_required
+def user_delete(user_id):
+    account_information = AccountInformation.query.get(user_id)
+
+    if current_user.id == account_information.id:
+        db.session().delete(account_information)
+        db.session().commit()
+
+    return redirect(url_for("index"))
+
 @application.route("/user/<user_id>", methods=["GET", "POST"])
 @login_required
 def user_detail(user_id):

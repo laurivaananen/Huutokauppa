@@ -147,6 +147,14 @@ nav a:hover {
     padding: 6em 6em;
 }
 
+/* User edit */
+
+#user-edit {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 6em 6em;
+}
+
 
 /* User login */
 
@@ -162,6 +170,11 @@ nav a:hover {
 h2 {
     margin: 0;
     padding: 0;
+    color: rgb(255, 145, 0);
+}
+
+h1 {
+    color: rgb(255, 145, 0);
 }
 
 #user-detail {
@@ -191,6 +204,27 @@ h2 {
     padding-top: 1.5em;
     padding-left: 20px;
     padding-bottom: 1.5em;
+}
+
+.user-toolbar {
+    grid-column: span 2;
+}
+
+.user-toolbar h2 {
+    display: inline-block;
+}
+
+.user-toolbar .buttons {
+    display: inline-block;
+    padding-left: 2em;
+}
+
+.user-toolbar .btn {
+    display: inline-block;
+}
+
+.user-toolbar .detail-form {
+    display: inline-block;
 }
 
 
@@ -378,8 +412,8 @@ a[class=btn] {
 }
 
 a[class=btn]:hover {
-    background-color: rgb(255, 217, 0);
-    color: rgb(50, 96, 139);
+    background-color: rgb(255, 145, 0);
+    color: #fff;
 }
 
 
@@ -444,6 +478,10 @@ a[class=btn]:hover {
     }
     
     #user-detail .user-items-bought-div {
+        grid-column: span 1;
+    }
+
+    #user-detail .user-toolbar {
         grid-column: span 1;
     }
 

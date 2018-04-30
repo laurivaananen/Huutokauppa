@@ -2,7 +2,20 @@
 
 {% block body %}
 <main id="user-detail">
-<h1>{{ account_information.user_account.first_name }} {{ account_information.user_account.last_name }}</h1>
+
+{% if current_user.id == account_information.id %}
+<div class="float-div user-toolbar">
+    <h2>{{ account_information.user_account.first_name }} {{ account_information.user_account.last_name }}</h1>
+<!-- <h2 class="table-header">Toolbar</h2> -->
+    <div class="buttons">
+    <a class="btn" href="{{ url_for('user_edit', user_id=account_information.id) }}">Edit</a>
+
+    <form class="detail-form" method="POST" action="{{ url_for('user_delete', user_id=account_information.id) }}">
+        <input class="btn inline" type="submit" value="Delete">
+    </form>
+    </div>
+</div>
+{% endif %}
 
 <!-- User account details -->
 <div class="user-detail-div float-div">
