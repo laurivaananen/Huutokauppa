@@ -13,11 +13,11 @@ import pytz
 
 @application.route("/items/", methods=["GET"])
 def items_index():
-    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(1, 1, error_out=False)
-    next_page = None
-    if items.has_next:
-        next_page = items.next_num
-    return render_template("items/list.html", items=items, next_page=next_page)
+    # items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(1, 1, error_out=False)
+    # next_page = None
+    # if items.has_next:
+    #     next_page = items.next_num
+    return render_template("items/list.html", items=None, next_page=None)
 
 @application.route("/loaditems")
 def load_items():

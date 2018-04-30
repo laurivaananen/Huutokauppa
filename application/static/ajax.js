@@ -1,16 +1,4 @@
-$(function() {
-    var next_page = $("#load-items-button").attr("name");
-    $('#load-items-button').bind('click', function() {
-        $.getJSON($SCRIPT_ROOT + '/loaditems', {
-            page: next_page
-        }, function(data) {
-            next_page = data.next_page,
-            list_items(data.items, $('#item-ajax-table')),
-            check_page(next_page)
-        });
-        return false;
-    });
-});
+var next_page = $("#load-items-button").attr("name");
 
 function list_items (items, table) {
     for (i = 0; i < items.length; i++) {
@@ -51,3 +39,40 @@ function check_page (next_page) {
         $("#load-items-button").hide();
     }
 };
+
+function create_table (items) {
+    console.log(items.length === 0);
+    if (items.length > 0) {
+        $("#item-ajax-div").append('<table class="detail-table-vertical" id="item-ajax-table">'
+        +'<tr>'
+        +    '<th>Item</th><th>Starting price</th><th>Latest bid</th><th>Auction ends</th><th>Quality</th><th>Seller</th>'
+        +'</tr>');
+    } else {
+        $("#item-ajax-div").append('<p class="info-text empty-table">No items found</p>');
+    }
+};
+
+document.getElementById("load-items-button").onclick = function am () {
+    $.getJSON($SCRIPT_ROOT + '/loaditems', {
+        page: next_page
+    }, function(data) {
+        next_page = data.next_page,
+        list_items(data.items, $('#item-ajax-table')),
+        check_page(next_page)
+    });
+    return false;
+};
+
+function start () {
+    $.getJSON($SCRIPT_ROOT + '/loaditems', {
+        page: next_page
+    }, function(data) {
+        next_page = data.next_page,
+        create_table(data.items),
+        list_items(data.items, $('#item-ajax-table')),
+        check_page(next_page)
+    });
+    return false;
+}
+
+start();

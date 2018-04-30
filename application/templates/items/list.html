@@ -1,54 +1,13 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
 <main id="item-list">
 
-<div class="float-div">
+<div class="float-div" id="item-ajax-div">
 <h1>Items</h1>
-
-{% if items %}
-<table class="detail-table-vertical" id="item-ajax-table">
-    <tr>
-        <th>Item</th>
-        <th>Starting price</th>
-        <th>Latest bid</th>
-        <th>Auction ends</th>
-        <th>Quality</th>
-        <th>Seller</th>
-    </tr>
-    {% for item in items.items %}
-    {% if (item.sold == False) and (item.hidden == False) %}
-    <tr>
-        <td>
-            <a class="important" href="{{ url_for('item_detail', item_id=item.id) }}">
-                {{ item.name }}
-            </a>
-        </td>
-        <td>{{ item.starting_price }}</td>
-        {% if item.latest_bid() %}
-            <td>{{ item.latest_bid() }}</td>
-        {% else %}
-            <td class="info-text">No bids yet</td>
-        {% endif %}
-
-        {% if item.bidding_time_left().hours > 23 %}
-            <td>{{ item.datetime_from_utc() }}</td>
-        {% else %}
-            {% from 'items/time_left_macro.html' import time_left_macro %}
-            <td>{{ time_left_macro(item.bidding_time_left()) }}</td>
-        {% endif %}
-
-        <td>{{ item.quality.name }}</td>
-        <td><a href="{{ url_for('user_detail', user_id=item.account_information_id) }}">{{ item.account_information.user_account.user_name }}</a></td>
-    </tr>
-    {% endif %}
-    {% endfor %}
-</table>
-{% else %}
-<p class="info-text empty-table">No items added yet</p>
-{% endif %}
 </div>
 <input class="btn" type="button" id="load-items-button" name="{{ next_page }}" value="Load More">
 </main>
+
+<script type=text/javascript src="{{ url_for('static', filename='ajax.js') }}"></script>
 {% endblock %}
