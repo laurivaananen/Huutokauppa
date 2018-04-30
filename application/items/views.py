@@ -21,18 +21,12 @@ def items_index():
 
 @application.route("/loaditems")
 def load_items():
-    
     page = request.args.get('page', 1, type=int)
-    print("\n\n\nWE GOT PAGE: {}\n\n\n".format(request.args.get("page")))
-    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(page, 1, error_out=False)
-    # print("\n\n\n{}\n\n\n".format(items.items))
+    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(page, 5, error_out=False)
 
     next_page = None
     if items.has_next:
         next_page = items.next_num
-        print("\n\n\nSNDING NEXT PAGE: {}\n\n\n".format(next_page))
-
-    
 
     return jsonify(items=[{"name": item.name,
                            "starting_price": item.starting_price,

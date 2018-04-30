@@ -105,6 +105,10 @@ nav a:hover {
     grid-area: item-bids;
 }
 
+#item-detail .item-bid {
+    grid-area: item-bid;
+}
+
 #item-detail .item-toolbar {
     grid-area: item-toolbar;
 }
