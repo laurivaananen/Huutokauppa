@@ -44,7 +44,14 @@ def item_edit(item_id):
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
 
-    return render_template("items/edit.html", item=item, form=form)
+    if not item.sold and not item.hidden:
+        if current_user.id is item.account_information_id:
+            return render_template("items/edit.html", item=item, form=form)
+        else:
+            return redirect(url_for('items_index'))
+
+    else:
+        return redirect(url_for('items_index'))
 
 @login_required
 @application.route("/items/update/<item_id>/", methods=["POST"])
@@ -59,15 +66,16 @@ def item_update(item_id):
         return render_template("items/edit.html", form=form, item=Item.query.get(item_id))
 
     item = Item.query.get_or_404(item_id)
-    if current_user.id == item.account_information.id:
-        
-        item.name = form.name.data
+    if not item.sold and not item.hidden:
+        if current_user.id == item.account_information.id:
+            
+            item.name = form.name.data
 
-        item.description = form.description.data
+            item.description = form.description.data
 
-        item.quality_id = form.quality.data
+            item.quality_id = form.quality.data
 
-        db.session().commit()
+            db.session().commit()
 
     return redirect(url_for("item_detail", item_id=item.id))
 
@@ -76,9 +84,10 @@ def item_update(item_id):
 def item_delete(item_id):
 
     item = Item.query.get(item_id)
-    if current_user.id == item.account_information.id:
-        db.session().delete(item)
-        db.session().commit()
+    if not item.sold and not item.hidden:
+        if current_user.id == item.account_information.id:
+            db.session().delete(item)
+            db.session().commit()
 
     return redirect(url_for("items_index"))
 

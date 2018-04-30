@@ -20,10 +20,10 @@ def bid_create(item_id):
 
     amount = form.amount.data
 
-    bid = Bid(amount=amount, account_information_id=current_user.id, item_id=item_id)
-
-    db.session().add(bid)
-    db.session().commit()
+    if not item.sold and not item.hidden:
+        bid = Bid(amount=amount, account_information_id=current_user.id, item_id=item_id)
+        db.session().add(bid)
+        db.session().commit()
 
     return redirect(url_for("item_detail", item_id=item_id))
 

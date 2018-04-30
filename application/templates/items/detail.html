@@ -5,12 +5,13 @@
 <main id="item-detail">
 
 {% if current_user.is_authenticated %}
+{% if not item.hidden and not item.sold %}
 <!-- Toolbar to edit or delete item fi you are the owner -->
 {% if current_user.id == item.account_information.id and not item.sold %}
 <div class="float-div item-toolbar">
 <h2 class="table-header">Toolbar</h2>
     <div class="buttons">
-    <a class="btn" href="{{ url_for('item_edit', item_id=item.id) }}">Edit</a>
+    <a class="btn" href="{{ url_for('item_edit', item_id=item.id) }}"  {% if item.sold %}"disabled"{% endif %} >Edit</a>
 
     <form class="detail-form" method="POST" action="{{ url_for('item_delete', item_id=item.id) }}">
         <input class="btn inline" type="submit" value="Delete">
@@ -23,21 +24,22 @@
 <!-- Toolbar to add a bid if you are not the owner -->
 {% if current_user.id != item.account_information.id and not item.sold %}
 <div class="float-div item-bid">
-<h2 class="table-header">{{ item.name }}</h2>
+<h2 class="table-header">Bid</h2>
 <form class="detail-form" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
     {{ form.amount.label}}
     {{ form.amount(placeholder="Bid amount") }}
     <p class="error">{{ form.amount.errors[0] }}</p>
-    <input class="btn" type="submit" value="Bid"/>
+    <input class="btn" type="submit" value="Bid" {% if item.hidden or item.sold %}disabled{% endif %}/>
 </form>
 </div>
+{% endif %}
 {% endif %}
 {% endif %}
 
 
 <!-- Item details of the item -->
 <div class="float-div item-details">
-<h2 class="table-header">Details</h1>
+<h2 class="table-header">{{ item.name }}</h1>
 <table class="detail-table">
     <tr>
         <th>Name</th>
