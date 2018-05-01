@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 # from datetime import datetime, date, time
-from flask_wtf.file import FileField
+from flask_wtf.file import FileField, FileRequired
 import datetime
 from pytz import utc, timezone
 import pytz
@@ -59,5 +59,5 @@ class ItemForm(FlaskForm):
     description = TextAreaField("Item description", [validators.InputRequired(), validators.Length(max=4096)])
     quality = SelectField("Quality", coerce=int)
 
-    class Meta:
-        csrf = False
+    # class Meta:
+    #     csrf = False

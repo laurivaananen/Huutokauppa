@@ -5,6 +5,8 @@
 <div class="float-div">
 <h1 class="table-header">New item</h1>
 <form class="detail-form" method="POST" enctype="multipart/form-data" action="{{ url_for('items_create') }}">
+    {{ form.csrf_token }}
+    {{ form.hidden_tag() }}
 
     {{ form.starting_price.label }}
     {{ form.starting_price }}
@@ -23,7 +25,7 @@
     <p class="error">{{ form.name.errors[0] }}</p>
 
     {{ form.image.label }}
-    {{ form.image }}
+    {{ form.image() }}
     <p class="error">{{ form.image.errors[0] }}</p>
 
     {{ form.description.label }}

@@ -82,6 +82,11 @@ else:
     application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
     application.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
+    application.config["S3_BUCKET"] = os.environ.get("S3_BUCKET")
+    application.config["S3_KEY"] = os.environ.get("S3_KEY")
+    application.config["S3_SECRET"] = os.environ.get("S3_SECRET")
+    application.config["S3_LOCATION"] = 'http://{}.s3.amazonaws.com/'.format(application.config["S3_BUCKET"])
+
 
 
 

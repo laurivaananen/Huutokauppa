@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from application.items.models import Item, Quality
 from application.items.forms import ItemForm
 from application.items.tasks import sell_item, delete_task
-from application.extensions import get_or_create
+from application.extensions import get_or_create, upload_file_to_s3, put_object_to_s3, generate_presigned_url
 from application.bid.forms import BidForm
 from application.bid.models import Bid
 import datetime
@@ -127,10 +127,15 @@ def item_delete(item_id):
 def items_create():
     form = ItemForm(request.form)
 
+    # if form.validate_on_submit():
+    #     image_data = form.image.data
+    #     print("\n\n")
+    #     print(image_data)
+
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
 
-    if not form.validate():
+    if not form.validate_on_submit():
         return render_template("items/new.html", form=form)
 
     if 'image' not in request.files:
@@ -138,6 +143,8 @@ def items_create():
         return render_template("items/new.html", form=form)
 
     image_file = request.files.get("image")
+    print("\n\n")
+    print(image_file)
 
     if image_file.filename.rsplit(".", 1)[1].lower() not in ["jpg", "jpeg", "png", "bmp"]:
         form.image.errors.append("Invalid filetype")
@@ -159,7 +166,29 @@ def items_create():
 
     filename = "{}-{}.{}".format(sec_filename.rsplit(".", 1)[0], timecode, sec_filename.rsplit(".", 1)[1])
 
+    # sec_file_key = secure_filename(form.image)
+    # print(sec_file_key)
+    image_bytes = form.image.data
+    print("\n\nGOT IMAGE BYTES")
+    print(image_bytes)
+    if image_bytes:
+        print("SUCCESS")
+        print(image_bytes)
+
+    image_bytes = request.files.get("image")
+
+    file_key = "{}-{}".format(sec_filename, timecode)
+
     image_file.save(os.path.join(application.config["UPLOAD_FOLDER"], filename))
+
+    put_object_to_s3(image_bytes=image_bytes, filename=file_key)
+    # output = upload_file_to_s3(image_file, application.config["S3_BUCKET"], filename=filename)
+    print("\n\n\n")
+
+    s3_image_url = generate_presigned_url(filename=file_key)
+
+    print("\n\n")
+    print(s3_image_url)
 
     item = Item(starting_price = form.starting_price.data,
                 name = form.name.data,
