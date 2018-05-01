@@ -11,7 +11,7 @@ function list_items (items, table) {
         var starting_price = "<td>" + items[i]["starting_price"] + "</td>";
 
         if (items[i]["latest_bid"]){
-            var latest_bid = "<h3>$ " + items[i]["latest_bid"] + "</h3>";
+            var latest_bid = "<h3 class='time-normal'>$ " + items[i]["latest_bid"] + "</h3>";
         } else {
             var latest_bid = "<p class='info-text'>No bids yet</p>";
         }
@@ -40,10 +40,9 @@ function list_items (items, table) {
 
             console.log(bidding_time_left);
 
-
-
-            bidding_time_left +=  items[i]["bidding_time_left"]["hours"] + "h ";
-
+            if (items[i]["bidding_time_left"]["hours"] > 0) {
+                bidding_time_left +=  items[i]["bidding_time_left"]["hours"] + "h ";
+            }
             if (items[i]["bidding_time_left"]["minutes"] > 0) {
                 bidding_time_left +=  items[i]["bidding_time_left"]["minutes"] + "m ";
             }

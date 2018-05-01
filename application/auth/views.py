@@ -130,6 +130,10 @@ def user_delete(user_id):
     account_information = AccountInformation.query.get(user_id)
 
     if current_user.id == account_information.id:
+        items = account_information.items
+        from application.items.tasks import delete_task
+        for item in items:
+            delete_task(item.celery_task_id)
         db.session().delete(account_information)
         db.session().commit()
 

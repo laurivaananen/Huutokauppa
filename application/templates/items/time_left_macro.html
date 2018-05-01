@@ -1,5 +1,18 @@
 {% macro time_left_macro(time_left) -%}
-<p>
+{% if time_left.hours <= 0 %}
+    {% if time_left.minutes <= 0 %}
+        {% if time_left.seconds <= 0 %}
+
+        {% else %}
+        <p class="time-danger">
+        {% endif %}
+    {% else %}
+    <p class="time-close">
+    {% endif %}
+{% else %}
+<p class="time-far">
+{% endif %}
+
     {% if time_left.hours > 0 %}
         {{ time_left.hours }}h
     {% endif %}

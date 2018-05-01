@@ -27,7 +27,7 @@
 <h2 class="table-header">Bid</h2>
 <form class="detail-form" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
     {{ form.amount.label}}
-    {{ form.amount(placeholder="Bid amount") }}
+    {{ form.amount(placeholder=(1 + item.bid_latest(item.id))) }}
     <p class="error">{{ form.amount.errors[0] }}</p>
     <input class="btn" type="submit" value="Bid" {% if item.hidden or item.sold %}disabled{% endif %}/>
 </form>
