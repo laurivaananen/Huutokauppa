@@ -80,6 +80,7 @@ else:
     application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
 
     application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
+    application.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
 
 

@@ -40,6 +40,11 @@ class ItemForm(FlaskForm):
     bidding_end = FormField(DateTimeForm)
     image = FileField("Image")
 
+    # def validate_image(form, field):
+    #     print("\n\n{}\n\n".format(field))
+    #     print("\n\n{}\n\n".format(field.data))
+    #     print("\n\n{}\n\n".format(field.name))
+
 
     @staticmethod
     def get_current_date():

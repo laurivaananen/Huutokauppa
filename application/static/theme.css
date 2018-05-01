@@ -121,6 +121,15 @@ nav a:hover {
     padding-left: 20px;
 }
 
+#item-detail img {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    padding: 2em;
+    height: auto;
+    max-height: 600px;
+}
+
 
 
 
@@ -292,7 +301,7 @@ DETAIL ELEMENTS
 }
 
 .detail-table tr, .detail-table-vertical tr {
-    height: 3em;
+    /* height: 3em; */
     border-bottom: 1px solid rgb(216, 216, 216);
 }
 
@@ -302,6 +311,7 @@ DETAIL ELEMENTS
 
 .detail-table-vertical th {
     text-align: left;
+    padding: 1em 0;
 }
 
 /* .detail-table tr:nth-child(even), .detail-table-vertical tr:nth-child(even) {
@@ -311,6 +321,11 @@ DETAIL ELEMENTS
 .detail-table th {
     text-align: left;
     width: 50%;
+    padding: 1em 0;
+}
+
+.detail-table td, .detail-table-vertical td {
+    padding: 1em 0;
 }
 
 .detail-table-vertical th:first-child, .detail-table-vertical td:first-child {

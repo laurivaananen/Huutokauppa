@@ -1,6 +1,7 @@
 from application import db
 from application.models import Base
 from sqlalchemy.sql import text
+from flask import url_for
 import datetime
 import pytz
 
@@ -13,13 +14,10 @@ class Item(Base):
     description = db.Column(db.String(4096), nullable=False)
     bidding_start = db.Column(db.DateTime, default=db.func.current_timestamp())
     bidding_end = db.Column(db.DateTime, nullable=False)
-
-    def get_bidding_end(self):
-        from datetime import datetime
-        return self.bidding_end.strftime("%Y-%m-%d")
-
     hidden = db.Column(db.Boolean, default=False)
     sold = db.Column(db.Boolean, nullable=False)
+
+    image = db.Column(db.String(128))
 
     quality_id = db.Column(db.Integer(), db.ForeignKey("quality.id"), nullable=False)
 
@@ -33,7 +31,9 @@ class Item(Base):
 
     buyer_account_information = db.relationship("AccountInformation", back_populates="bought_items", foreign_keys="Item.buyer_account_information_id")
 
-    def __init__(self, name, starting_price, quality, description, bidding_end, account_information_id):
+    celery_task_id = db.Column(db.String(92))
+
+    def __init__(self, name, starting_price, quality, description, bidding_end, account_information_id, image):
         self.name = name
         self.starting_price = starting_price
         self.sold = False
@@ -41,6 +41,10 @@ class Item(Base):
         self.quality_id = quality
         self.description = description
         self.bidding_end = bidding_end
+        self.image = image
+
+    def image_url(self):
+        return url_for('static', filename="images/{}".format(self.image))
 
     def datetime_from_utc(self):
         helsinki = pytz.timezone("Europe/Helsinki")

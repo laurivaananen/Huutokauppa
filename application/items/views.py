@@ -3,7 +3,7 @@ from flask import redirect, render_template, request, url_for, jsonify
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality
 from application.items.forms import ItemForm
-from application.items.tasks import sell_item
+from application.items.tasks import sell_item, delete_task
 from application.extensions import get_or_create
 from application.bid.forms import BidForm
 from application.bid.models import Bid
@@ -12,6 +12,7 @@ from pytz import utc
 import pytz
 from werkzeug.utils import secure_filename
 import os
+from werkzeug.exceptions import RequestEntityTooLarge
 
 @application.route("/items/", methods=["GET"])
 def items_index():
@@ -55,6 +56,11 @@ def item_detail(item_id):
 
     item = Item.query.get_or_404(item_id)
     bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc()).limit(7)
+    # print("\n\n\n")
+    # print(item.celery_result)
+    # print(item.celery_result.status)
+    # print(item.celery_result.id)
+    # delete_task("16cc435c-7812-431e-b244-b68f6fcb3f01")
 
     return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
 
@@ -111,6 +117,8 @@ def item_delete(item_id):
     item = Item.query.get(item_id)
     if not item.sold and not item.hidden:
         if current_user.id == item.account_information.id:
+            # Revoking the selling task of this item when deleted
+            delete_task(item.celery_task_id)
             db.session().delete(item)
             db.session().commit()
 
@@ -127,6 +135,16 @@ def items_create():
     if not form.validate():
         return render_template("items/new.html", form=form)
 
+    if 'image' not in request.files:
+        form.image.errors.append("No image found")
+        return render_template("items/new.html", form=form)
+
+    image_file = request.files.get("image")
+
+    if image_file.filename.rsplit(".", 1)[1].lower() not in ["jpg", "jpeg", "png", "bmp"]:
+        form.image.errors.append("Invalid filetype")
+        return render_template("items/new.html", form=form)
+
     helsinki = pytz.timezone("Europe/Helsinki")
 
     bidding_end = "{} {}".format(form.bidding_end.bidding_end_date.data, form.bidding_end.bidding_end_time.data)
@@ -137,32 +155,26 @@ def items_create():
 
     bidding_end = bidding_end.astimezone(utc)
 
-    # print("\n\n{}\n\n".format(form.image))
-    # print("\n\n{}\n\n".format(form.image.name))
-    # print("\n\n{}\n\n".format(request.files))
-    # print("\n\n{}\n\n".format(request.files.get("image")))
-    # print("\n\n{}\n\n".format(request.files.get("image").filename))
-    # print("\n\n{}\n\n".format(os.getcwd()))
-    # print("\n\n{}\n\n".format(application.config["UPLOAD_FOLDER"]))
-
-    image_file = request.files.get("image")
-
     sec_filename = secure_filename(image_file.filename)
 
     timecode = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
-    image_file.save(os.path.join(application.config["UPLOAD_FOLDER"], "{}-{}".format(sec_filename, timecode)))
+    filename = "{}-{}.{}".format(sec_filename.rsplit(".", 1)[0], timecode, sec_filename.rsplit(".", 1)[1])
+
+    image_file.save(os.path.join(application.config["UPLOAD_FOLDER"], filename))
 
     item = Item(starting_price = form.starting_price.data,
                 name = form.name.data,
                 account_information_id = current_user.id,
                 quality = form.quality.data,
                 description = form.description.data,
-                bidding_end = bidding_end)
+                bidding_end = bidding_end,
+                image = filename)
 
     db.session().add(item)
+    # Getting the id of a celery task that will sell this item
+    task_id = sell_item.apply_async(args=[item.id], eta=bidding_end)
+    item.celery_task_id = task_id.id
     db.session().commit()
-
-    sell_item.apply_async(args=[item.id], eta=bidding_end)
 
     return redirect(url_for("items_index"))
