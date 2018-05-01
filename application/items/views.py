@@ -16,25 +16,23 @@ from werkzeug.exceptions import RequestEntityTooLarge
 
 @application.route("/items/", methods=["GET"])
 def items_index():
-    # items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(1, 1, error_out=False)
-    # next_page = None
-    # if items.has_next:
-    #     next_page = items.next_num
-    return render_template("items/list.html", items=None, next_page=None)
+    item_count = Item.query.filter_by(sold=False, hidden=False).count()
+    return render_template("items/list.html", item_count=item_count, next_page=1)
 
 @application.route("/loaditems")
 def load_items():
     page = request.args.get('page', 1, type=int)
-    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(page, 5, error_out=False)
+    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(page, 8, error_out=False)
 
     next_page = None
     if items.has_next:
         next_page = items.next_num
 
     return jsonify(items=[{"name": item.name,
+                           "image_url": item.image_url(),
                            "starting_price": item.starting_price,
                            "id": item.id,
-                           "latest_bid": item.latest_bid(),
+                           "latest_bid": item.bid_latest(item.id),
                            "bidding_time_left": item.bidding_time_left(),
                            "bidding_end": item.datetime_from_utc(),
                            "quality": item.quality.name,
@@ -55,7 +53,7 @@ def items_form():
 def item_detail(item_id):
 
     item = Item.query.get_or_404(item_id)
-    bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc()).limit(7)
+    bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc()).limit(15)
     # print("\n\n\n")
     # print(item.celery_result)
     # print(item.celery_result.status)
@@ -172,7 +170,9 @@ def items_create():
                 image = filename)
 
     db.session().add(item)
+    db.session().flush()
     # Getting the id of a celery task that will sell this item
+    print(item.id)
     task_id = sell_item.apply_async(args=[item.id], eta=bidding_end)
     item.celery_task_id = task_id.id
     db.session().commit()

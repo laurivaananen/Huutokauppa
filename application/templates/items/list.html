@@ -3,8 +3,14 @@
 {% block body %}
 <main id="item-list">
 
-<div class="float-div" id="item-ajax-div">
-<h1>Items</h1>
+<div class="float-div">
+{% if item_count == 1 %}
+    <h1>Found {{ item_count }} item</h1>
+{% else %}
+    <h1>Found {{ item_count }} items</h1>
+{% endif %}
+<div id="item-ajax-div">
+</div>
 </div>
 <input class="btn" type="button" id="load-items-button" name="{{ next_page }}" value="Load More">
 </main>
