@@ -1,9 +1,9 @@
-from application import application, db
+from application import application, db, temp_img
 from flask import redirect, render_template, request, url_for, jsonify
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality
 from application.items.forms import ItemForm
-from application.items.tasks import sell_item, delete_task
+from application.items.tasks import sell_item, delete_task, image_to_s3
 from application.extensions import get_or_create, upload_file_to_s3, put_object_to_s3, generate_presigned_url
 from application.bid.forms import BidForm
 from application.bid.models import Bid
@@ -12,6 +12,8 @@ from pytz import utc
 import pytz
 from werkzeug.utils import secure_filename
 import os
+from PIL import Image
+from io import BytesIO
 from werkzeug.exceptions import RequestEntityTooLarge
 
 @application.route("/items/", methods=["GET"])
@@ -54,11 +56,6 @@ def item_detail(item_id):
 
     item = Item.query.get_or_404(item_id)
     bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc()).limit(15)
-    # print("\n\n\n")
-    # print(item.celery_result)
-    # print(item.celery_result.status)
-    # print(item.celery_result.id)
-    # delete_task("16cc435c-7812-431e-b244-b68f6fcb3f01")
 
     return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
 
@@ -127,11 +124,6 @@ def item_delete(item_id):
 def items_create():
     form = ItemForm(request.form)
 
-    # if form.validate_on_submit():
-    #     image_data = form.image.data
-    #     print("\n\n")
-    #     print(image_data)
-
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
 
@@ -143,15 +135,13 @@ def items_create():
         return render_template("items/new.html", form=form)
 
     image_file = request.files.get("image")
-    print("\n\n")
-    print(image_file)
 
     if image_file.filename.rsplit(".", 1)[1].lower() not in ["jpg", "jpeg", "png", "bmp"]:
         form.image.errors.append("Invalid filetype")
         return render_template("items/new.html", form=form)
 
-    helsinki = pytz.timezone("Europe/Helsinki")firefoxfirefoxfirefoxfirefoxfirefoxfirefoxfirefoxfirefoxfifirefoxfirefoxfirefoxfirefoxfirefoxrefox
-
+    helsinki = pytz.timezone("Europe/Helsinki")
+    
     bidding_end = "{} {}".format(form.bidding_end.bidding_end_date.data, form.bidding_end.bidding_end_time.data)
 
     bidding_end = datetime.datetime.strptime(bidding_end, "%Y-%m-%d %H:%M")
@@ -159,45 +149,35 @@ def items_create():
     bidding_end = helsinki.localize(bidding_end)
 
     bidding_end = bidding_end.astimezone(utc)
+    
+    img = Image.open(request.files.get("image"))
+    bytes_stream = BytesIO()
+    img.save(bytes_stream, "PNG")
 
     sec_filename = secure_filename(image_file.filename)
-
     timecode = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-
     filename = "{}-{}.{}".format(sec_filename.rsplit(".", 1)[0], timecode, sec_filename.rsplit(".", 1)[1])
+    file_key = "{}-{}".format(sec_filename.rsplit(".", 1)[0], timecode)
 
-    # sec_file_key = secure_filename(form.image)
-    # print(sec_file_key)
-    image_bytes = form.image.data
-    print("\n\nGOT IMAGE BYTES")firefox
-    print(image_bytes)
-    if image_bytes:
-        print("SUCCESS")
-        print(image_bytes)
+    temp_img.append(bytes_stream.getvalue())
+    # if os.environ.get("AWS") == "huutokauppa-sovellus":
+        # If this is hosted on aws save image to S3
+    # image_url = image_to_s3.apply_async(args=[bytes_stream.getvalue(), file_key])
+    # else:
+        # If this is on local save image to storage
+    with open(os.path.join(application.config["UPLOAD_FOLDER"], file_key), "wb") as f:
+        f.write(bytes_stream.getvalue())
+        
+        # image_url = filename
 
+    # put_object_to_s3(image_bytes=bytes_stream.getvalue(), filename=file_key)
 
-
-
-    from PIL import Image
-    from numpy import array
-    img = Image.open("input.png")
-    arr = array(img)
-
-
-    image_bytes = request.files.get("image")
-
-    file_key = "{}-{}".format(sec_filename, timecode)
-
-    image_file.save(os.path.join(application.config["UPLOAD_FOLDER"], filename))
-
-    put_object_to_s3(image_bytes=image_bytes, filename=file_key)
-    # output = upload_file_to_s3(image_file, application.config["S3_BUCKET"], filename=filename)
-    print("\n\n\n")
-
-    s3_image_url = generate_presigned_url(filename=file_key)
-
+    # s3_image_url = generate_presigned_url(filename=file_key)
+    image_url = "null"
     print("\n\n")
-    print(s3_image_url)
+    print(image_url)
+    print(type(image_url))
+    print("\n\n")
 
     item = Item(starting_price = form.starting_price.data,
                 name = form.name.data,
@@ -205,10 +185,13 @@ def items_create():
                 quality = form.quality.data,
                 description = form.description.data,
                 bidding_end = bidding_end,
-                image = filename)
+                image = image_url)
 
     db.session().add(item)
     db.session().flush()
+
+    image_to_s3.apply_async(args=[file_key, item.id])
+
     # Getting the id of a celery task that will sell this item
     print(item.id)
     task_id = sell_item.apply_async(args=[item.id], eta=bidding_end)

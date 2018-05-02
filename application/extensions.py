@@ -20,6 +20,7 @@ s3 = boto3.client(
 
 def put_object_to_s3(image_bytes, filename, content_type='image/png'):
     print("\n\nTRYING TO PUT IMAGE TO S3")
+    print(application.config["S3_BUCKET"])
 
     s3.put_object(
         Bucket=application.config["S3_BUCKET"],

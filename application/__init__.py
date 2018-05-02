@@ -2,7 +2,7 @@
 from flask import Flask, redirect
 application = Flask(__name__)
 application.config["BCRYPT_LOG_ROUNDS"] = 12
-
+temp_img = []
 # Bcrypt
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(application)
@@ -39,7 +39,6 @@ elif os.environ.get("AWS") == "huutokauppa-sovellus":
 
     application.config["CELERY_BROKER_URL"] = os.environ.get("REDIS_URL")
     application.config["CELERY_RESULT_BACKEND"] = os.environ.get("REDIS_URL")
-
 
     # Celery
     from application.tasks import make_celery
@@ -80,7 +79,7 @@ else:
     application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
 
     application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
-    application.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
+    application.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
     application.config["S3_BUCKET"] = os.environ.get("S3_BUCKET")
     application.config["S3_KEY"] = os.environ.get("S3_KEY")

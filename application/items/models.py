@@ -4,6 +4,7 @@ from sqlalchemy.sql import text
 from flask import url_for
 import datetime
 import pytz
+import os
 
 class Item(Base):
 
@@ -44,6 +45,9 @@ class Item(Base):
         self.image = image
 
     def image_url(self):
+        if os.environ.get("AWS") == "huutokauppa-sovellus":
+            return self.image
+
         return url_for('static', filename="images/{}".format(self.image))
 
     def datetime_from_utc(self):
