@@ -150,7 +150,7 @@ def items_create():
         form.image.errors.append("Invalid filetype")
         return render_template("items/new.html", form=form)
 
-    helsinki = pytz.timezone("Europe/Helsinki")
+    helsinki = pytz.timezone("Europe/Helsinki")firefoxfirefoxfirefoxfirefoxfirefoxfirefoxfirefoxfirefoxfifirefoxfirefoxfirefoxfirefoxfirefoxrefox
 
     bidding_end = "{} {}".format(form.bidding_end.bidding_end_date.data, form.bidding_end.bidding_end_time.data)
 
@@ -169,11 +169,20 @@ def items_create():
     # sec_file_key = secure_filename(form.image)
     # print(sec_file_key)
     image_bytes = form.image.data
-    print("\n\nGOT IMAGE BYTES")
+    print("\n\nGOT IMAGE BYTES")firefox
     print(image_bytes)
     if image_bytes:
         print("SUCCESS")
         print(image_bytes)
+
+
+
+
+    from PIL import Image
+    from numpy import array
+    img = Image.open("input.png")
+    arr = array(img)
+
 
     image_bytes = request.files.get("image")
 
