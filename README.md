@@ -38,9 +38,12 @@ The application is hosted in AWS Elastic Beanstalk because you can't do certain 
 
 [User stories](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/userstories.md)
 
-# Sovelluksen toiminta
+# Features
 
-Tällä hetkellä sovelluksessa pystyy:
+* Responsive UI
+* You can create, edit and delete a user account
+* In you account page you can see your items that are currently on sale and all the items that you have bought
+* You can add a new item to sale
 
 * Responsiivinen ulkoasu. Sivu mukautuu selainikkunan kokoon, kun sitä pienentää tai suurentaa sivuttain
 * Tehdä käyttäjätilin ja kirjautumaan sillä sisään

@@ -46,7 +46,8 @@ def image_to_s3(file_key, item_id):
     # Save thumbnail image to s3 and get the url
     thumbnail_image_key = "{}-400".format(file_key)
     put_object_to_s3(image_bytes=thumbnail_image_bytes_stream.getvalue(), filename=thumbnail_image_key)
-    thumbnail_image_url = generate_presigned_url(filename=thumbnail_image_key)
+    # thumbnail_image_url = generate_presigned_url(filename=thumbnail_image_key)
+    thumbnail_image_url = "{}{}".format(application.config["S3_LOCATION"], thumbnail_image_key)
     
     item = Item.query.get(item_id)
     item.image_thumbnail = thumbnail_image_url
@@ -54,7 +55,8 @@ def image_to_s3(file_key, item_id):
     # Save full image to s3 and get the url
     full_image_key = "{}-800".format(file_key)
     put_object_to_s3(image_bytes=full_image_bytes_stream.getvalue(), filename=full_image_key)
-    full_image_url = generate_presigned_url(filename=full_image_key)
+    # full_image_url = generate_presigned_url(filename=full_image_key)
+    full_image_url = "{}{}".format(application.config["S3_LOCATION"], full_image_key)
 
     item.image_full = full_image_url
 

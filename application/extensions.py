@@ -21,7 +21,7 @@ try:
 except KeyError:
     print("\n{}\n".format("Couldn't find aws keys"))
 
-def put_object_to_s3(image_bytes, filename, content_type='image/png'):
+def put_object_to_s3(image_bytes, filename, content_type='image/jpg'):
     print("\n\nTRYING TO PUT IMAGE TO S3")
     print(application.config["S3_BUCKET"])
 

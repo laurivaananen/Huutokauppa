@@ -3,8 +3,8 @@ from flask import redirect, render_template, request, url_for, jsonify
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality
 from application.items.forms import ItemForm
-from application.items.tasks import sell_item, delete_task, image_to_s3
-from application.extensions import get_or_create
+from application.items.tasks import sell_item, delete_task, image_to_s3, create_thumbnail, create_full
+from application.extensions import get_or_create, put_object_to_s3
 from application.bid.forms import BidForm
 from application.bid.models import Bid
 import datetime
@@ -151,33 +151,86 @@ def items_create():
     bidding_end = bidding_end.astimezone(utc)
 
 
-    # Save the uploaded image as a jpeg
+
     img = Image.open(request.files.get("image"))
-    img = img.convert('RGB')
-    bytes_stream = BytesIO()
-    img.save(bytes_stream, "PNG")
 
     sec_filename = secure_filename(image_file.filename)
     timecode = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    filename = "{}-{}.{}".format(sec_filename.rsplit(".", 1)[0], timecode, sec_filename.rsplit(".", 1)[1])
     file_key = "{}-{}".format(sec_filename.rsplit(".", 1)[0], timecode)
 
-    # if os.environ.get("AWS") == "huutokauppa-sovellus":
-        # If this is hosted on aws save image to S3
-    # image_url = image_to_s3.apply_async(args=[bytes_stream.getvalue(), file_key])
-    # else:
-        # If this is on local save image to storage
-        
-    with open(os.path.join(application.config["UPLOAD_FOLDER"], "{}.png".format(file_key)), "wb") as f:
-        # f.write(bytes_stream.getvalue())
-        f.write(bytes_stream.getvalue())
 
-    # Add a placeholder image while image is being uploaded to s3
-    # image_url = url_for('static', filename="images/placeholder.jpeg")
-    # image_url = os.path.join(application.config["UPLOAD_FOLDER"], "{}.png".format(file_key))
+    sec_filename = secure_filename(img.filename)
+    timecode = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    file_key = "{}-{}".format(sec_filename.rsplit(".", 1)[0], timecode)
+
+    thumbnail_image_key = "{}-400".format(file_key)
+    full_image_key = "{}-800".format(file_key)
+
+    thumbnail_image_name = "{}.jpg".format(thumbnail_image_key)
+    full_image_name = "{}.jpg".format(full_image_key)
+
+
+
+
+
+    thumbnail_image = create_thumbnail(img)
+    full_image = create_full(img)
+
+    thumbnail_image = thumbnail_image.convert('RGB')
+    thumbnail_image_bytes_stream = BytesIO()
+    thumbnail_image.save(thumbnail_image_bytes_stream, "JPEG", quality=70)
+
+    full_image = full_image.convert('RGB')
+    full_image_bytes_stream = BytesIO()
+    full_image.save(full_image_bytes_stream, "JPEG", quality=75)
+
+    if os.environ.get("AWS") == "huutokauppa-sovellus":
+        # Save thumbnail image to s3 and get the url
+        # thumbnail_image_key = thumbnail_image_key
+        put_object_to_s3(image_bytes=thumbnail_image_bytes_stream.getvalue(), filename=thumbnail_image_key)
+        # thumbnail_image_url = generate_presigned_url(filename=thumbnail_image_key)
+        thumbnail_image_url = "{}{}".format(application.config["S3_LOCATION"], thumbnail_image_key)
+
+        # Save full image to s3 and get the url
+        # full_image_key = full_image_key
+        put_object_to_s3(image_bytes=full_image_bytes_stream.getvalue(), filename=full_image_key)
+        # full_image_url = generate_presigned_url(filename=full_image_key)
+        full_image_url = "{}{}".format(application.config["S3_LOCATION"], full_image_key)
+    else:
+        with open(os.path.join(application.config["UPLOAD_FOLDER"], thumbnail_image_name), "wb") as f:
+            f.write(thumbnail_image_bytes_stream.getvalue())
+            thumbnail_image_url = url_for('static', filename="images/{}".format(thumbnail_image_name))
+
+        with open(os.path.join(application.config["UPLOAD_FOLDER"], full_image_name), "wb") as f:
+            f.write(full_image_bytes_stream.getvalue())
+            full_image_url = url_for('static', filename="images/{}".format(full_image_name))
+
+
+    # item = Item.query.get(item_id)
+    # item.image_thumbnail = thumbnail_image_url
+    # item.image_full = full_image_url
+
+    # db.session().commit()
+    # db.session().close()
+
+
+
+
+
+
+
+
+    # img = img.convert('RGB')
+    # bytes_stream = BytesIO()
+    # img.save(bytes_stream, "PNG")
+
+    
+        
+    # with open(os.path.join(application.config["UPLOAD_FOLDER"], "{}.png".format(file_key)), "wb") as f:
+    #     f.write(bytes_stream.getvalue())
 
     # Showing image from storage while it's being uploaded to s3
-    image_url = url_for('static', filename="images/{}".format("{}.png".format(file_key)))
+    # image_url = url_for('static', filename="images/{}".format("{}.png".format(file_key)))
 
     item = Item(starting_price = form.starting_price.data,
                 name = form.name.data,
@@ -185,15 +238,15 @@ def items_create():
                 quality = form.quality.data,
                 description = form.description.data,
                 bidding_end = bidding_end,
-                image_thumbnail = image_url,
-                image_full = image_url)
+                image_thumbnail = thumbnail_image_url,
+                image_full = full_image_url)
 
     db.session().add(item)
     db.session().flush()
 
     # Using a background task to upload image to s3, otherwise the user has to wait
-    if os.environ.get("AWS") == "huutokauppa-sovellus":
-        image_to_s3.apply_async(args=[file_key, item.id])
+    # if os.environ.get("AWS") == "huutokauppa-sovellus":
+    #     image_to_s3.apply_async(args=[file_key, item.id])
 
     # Getting the id of a celery task that will sell this item
     print(item.id)
