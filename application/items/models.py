@@ -17,8 +17,8 @@ class Item(Base):
     bidding_end = db.Column(db.DateTime, nullable=False)
     hidden = db.Column(db.Boolean, default=False)
     sold = db.Column(db.Boolean, nullable=False)
-    image_thumbnail = db.Column(db.String(128))
-    image_full = db.Column(db.String(128))
+    image_thumbnail = db.Column(db.String(512))
+    image_full = db.Column(db.String(512))
 
     quality_id = db.Column(db.Integer(), db.ForeignKey("quality.id"), nullable=False)
 
