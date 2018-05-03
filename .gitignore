@@ -11,10 +11,13 @@ pip-delete-this-directory.txt
 *$py.class
 items.db
 jobs.db
+# /application/static/images/*.jpg
+# /application/static/images/*.png
+/application/static/images/*
+!/application/static/images/placeholder.jpeg
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
-/application/static/images/
-!/application/static/images/hello.jpg
+

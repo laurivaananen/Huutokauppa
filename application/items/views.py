@@ -149,24 +149,45 @@ def items_create():
     bidding_end = helsinki.localize(bidding_end)
 
     bidding_end = bidding_end.astimezone(utc)
-    
+
+
+
     img = Image.open(request.files.get("image"))
+    
+    img = img.convert('RGB')
+
+    shorter_side = min(img.size)
+    horizontal_padding = (shorter_side - img.size[0]) / 2
+    vertical_padding = (shorter_side - img.size[1]) / 2
+    img = img.crop(
+        (
+            -horizontal_padding,
+            -vertical_padding,
+            img.size[0] + horizontal_padding,
+            img.size[1] + vertical_padding
+        )
+    )
+    
+    img.thumbnail((400, 400))
+    
     bytes_stream = BytesIO()
-    img.save(bytes_stream, "PNG")
+    
+    img.save(bytes_stream, "JPEG", quality=70)
 
     sec_filename = secure_filename(image_file.filename)
     timecode = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     filename = "{}-{}.{}".format(sec_filename.rsplit(".", 1)[0], timecode, sec_filename.rsplit(".", 1)[1])
     file_key = "{}-{}".format(sec_filename.rsplit(".", 1)[0], timecode)
 
-    temp_img.append(bytes_stream.getvalue())
     # if os.environ.get("AWS") == "huutokauppa-sovellus":
         # If this is hosted on aws save image to S3
     # image_url = image_to_s3.apply_async(args=[bytes_stream.getvalue(), file_key])
     # else:
         # If this is on local save image to storage
+        
     with open(os.path.join(application.config["UPLOAD_FOLDER"], file_key), "wb") as f:
         f.write(bytes_stream.getvalue())
+        
         
         # image_url = filename
 
