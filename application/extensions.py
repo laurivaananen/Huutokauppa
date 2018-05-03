@@ -12,11 +12,14 @@ def get_or_create(session, model, **kwargs):
 
 import boto3
 
-s3 = boto3.client(
-   "s3",
-   aws_access_key_id=application.config["S3_KEY"],
-   aws_secret_access_key=application.config["S3_SECRET"]
-)
+try:
+    s3 = boto3.client(
+    "s3",
+    aws_access_key_id=application.config["S3_KEY"],
+    aws_secret_access_key=application.config["S3_SECRET"]
+    )
+except KeyError:
+    print("\n{}\n".format("Couldn't find aws keys"))
 
 def put_object_to_s3(image_bytes, filename, content_type='image/png'):
     print("\n\nTRYING TO PUT IMAGE TO S3")

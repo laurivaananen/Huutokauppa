@@ -1,10 +1,10 @@
-from application import application, db, temp_img
+from application import application, db
 from flask import redirect, render_template, request, url_for, jsonify
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality
 from application.items.forms import ItemForm
 from application.items.tasks import sell_item, delete_task, image_to_s3
-from application.extensions import get_or_create, upload_file_to_s3, put_object_to_s3, generate_presigned_url
+from application.extensions import get_or_create
 from application.bid.forms import BidForm
 from application.bid.models import Bid
 import datetime
@@ -31,7 +31,7 @@ def load_items():
         next_page = items.next_num
 
     return jsonify(items=[{"name": item.name,
-                           "image_url": item.image_url(),
+                           "image_url": item.image_thumbnail_url(),
                            "starting_price": item.starting_price,
                            "id": item.id,
                            "latest_bid": item.bid_latest(item.id),
@@ -151,28 +151,11 @@ def items_create():
     bidding_end = bidding_end.astimezone(utc)
 
 
-
+    # Save the uploaded image as a jpeg
     img = Image.open(request.files.get("image"))
-    
     img = img.convert('RGB')
-
-    shorter_side = min(img.size)
-    horizontal_padding = (shorter_side - img.size[0]) / 2
-    vertical_padding = (shorter_side - img.size[1]) / 2
-    img = img.crop(
-        (
-            -horizontal_padding,
-            -vertical_padding,
-            img.size[0] + horizontal_padding,
-            img.size[1] + vertical_padding
-        )
-    )
-    
-    img.thumbnail((400, 400))
-    
     bytes_stream = BytesIO()
-    
-    img.save(bytes_stream, "JPEG", quality=70)
+    img.save(bytes_stream, "PNG")
 
     sec_filename = secure_filename(image_file.filename)
     timecode = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -185,20 +168,16 @@ def items_create():
     # else:
         # If this is on local save image to storage
         
-    with open(os.path.join(application.config["UPLOAD_FOLDER"], file_key), "wb") as f:
+    with open(os.path.join(application.config["UPLOAD_FOLDER"], "{}.png".format(file_key)), "wb") as f:
+        # f.write(bytes_stream.getvalue())
         f.write(bytes_stream.getvalue())
-        
-        
-        # image_url = filename
 
-    # put_object_to_s3(image_bytes=bytes_stream.getvalue(), filename=file_key)
+    # Add a placeholder image while image is being uploaded to s3
+    # image_url = url_for('static', filename="images/placeholder.jpeg")
+    # image_url = os.path.join(application.config["UPLOAD_FOLDER"], "{}.png".format(file_key))
 
-    # s3_image_url = generate_presigned_url(filename=file_key)
-    image_url = "null"
-    print("\n\n")
-    print(image_url)
-    print(type(image_url))
-    print("\n\n")
+    # Showing image from storage while it's being uploaded to s3
+    image_url = url_for('static', filename="images/{}".format("{}.png".format(file_key)))
 
     item = Item(starting_price = form.starting_price.data,
                 name = form.name.data,
@@ -206,12 +185,15 @@ def items_create():
                 quality = form.quality.data,
                 description = form.description.data,
                 bidding_end = bidding_end,
-                image = image_url)
+                image_thumbnail = image_url,
+                image_full = image_url)
 
     db.session().add(item)
     db.session().flush()
 
-    image_to_s3.apply_async(args=[file_key, item.id])
+    # Using a background task to upload image to s3, otherwise the user has to wait
+    if os.environ.get("AWS") == "huutokauppa-sovellus":
+        image_to_s3.apply_async(args=[file_key, item.id])
 
     # Getting the id of a celery task that will sell this item
     print(item.id)
@@ -219,4 +201,4 @@ def items_create():
     item.celery_task_id = task_id.id
     db.session().commit()
 
-    return redirect(url_for("items_index"))
+    return redirect(url_for("item_detail", item_id=item.id))

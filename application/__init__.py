@@ -1,8 +1,10 @@
 # Flask-sovellus
 from flask import Flask, redirect
+import os
 application = Flask(__name__)
 application.config["BCRYPT_LOG_ROUNDS"] = 12
-temp_img = []
+application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
+application.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 # Bcrypt
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(application)
@@ -12,7 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy(application)
 
-import os
+
 
 
 if os.environ.get("HEROKU"):
@@ -32,6 +34,11 @@ elif os.environ.get("AWS") == "huutokauppa-sovellus":
     host = os.environ.get("PSQL_HOST")
     port = os.environ.get("PSQL_PORT")
     database = os.environ.get("PSQL_DATABASE")
+
+    application.config["S3_BUCKET"] = os.environ.get("S3_BUCKET")
+    application.config["S3_KEY"] = os.environ.get("S3_KEY")
+    application.config["S3_SECRET"] = os.environ.get("S3_SECRET")
+    application.config["S3_LOCATION"] = 'http://{}.s3.amazonaws.com/'.format(application.config["S3_BUCKET"])
 
     application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://{}:{}@{}:{}/{}".format(user, password, host, port, database)
 
@@ -72,28 +79,24 @@ else:
 
     application.config["SQLALCHEMY_ECHO"] = True
 
-    # application.config["CELERY_BROKER_URL"] = os.environ.get("REDIS_URL")
-    # application.config["CELERY_RESULT_BACKEND"] = os.environ.get("REDIS_URL")
-
     application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
     application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
 
-    application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
-    application.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
+    
 
-    with open(os.path.expanduser("~/creds.txt")) as f:
-        for line in f.readlines():
-            line = line[:-1]
-            if line:
-                print(line)
-                splitted = line.split("=")
-                application.config[splitted[0]] = splitted[1]
+    # with open(os.path.expanduser("~/creds.txt")) as f:
+    #     for line in f.readlines():
+    #         line = line[:-1]
+    #         if line:
+    #             print(line)
+    #             splitted = line.split("=")
+    #             application.config[splitted[0]] = splitted[1]
 
 
     # application.config["S3_BUCKET"] = os.environ.get("S3_BUCKET")
     # application.config["S3_KEY"] = os.environ.get("S3_KEY")
     # application.config["S3_SECRET"] = os.environ.get("S3_SECRET")
-    application.config["S3_LOCATION"] = 'http://{}.s3.amazonaws.com/'.format(application.config["S3_BUCKET"])
+    # application.config["S3_LOCATION"] = 'http://{}.s3.amazonaws.com/'.format(application.config["S3_BUCKET"])
 
 
 

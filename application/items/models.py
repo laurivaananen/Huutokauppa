@@ -17,8 +17,8 @@ class Item(Base):
     bidding_end = db.Column(db.DateTime, nullable=False)
     hidden = db.Column(db.Boolean, default=False)
     sold = db.Column(db.Boolean, nullable=False)
-
-    image = db.Column(db.String(128))
+    image_thumbnail = db.Column(db.String(128))
+    image_full = db.Column(db.String(128))
 
     quality_id = db.Column(db.Integer(), db.ForeignKey("quality.id"), nullable=False)
 
@@ -34,7 +34,7 @@ class Item(Base):
 
     celery_task_id = db.Column(db.String(92))
 
-    def __init__(self, name, starting_price, quality, description, bidding_end, account_information_id, image):
+    def __init__(self, name, starting_price, quality, description, bidding_end, account_information_id, image_thumbnail, image_full):
         self.name = name
         self.starting_price = starting_price
         self.sold = False
@@ -42,11 +42,18 @@ class Item(Base):
         self.quality_id = quality
         self.description = description
         self.bidding_end = bidding_end
-        self.image = image
+        self.image_thumbnail = image_thumbnail
+        self.image_full = image_full
 
-    def image_url(self):
+    def image_thumbnail_url(self):
         # if os.environ.get("AWS") == "huutokauppa-sovellus":
-        return self.image
+        return self.image_thumbnail
+
+        # return url_for('static', filename="images/{}".format(self.image))
+
+    def image_full_url(self):
+        # if os.environ.get("AWS") == "huutokauppa-sovellus":
+        return self.image_full
 
         # return url_for('static', filename="images/{}".format(self.image))
 
