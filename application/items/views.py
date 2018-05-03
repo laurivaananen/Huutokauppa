@@ -24,6 +24,7 @@ def items_index():
 @application.route("/loaditems")
 def load_items():
     page = request.args.get('page', 1, type=int)
+    # Returning 8 items per page
     items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(page, 8, error_out=False)
 
     next_page = None
@@ -64,14 +65,12 @@ def item_detail(item_id):
 def item_edit(item_id):
 
     item = Item.query.get(item_id)
-
     form = ItemForm(obj=item)
-
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
 
     if not item.sold and not item.hidden:
-        if current_user.id is item.account_information_id:
+        if current_user.is_authenticated() and (current_user.id is item.account_information_id):
             return render_template("items/edit.html", item=item, form=form)
         else:
             return redirect(url_for('items_index'))
@@ -88,19 +87,17 @@ def item_update(item_id):
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
 
+    # Validating only certain fields from the form
     if not (form.name.validate(form) and (form.description.validate(form)) and (form.quality.validate(form))):
         return render_template("items/edit.html", form=form, item=Item.query.get(item_id))
 
     item = Item.query.get_or_404(item_id)
     if not item.sold and not item.hidden:
-        if current_user.id == item.account_information.id:
+        if current_user.is_authenticated() and (current_user.id == item.account_information.id):
             
             item.name = form.name.data
-
             item.description = form.description.data
-
             item.quality_id = form.quality.data
-
             db.session().commit()
 
     return redirect(url_for("item_detail", item_id=item.id))
@@ -124,11 +121,20 @@ def item_delete(item_id):
 def items_create():
     form = ItemForm(request.form)
 
+    # Fetching all qualities from the database and manually adding them to the form
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
 
     if not form.validate_on_submit():
         return render_template("items/new.html", form=form)
+
+    helsinki = pytz.timezone("Europe/Helsinki")
+    bidding_end = "{} {}".format(form.bidding_end.bidding_end_date.data, form.bidding_end.bidding_end_time.data)
+    bidding_end = datetime.datetime.strptime(bidding_end, "%Y-%m-%d %H:%M")
+    bidding_end = helsinki.localize(bidding_end)
+    # Saving datetime in UTC timezone for easier processing
+    bidding_end = bidding_end.astimezone(utc)
+
 
     if 'image' not in request.files:
         form.image.errors.append("No image found")
@@ -136,30 +142,15 @@ def items_create():
 
     image_file = request.files.get("image")
 
+    # If not image file return form
     if image_file.filename.rsplit(".", 1)[1].lower() not in ["jpg", "jpeg", "png", "bmp"]:
         form.image.errors.append("Invalid filetype")
         return render_template("items/new.html", form=form)
-
-    helsinki = pytz.timezone("Europe/Helsinki")
-    
-    bidding_end = "{} {}".format(form.bidding_end.bidding_end_date.data, form.bidding_end.bidding_end_time.data)
-
-    bidding_end = datetime.datetime.strptime(bidding_end, "%Y-%m-%d %H:%M")
-
-    bidding_end = helsinki.localize(bidding_end)
-
-    bidding_end = bidding_end.astimezone(utc)
-
 
 
     img = Image.open(request.files.get("image"))
 
     sec_filename = secure_filename(image_file.filename)
-    timecode = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    file_key = "{}-{}".format(sec_filename.rsplit(".", 1)[0], timecode)
-
-
-    sec_filename = secure_filename(img.filename)
     timecode = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     file_key = "{}-{}".format(sec_filename.rsplit(".", 1)[0], timecode)
 
@@ -169,10 +160,7 @@ def items_create():
     thumbnail_image_name = "{}.jpg".format(thumbnail_image_key)
     full_image_name = "{}.jpg".format(full_image_key)
 
-
-
-
-
+    # Image filename format: name-timestamp-size
     thumbnail_image = create_thumbnail(img)
     full_image = create_full(img)
 
@@ -185,18 +173,15 @@ def items_create():
     full_image.save(full_image_bytes_stream, "JPEG", quality=75)
 
     if os.environ.get("AWS") == "huutokauppa-sovellus":
-        # Save thumbnail image to s3 and get the url
-        # thumbnail_image_key = thumbnail_image_key
+        # Save thumbnail image to s3
         put_object_to_s3(image_bytes=thumbnail_image_bytes_stream.getvalue(), filename=thumbnail_image_key)
-        # thumbnail_image_url = generate_presigned_url(filename=thumbnail_image_key)
         thumbnail_image_url = "{}{}".format(application.config["S3_LOCATION"], thumbnail_image_key)
 
-        # Save full image to s3 and get the url
-        # full_image_key = full_image_key
+        # Save full image to s3
         put_object_to_s3(image_bytes=full_image_bytes_stream.getvalue(), filename=full_image_key)
-        # full_image_url = generate_presigned_url(filename=full_image_key)
         full_image_url = "{}{}".format(application.config["S3_LOCATION"], full_image_key)
     else:
+        # If running locally save images to static/images
         with open(os.path.join(application.config["UPLOAD_FOLDER"], thumbnail_image_name), "wb") as f:
             f.write(thumbnail_image_bytes_stream.getvalue())
             thumbnail_image_url = url_for('static', filename="images/{}".format(thumbnail_image_name))
@@ -204,33 +189,6 @@ def items_create():
         with open(os.path.join(application.config["UPLOAD_FOLDER"], full_image_name), "wb") as f:
             f.write(full_image_bytes_stream.getvalue())
             full_image_url = url_for('static', filename="images/{}".format(full_image_name))
-
-
-    # item = Item.query.get(item_id)
-    # item.image_thumbnail = thumbnail_image_url
-    # item.image_full = full_image_url
-
-    # db.session().commit()
-    # db.session().close()
-
-
-
-
-
-
-
-
-    # img = img.convert('RGB')
-    # bytes_stream = BytesIO()
-    # img.save(bytes_stream, "PNG")
-
-    
-        
-    # with open(os.path.join(application.config["UPLOAD_FOLDER"], "{}.png".format(file_key)), "wb") as f:
-    #     f.write(bytes_stream.getvalue())
-
-    # Showing image from storage while it's being uploaded to s3
-    # image_url = url_for('static', filename="images/{}".format("{}.png".format(file_key)))
 
     item = Item(starting_price = form.starting_price.data,
                 name = form.name.data,
@@ -244,12 +202,7 @@ def items_create():
     db.session().add(item)
     db.session().flush()
 
-    # Using a background task to upload image to s3, otherwise the user has to wait
-    # if os.environ.get("AWS") == "huutokauppa-sovellus":
-    #     image_to_s3.apply_async(args=[file_key, item.id])
-
-    # Getting the id of a celery task that will sell this item
-    print(item.id)
+    # Adding a new task for the item that sells it when the bidding time ends
     task_id = sell_item.apply_async(args=[item.id], eta=bidding_end)
     item.celery_task_id = task_id.id
     db.session().commit()

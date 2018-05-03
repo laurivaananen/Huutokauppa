@@ -34,29 +34,26 @@ The application is hosted in AWS Elastic Beanstalk because you can't do certain 
 
 [Live version in AWS Elastic Beanstalk](http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/)
 
-[Database graph](https://raw.githubusercontent.com/laurivaananen/Huutokauppa/master/documentation/tietokantakaavio.png)
+[Database graph](https://raw.githubusercontent.com/laurivaananen/Huutokauppa/master/documentation/kaavio.jpg)
 
 [User stories](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/userstories.md)
 
 # Features
 
-* Responsive UI
+* Responsive UI made using css grid
 * You can create, edit and delete a user account
 * In you account page you can see your items that are currently on sale and all the items that you have bought
-* You can add a new item to sale
-
-* Responsiivinen ulkoasu. Sivu mukautuu selainikkunan kokoon, kun sitä pienentää tai suurentaa sivuttain
-* Tehdä käyttäjätilin ja kirjautumaan sillä sisään
-* Oman käyttäjätilin sivuilla näkee omat tavarat mitä olet laittanut myyntiin sekä omat tavarat mitä olet ostanut.
-* Laittaa uuden tavaran kauppaan myyntiin, sekä muokata sen tietoja tai poistaa sen kokonaan
-* Selata muiden lisäämiä tavaroita sekä huutaa niitä
-* Kun valitsemasi huutamisaika loppuu niin tavara myydään sille kuka oli huutanut eniten. Tai jos kukaan ei ollu huutanut, niin tavara menee pois myynnistä
-* Katsoa muiden profiileja
-* Etusivulla pystyy tarkkailemaan dataa käyttäjistä
-* Admin käyttäjät pystyvät näkemään kaikkien tiedot sekä muokkaamaan, tekemään ja poistamaan niitä.
-* Linkki admin paneeliin: http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/admin/
-* HUOM! Sinun pitää olla kirjautunut käyttäjällä, jolla on admin oikeudet, jotta näet admin paneelin.
-* Sivulla on valmiiksi tehty admin käyttäjä
-  * sähköposti: admin@email.com
-  * salasana: based_god
-* Admin käyttäjä voi halutessaan antaa muille käyttäjille admin oikeudet
+* When adding a new item to sale you can choose name, starting price, bidding end datetime, image, description and quality
+* The application makes two different versions from the image, a thumbnail and full size image for optimizing loading times
+* Images get saved into aws s3 and the url added to sql database
+* Loading items in list view is done using ajax for better user experience
+* You can edit the item information or delete the item
+* When your chosen bidding time ends the item gets sold to the highest bidder, or removed from the store if nobody bid on it
+* This is handled by an asynchronous task queue celery using redis as the message broker
+* When looking at other profiles you can only see limited information (no billing address or purchase history)
+* On the index page you can see users based on the amount of bids and amounts of items they have sold
+* Full admin paned at http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/admin/
+* Your account needs to have admin priviledges to see the admin panel. Only another admin can give admin priviledges
+* There is a default admin account
+  * email address: admin@email.com
+  * password: based_god
