@@ -5,15 +5,17 @@
 
 <div class="float-div">
 {% if item_count == 1 %}
-    <h1>Found {{ item_count }} item</h1>
+    <h1 id="item-counter">Found {{ item_count }} item</h1>
 {% else %}
-    <h1>Found {{ item_count }} items</h1>
+    <h1 id="item-counter">Found {{ item_count }} items</h1>
 {% endif %}
 
 <form class="ajax" id="item-search-form" method="POST" action="{{ url_for('load_items') }}">
     {{ form.key }}
     {{ form.direction }}
     {{ form.page }}
+    {{ form.quality }}
+    {{ form.category }}
     <input class="btn" type="submit" id="item-search-btn" value="Search">
 </form>
 <div id="item-ajax-div">

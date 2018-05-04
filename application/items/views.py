@@ -1,7 +1,7 @@
 from application import application, db
 from flask import redirect, render_template, request, url_for, jsonify
 from flask_login import login_required, current_user
-from application.items.models import Item, Quality
+from application.items.models import Item, Quality, Category
 from application.items.forms import ItemForm, ItemSortForm
 from application.items.tasks import sell_item, delete_task, image_to_s3, create_thumbnail, create_full
 from application.extensions import get_or_create, put_object_to_s3
@@ -21,22 +21,55 @@ def items_index():
     # Items are loaded using ajax
     item_count = Item.query.filter_by(sold=False, hidden=False).count()
     item_sort_form = ItemSortForm()
+
+    qualities = Quality.query.all()
+    item_sort_form.quality.choices = [(quality.id, quality.name) for quality in qualities]
+    item_sort_form.quality.choices.insert(0, (0, "All"))
+
+    categories = Category.query.all()
+    item_sort_form.category.choices = [(category.id, category.name) for category in categories]
+    item_sort_form.category.choices.insert(0, (0, "All"))
     return render_template("items/list.html", item_count=item_count, form=item_sort_form)
 
 @application.route("/loaditems", methods=["POST", "GET"])
 def load_items():
     # The javascript in items/list.html calls this function
     form = ItemSortForm(request.form)
+
     key = form.key.data
     page = int(form.page.data)
-    print(page)
+    quality = form.quality.data
+    category = form.category.data
     direction = form.direction.data
-    keys = {1: Item.current_price, 2: Item.bidding_end, 3: Item.bidding_start, 4: Item.name}
-    obj = keys[key]
-    directions = {1: obj.asc(), 2: obj.desc()}
-    order = directions[direction]
-    # Returning 8 items per page
-    items = Item.query.filter_by(sold=False, hidden=False).order_by(order).paginate(page, 8, error_out=False)
+
+    try:
+        keys = {1: Item.current_price, 2: Item.bidding_end, 3: Item.bidding_start, 4: Item.name}
+        obj = keys[key]
+        directions = {1: obj.asc(), 2: obj.desc()}
+        order = directions[direction]
+    except KeyError:
+        order = Item.bidding_end.asc()
+
+    qualities_count = Quality.query.count()
+    quality_in = [quality]
+    if quality == 0:
+        quality_in = [x for x in range(1, qualities_count + 1)]
+
+    # Filter items if category_id is not in category_in
+    categories_count = Category.query.count()
+    category_in = [category]
+    # If selected 0 (All) don't filter by category
+    if category == 0:
+        category_in = [x for x in range(1, categories_count + 1)]
+
+    items = Item.query.filter(Item.sold==False,
+                              Item.hidden==False,
+                              Item.quality_id.in_(quality_in),
+                              Item.category_id.in_(category_in)).order_by(order)
+
+    item_count = len(items.all())
+    # Returning 6 items per page
+    items = items.paginate(page, 6, error_out=True)
 
     next_page = None
     if items.has_next:
@@ -52,15 +85,19 @@ def load_items():
                            "quality": item.quality.name,
                            "seller": item.account_information.user_account.user_name,
                            "seller_id": item.account_information_id} for item in items.items],
-                           next_page=next_page)
+                   next_page=next_page,
+                   item_count=item_count)
 
 
 @application.route("/items/new/")
 @login_required
 def items_form():
     form = ItemForm()
+    # Adding qualities and categories manually to the form
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
+    categories = Category.query.all()
+    form.category.choices = [(category.id, category.name) for category in categories]
     return render_template("items/new.html", form = form)
 
 @application.route("/items/<item_id>/", methods=["GET"])
@@ -74,11 +111,14 @@ def item_detail(item_id):
 @login_required
 @application.route("/items/edit/<item_id>/", methods=["GET"])
 def item_edit(item_id):
-
     item = Item.query.get(item_id)
     form = ItemForm(obj=item)
+
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
+
+    categories = Category.query.all()
+    form.category.choices = [(category.id, category.name) for category in categories]
 
     if not item.sold and not item.hidden:
         if current_user.is_authenticated() and (current_user.id is item.account_information_id):
@@ -98,6 +138,9 @@ def item_update(item_id):
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
 
+    categories = Category.query.all()
+    form.category.choices = [(category.id, category.name) for category in categories]
+
     # Validating only certain fields from the form
     if not (form.name.validate(form) and (form.description.validate(form)) and (form.quality.validate(form))):
         return render_template("items/edit.html", form=form, item=Item.query.get(item_id))
@@ -109,6 +152,7 @@ def item_update(item_id):
             item.name = form.name.data
             item.description = form.description.data
             item.quality_id = form.quality.data
+            item.category_id = form.category.data
             db.session().commit()
 
     return redirect(url_for("item_detail", item_id=item.id))
@@ -135,6 +179,9 @@ def items_create():
     # Fetching all qualities from the database and manually adding them to the form
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
+
+    categories = Category.query.all()
+    form.category.choices = [(category.id, category.name) for category in categories]
 
     if not form.validate_on_submit():
         return render_template("items/new.html", form=form)
@@ -206,6 +253,7 @@ def items_create():
                 name = form.name.data,
                 account_information_id = current_user.id,
                 quality = form.quality.data,
+                category = form.category.data,
                 description = form.description.data,
                 bidding_end = bidding_end,
                 image_thumbnail = thumbnail_image_url,

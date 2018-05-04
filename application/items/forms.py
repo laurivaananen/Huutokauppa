@@ -52,13 +52,16 @@ class ItemForm(FlaskForm):
 
     description = TextAreaField("Item description", [validators.InputRequired(), validators.Length(max=4096)])
     quality = SelectField("Quality", coerce=int)
+    category = SelectField("Category", coerce=int)
 
-    # class Meta:
-    #     csrf = False
+    class Meta:
+        csrf = False
 
 
 class ItemSortForm(FlaskForm):
 
     key = SelectField("Column", coerce=int, choices=[(1, "Price"), (2, "Time Left"), (3, "Date added"), (4, "Name")], default=2)
     direction = SelectField("Type", coerce=int, choices=[(1, "Ascending"), (2, "Descending")], default=1)
+    quality = SelectField("Quality", coerce=int, default=0)
+    category = SelectField("Category", coerce=int, default=0)
     page = HiddenField("Page", default=1, validators=[validators.InputRequired(), validators.NumberRange(min=1)])

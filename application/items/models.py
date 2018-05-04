@@ -20,8 +20,8 @@ class Item(Base):
     sold = db.Column(db.Boolean, nullable=False)
     image_thumbnail = db.Column(db.String(512))
     image_full = db.Column(db.String(512))
-
     quality_id = db.Column(db.Integer(), db.ForeignKey("quality.id"), nullable=False)
+    category_id = db.Column(db.Integer(), db.ForeignKey("category.id"), nullable=False)
 
     bids = db.relationship("Bid", backref='item', lazy=True, cascade="all, delete-orphan")
 
@@ -35,12 +35,13 @@ class Item(Base):
 
     celery_task_id = db.Column(db.String(92))
 
-    def __init__(self, name, starting_price, current_price, quality, description, bidding_end, account_information_id, image_thumbnail, image_full):
+    def __init__(self, name, starting_price, current_price, quality, category, description, bidding_end, account_information_id, image_thumbnail, image_full):
         self.name = name
         self.starting_price = starting_price
         self.sold = False
         self.account_information_id = account_information_id
         self.quality_id = quality
+        self.category_id = category
         self.description = description
         self.bidding_end = bidding_end
         self.image_thumbnail = image_thumbnail
@@ -165,9 +166,23 @@ class Quality(Base):
 
     name = db.Column(db.String(144), nullable=False)
 
-    items = db.relationship("Item", backref="quality", lazy=True, uselist=False)
+    items = db.relationship("Item", backref="quality", lazy=True, cascade="all, delete-orphan")
 
-    def __init__(self, name):
+    def __init__(self, name=""):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+
+class Category(Base):
+
+    __tablename__ = "category"
+
+    name = db.Column(db.String(144), nullable=False)
+
+    items = db.relationship("Item", backref="category", lazy=True, cascade="all, delete-orphan")
+
+    def __init__(self, name=""):
         self.name = name
 
     def __str__(self):

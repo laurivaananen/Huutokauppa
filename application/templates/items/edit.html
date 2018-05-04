@@ -20,6 +20,10 @@
     {{ form.quality(value=item.quality.name) }}
     <p class="error">{{ form.quality.errors[0] }}</p>
 
+    {{ form.category.label }}
+    {{ form.category(value=item.category.name) }}
+    <p class="error">{{ form.category.errors[0] }}</p>
+
     <input class="btn" type="submit" value="Update item"/>
 </form>
 {% else %}

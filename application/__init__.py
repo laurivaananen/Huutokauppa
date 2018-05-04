@@ -133,7 +133,7 @@ def load_user(user_id):
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask import url_for
-from application.items.models import Item
+from application.items.models import Item, Quality
 from application.bid.models import Bid
 
 
@@ -177,11 +177,12 @@ admin = Admin(application, name="Huutokauppa", template_mode="bootstrap3", index
 admin.add_view(AccountInformationModelView(AccountInformation, db.session))
 admin.add_view(ItemModelView(Item, db.session))
 admin.add_view(SecureModelView(Bid, db.session))
+admin.add_view(SecureModelView(Quality, db.session))
 
 
 
 
-from application.items.models import Quality
+from application.items.models import Quality, Category
 
 try:
     db.create_all()
@@ -198,6 +199,22 @@ def add_qualities():
         db.session().add(new)
         db.session().add(used)
         db.session().add(refurbished)
+        db.session().commit()
+
+@application.before_first_request
+def add_categories():
+    if not Category.query.all():
+        electronics = Category(name="Electronics")
+        home = Category(name="Home")
+        books = Category(name="Books")
+        sports = Category(name="Sports")
+        art = Category(name="Art")
+
+        db.session().add(electronics)
+        db.session().add(home)
+        db.session().add(books)
+        db.session().add(sports)
+        db.session().add(art)
         db.session().commit()
 
 # Adding an admin account when application is run for the first time

@@ -70,10 +70,20 @@ function call_ajax(obj) {
         success: function(response) {
             list_items(response.items, $('#item-ajax-div'));
             check_page(response.next_page);
+            item_counter(response.item_count);
         }
     });
 
     return false;
+};
+
+function item_counter (item_count) {
+    $('#item-counter').empty();
+    if (item_count == 1){
+        $('#item-counter').text("Found 1 item");
+    } else {
+        $('#item-counter').text("Found " + item_count + " items");
+    }
 };
 
 $('#item-search-form').on('submit', function() {
