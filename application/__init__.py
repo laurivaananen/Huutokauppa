@@ -101,7 +101,13 @@ else:
     from application.auth import views
 
 
+@application.route("/", methods=["POST", "GET"])
+def b_route():
+    return redirect(url_for('index'))
 
+@application.route('/<path:dummy>', methods=["POST", "GET"])
+def redirect_to_aws(dummy):
+    return redirect(url_for('index'))
 
 
     
