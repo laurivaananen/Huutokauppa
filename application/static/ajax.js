@@ -77,6 +77,7 @@ function call_ajax(obj) {
 };
 
 $('#item-search-form').on('submit', function() {
+    $('#item-search-form').data('changed', false);
     $('#item-ajax-div').empty();
     $("#page").val(1);
     call_ajax($('#item-search-form'));

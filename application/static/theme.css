@@ -514,6 +514,10 @@ DETAIL ELEMENTS
     font-size: 14px;
 }
 
+#item-search-form input:hover {
+    background-color: rgb(255, 145, 0);
+}
+
 #item-search-form select {
     display: inline-block;
     width: 12em;
