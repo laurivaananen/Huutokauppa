@@ -1,4 +1,6 @@
-# Installing and running the application locally
+# Huutokauppa
+
+## Installing and running the application locally
 
 This application uses sqlite, redis and python 3.6.3.
 
@@ -26,7 +28,7 @@ You need to let the window in which celery is running open. To run the server op
 
 If the site looks weird try reloading the page by pressing ctrl + shift + r which downloads the css theme from the server and not from browser cache. The css was designed in firefox so it might look different in other browsers.
 
-# Huutokauppa
+## Links
 
 The application is hosted in AWS Elastic Beanstalk because you can't do certain things in Heroku with the free tier.
 
@@ -38,7 +40,7 @@ The application is hosted in AWS Elastic Beanstalk because you can't do certain 
 
 [User stories](https://github.com/laurivaananen/Huutokauppa/blob/master/documentation/userstories.md)
 
-# Features
+## Features
 
 * Responsive UI
 * You can create, edit and delete a user account
