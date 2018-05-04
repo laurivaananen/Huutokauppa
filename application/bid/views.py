@@ -21,6 +21,7 @@ def bid_create(item_id):
     amount = form.amount.data
 
     if not item.sold and not item.hidden:
+        item.current_price = amount
         bid = Bid(amount=amount, account_information_id=current_user.id, item_id=item_id)
         db.session().add(bid)
         db.session().commit()

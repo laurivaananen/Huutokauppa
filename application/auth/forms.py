@@ -38,9 +38,4 @@ class UserSignupForm(FlaskForm):
 
     class Meta:
         csrf = False
-
-class AccountDepositForm(FlaskForm):
-    amount = IntegerField("Amount", [validators.NumberRange(min=1)])
-
-    class Meta:
-        csrf = False
+    

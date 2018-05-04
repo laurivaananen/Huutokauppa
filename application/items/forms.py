@@ -4,7 +4,7 @@ from flask_wtf.file import FileField, FileRequired
 import datetime
 from pytz import utc, timezone
 import pytz
-from wtforms import StringField, IntegerField, BooleanField, DateField, validators, ValidationError, TextAreaField, SelectField, FormField
+from wtforms import StringField, IntegerField, BooleanField, DateField, validators, ValidationError, TextAreaField, SelectField, FormField, HiddenField
 
 class DateTimeForm(FlaskForm):
     bidding_end_date = StringField("Bidding end date (yyyy-mm-dd)", [validators.InputRequired(), validators.regexp(r'^\d{4}-\d{2}-\d{2}$', message="You need to give the date in a correct format (yyyy-mm-dd)")])
@@ -40,12 +40,6 @@ class ItemForm(FlaskForm):
     bidding_end = FormField(DateTimeForm)
     image = FileField("Image")
 
-    # def validate_image(form, field):
-    #     print("\n\n{}\n\n".format(field))
-    #     print("\n\n{}\n\n".format(field.data))
-    #     print("\n\n{}\n\n".format(field.name))
-
-
     @staticmethod
     def get_current_date():
         helsinki = timezone("Europe/Helsinki")
@@ -61,3 +55,10 @@ class ItemForm(FlaskForm):
 
     # class Meta:
     #     csrf = False
+
+
+class ItemSortForm(FlaskForm):
+
+    key = SelectField("Column", coerce=int, choices=[(1, "Price"), (2, "Time Left"), (3, "Date added"), (4, "Name")], default=2)
+    direction = SelectField("Type", coerce=int, choices=[(1, "Ascending"), (2, "Descending")], default=1)
+    page = HiddenField("Page", default=1, validators=[validators.InputRequired(), validators.NumberRange(min=1)])

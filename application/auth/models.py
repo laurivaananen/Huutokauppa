@@ -66,6 +66,7 @@ class AccountInformation(Base):
         self.street_address_id = street_address
         self.is_admin = False
 
+    # Encrypting password using bcrypt
     def set_password(self, plaintext):
         self._password = bcrypt.generate_password_hash(plaintext).decode('utf-8')
 

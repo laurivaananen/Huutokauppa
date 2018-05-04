@@ -11,6 +11,7 @@ class Item(Base):
     __tablename__ = 'item'
 
     starting_price = db.Column(db.Integer, nullable=False)
+    current_price = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(144), nullable=False)
     description = db.Column(db.String(4096), nullable=False)
     bidding_start = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -34,7 +35,7 @@ class Item(Base):
 
     celery_task_id = db.Column(db.String(92))
 
-    def __init__(self, name, starting_price, quality, description, bidding_end, account_information_id, image_thumbnail, image_full):
+    def __init__(self, name, starting_price, current_price, quality, description, bidding_end, account_information_id, image_thumbnail, image_full):
         self.name = name
         self.starting_price = starting_price
         self.sold = False
@@ -44,22 +45,17 @@ class Item(Base):
         self.bidding_end = bidding_end
         self.image_thumbnail = image_thumbnail
         self.image_full = image_full
+        self.current_price = current_price
 
     def image_thumbnail_url(self):
-        # if os.environ.get("AWS") == "huutokauppa-sovellus":
         return self.image_thumbnail
 
-        # return url_for('static', filename="images/{}".format(self.image))
-
     def image_full_url(self):
-        # if os.environ.get("AWS") == "huutokauppa-sovellus":
         return self.image_full
-
-        # return url_for('static', filename="images/{}".format(self.image))
 
     def datetime_from_utc(self):
         helsinki = pytz.timezone("Europe/Helsinki")
-
+        # Because all datetimes are saved in UTC timezone we need to convert them to Helsinki timezone
         bidding_end_utc = pytz.utc.localize(self.bidding_end)
 
         return bidding_end_utc.astimezone(helsinki).strftime("%Y-%m-%d %H:%M")
@@ -69,6 +65,7 @@ class Item(Base):
         time_now = pytz.utc.localize(datetime.datetime.utcnow())
         bidding_time_end = pytz.utc.localize(self.bidding_end)
         time_difference = bidding_time_end - time_now
+        # How many seconds there are between now and bidding_end
         time_difference_seconds = int(math.floor(time_difference.total_seconds()))
 
         time_left_hour = time_difference_seconds

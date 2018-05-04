@@ -9,10 +9,19 @@
 {% else %}
     <h1>Found {{ item_count }} items</h1>
 {% endif %}
+
+<form class="ajax" id="item-search-form" method="POST" action="{{ url_for('load_items') }}">
+    {{ form.key }}
+    {{ form.direction }}
+    {{ form.page }}
+    <input class="btn" type="submit" id="item-search-btn" value="Search">
+</form>
 <div id="item-ajax-div">
 </div>
 </div>
-<input class="btn" type="button" id="load-items-button" name="{{ next_page }}" value="Load More">
+<form class="detail-form ajax" id="load-items-form" method="POST" action="{{ url_for('load_items') }}" hidden>
+    <input class="btn" type="submit" id="load-items-button" value="Load More">
+</form>
 </main>
 
 <script type=text/javascript src="{{ url_for('static', filename='ajax.js') }}"></script>

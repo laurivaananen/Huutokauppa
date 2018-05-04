@@ -1,5 +1,3 @@
-var next_page = $("#load-items-button").attr("name");
-
 function list_items (items, table) {
     for (i = 0; i < items.length; i++) {
         var name = "<h2><a href='" + $SCRIPT_ROOT + "/items/" + items[i]["id"] + "'>" + items[i]["name"] + "</a></h2>";
@@ -51,32 +49,61 @@ function list_items (items, table) {
     }
 };
 
+function call_ajax(obj) {
+    var current_obj = obj,
+        url = current_obj.attr('action'),
+        method = current_obj.attr('method'),
+        data = {};
+
+    current_obj.find('[name]').each(function(index, value) {
+        var that = $(this),
+            name = that.attr('name'),
+            value = that.val();
+
+        data[name] = value;
+    });
+
+    $.ajax({
+        url: url,
+        type: method,
+        data: data,
+        success: function(response) {
+            list_items(response.items, $('#item-ajax-div'));
+            check_page(response.next_page);
+        }
+    });
+
+    return false;
+};
+
+$('#item-search-form').on('submit', function() {
+    $('#item-ajax-div').empty();
+    $("#page").val(1);
+    call_ajax($('#item-search-form'));
+    return false;
+});
+
+$('#load-items-form').on('submit', function() {
+    if($('#item-search-form').data('changed')){
+        $('#item-ajax-div').empty();
+        $("#page").val(1);
+        $('#item-search-form').data('changed', false);
+    }
+    call_ajax($('#item-search-form'));
+    return false;
+});
+
+call_ajax($('#item-search-form'));
+
 function check_page (next_page) {
     if (next_page == null) {
-        $("#load-items-button").hide();
+        $("#load-items-form").hide();
+    } else {
+        $("#load-items-form").show();
+        $("#page").val(next_page++);
     }
 };
 
-document.getElementById("load-items-button").onclick = function am () {
-    $.getJSON($SCRIPT_ROOT + '/loaditems', {
-        page: next_page
-    }, function(data) {
-        next_page = data.next_page,
-        list_items(data.items, $('#item-ajax-div')),
-        check_page(next_page)
-    });
-    return false;
-};
-
-function start () {
-    $.getJSON($SCRIPT_ROOT + '/loaditems', {
-        page: 1
-    }, function(data) {
-        next_page = data.next_page,
-        list_items(data.items, $('#item-ajax-div')),
-        check_page(next_page)
-    });
-    return false;
-}
-
-start();
+$("#item-search-form :input").change(function() {
+    $(this).closest('form').data('changed', true);
+});

@@ -2,7 +2,7 @@ from application import application, db
 from flask import redirect, render_template, request, url_for, jsonify
 from flask_login import login_required, current_user
 from application.items.models import Item, Quality
-from application.items.forms import ItemForm
+from application.items.forms import ItemForm, ItemSortForm
 from application.items.tasks import sell_item, delete_task, image_to_s3, create_thumbnail, create_full
 from application.extensions import get_or_create, put_object_to_s3
 from application.bid.forms import BidForm
@@ -18,14 +18,25 @@ from werkzeug.exceptions import RequestEntityTooLarge
 
 @application.route("/items/", methods=["GET"])
 def items_index():
+    # Items are loaded using ajax
     item_count = Item.query.filter_by(sold=False, hidden=False).count()
-    return render_template("items/list.html", item_count=item_count, next_page=1)
+    item_sort_form = ItemSortForm()
+    return render_template("items/list.html", item_count=item_count, form=item_sort_form)
 
-@application.route("/loaditems")
+@application.route("/loaditems", methods=["POST", "GET"])
 def load_items():
-    page = request.args.get('page', 1, type=int)
+    # The javascript in items/list.html calls this function
+    form = ItemSortForm(request.form)
+    key = form.key.data
+    page = int(form.page.data)
+    print(page)
+    direction = form.direction.data
+    keys = {1: Item.current_price, 2: Item.bidding_end, 3: Item.bidding_start, 4: Item.name}
+    obj = keys[key]
+    directions = {1: obj.asc(), 2: obj.desc()}
+    order = directions[direction]
     # Returning 8 items per page
-    items = Item.query.filter_by(sold=False, hidden=False).order_by(Item.bidding_end.asc()).paginate(page, 8, error_out=False)
+    items = Item.query.filter_by(sold=False, hidden=False).order_by(order).paginate(page, 8, error_out=False)
 
     next_page = None
     if items.has_next:
@@ -191,6 +202,7 @@ def items_create():
             full_image_url = url_for('static', filename="images/{}".format(full_image_name))
 
     item = Item(starting_price = form.starting_price.data,
+                current_price = form.starting_price.data,
                 name = form.name.data,
                 account_information_id = current_user.id,
                 quality = form.quality.data,
@@ -198,6 +210,7 @@ def items_create():
                 bidding_end = bidding_end,
                 image_thumbnail = thumbnail_image_url,
                 image_full = full_image_url)
+
 
     db.session().add(item)
     db.session().flush()

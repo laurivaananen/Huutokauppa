@@ -4,7 +4,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from application import application, db
 from application.extensions import get_or_create
 from application.auth.models import UserAccount, AccountInformation, Country, City, PostalCode, StreetAddress
-from application.auth.forms import LoginForm, UserSignupForm, AccountDepositForm
+from application.auth.forms import LoginForm, UserSignupForm
 from application.items.models import Item
 
 @application.route("/auth/login", methods = ["GET", "POST"])
@@ -78,6 +78,7 @@ def user_edit(user_id):
 
             if current_user.is_authenticated() and current_user.id == account_information.id:
                 form = UserSignupForm(obj=account_information)
+                # Adding default values to the form
                 form.first_name.data = account_information.user_account.first_name
                 form.last_name.data = account_information.user_account.last_name
                 form.user_name.data = account_information.user_account.user_name
@@ -86,10 +87,11 @@ def user_edit(user_id):
             items = account_information.items
             bought_items = account_information.bought_items
 
-            return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm(), items=items, bought_items=bought_items)
+            return render_template("auth/detail.html", account_information=account_information, items=items, bought_items=bought_items)
         else:
             form = UserSignupForm(request.form)
 
+        # Deleting form validators for fields we are not updating
         form.password.validators = []
         form.repeat_password.validators = []
         form.email_address.validators = []
@@ -122,7 +124,7 @@ def user_edit(user_id):
         items = account_information.items
         bought_items = account_information.bought_items
 
-        return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm(), items=items, bought_items=bought_items)   
+        return render_template("auth/detail.html", account_information=account_information, items=items, bought_items=bought_items)   
 
 @application.route("/user/delete/<user_id>/", methods=["POST"])
 @login_required
@@ -132,6 +134,7 @@ def user_delete(user_id):
     if current_user.id == account_information.id:
         items = account_information.items
         from application.items.tasks import delete_task
+        # Revoking the sell tasks on items this user owned
         for item in items:
             delete_task(item.celery_task_id)
         db.session().delete(account_information)
@@ -151,4 +154,4 @@ def user_detail(user_id):
         items = account_information.items
         bought_items = account_information.bought_items
 
-    return render_template("auth/detail.html", account_information=account_information, form=AccountDepositForm(), items=items, bought_items=bought_items)
+    return render_template("auth/detail.html", account_information=account_information, items=items, bought_items=bought_items)

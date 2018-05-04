@@ -82,25 +82,6 @@ else:
     application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
     application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
 
-    
-
-    # with open(os.path.expanduser("~/creds.txt")) as f:
-    #     for line in f.readlines():
-    #         line = line[:-1]
-    #         if line:
-    #             print(line)
-    #             splitted = line.split("=")
-    #             application.config[splitted[0]] = splitted[1]
-
-
-    # application.config["S3_BUCKET"] = os.environ.get("S3_BUCKET")
-    # application.config["S3_KEY"] = os.environ.get("S3_KEY")
-    # application.config["S3_SECRET"] = os.environ.get("S3_SECRET")
-    # application.config["S3_LOCATION"] = 'http://{}.s3.amazonaws.com/'.format(application.config["S3_BUCKET"])
-
-
-
-
     # Celery
     from application.tasks import make_celery
 
@@ -145,9 +126,7 @@ login_manager.login_message = "Please login to use this functionality"
 
 @login_manager.user_loader
 def load_user(user_id):
-    # return User.query.filter(User.id==userid).first()
     return AccountInformation.query.filter(AccountInformation.id==user_id).first()
-    # return AccountInformation.query.get(user_id)
 
 
 # Admin
@@ -158,7 +137,7 @@ from application.items.models import Item
 from application.bid.models import Bid
 
 
-
+# Inheriting from the default admin view and adding authentication checks
 class SecureAdminIndexView(AdminIndexView):
     def is_accessible(self):
         if current_user.is_authenticated:
@@ -221,6 +200,7 @@ def add_qualities():
         db.session().add(refurbished)
         db.session().commit()
 
+# Adding an admin account when application is run for the first time
 @application.before_first_request
 def add_super_admin():
     from application.extensions import get_or_create
