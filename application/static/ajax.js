@@ -1,6 +1,12 @@
 function list_items (items, table) {
     for (i = 0; i < items.length; i++) {
-        var name = "<h3><a href='" + $SCRIPT_ROOT + "/items/" + items[i]["id"] + "'>" + items[i]["name"] + "</a></h3>";
+
+        var truncated = items[i]["name"]
+        if(truncated.length > 54){
+            var truncated = truncated.substring(0, 54);
+            truncated += "..."
+        }
+        var name = "<h3 id='trunc'><a href='" + $SCRIPT_ROOT + "/items/" + items[i]["id"] + "'>" + truncated + "</a></h3>";
 
         var image = "<a href='" + $SCRIPT_ROOT + "/items/" + items[i]["id"] + "'><img src=" + items[i]["image_url"] + " alt=" + items[i]["name"] + "></a>"
 

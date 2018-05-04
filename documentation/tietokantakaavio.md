@@ -1,2 +1,2 @@
-https://raw.githubusercontent.com/laurivaananen/Huutokauppa/master/documentation/kaavio.jpg
+https://raw.githubusercontent.com/laurivaananen/Huutokauppa/master/documentation/kaavio_uusi.jpg
 

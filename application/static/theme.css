@@ -42,13 +42,13 @@ h2 {
 h3 a {
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
-    font-size: 24px;
+    font-size: 18px;
 }
 
 h3 {
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 
@@ -103,7 +103,7 @@ nav a:hover {
 #item-list > div {
     grid-column: 2;
     margin-top: 10em;
-    margin-bottom: 10em;
+    margin-bottom: 4em;
 }
 
 #item-ajax-div {
@@ -134,14 +134,19 @@ nav a:hover {
 }
 
 .item-container:hover {
-    box-shadow: 0px 0px 20px -2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.12);
 }
 
 .item-container h3 {
     text-align: center;
-    padding: 12.5px 0;
+    /* height: 3em; */
     border-bottom: solid 1px #ddd;
-    margin: 0 20px;
+    margin: auto 20px;
+    padding: 10px 0;
+}
+
+.item-container #trunc {
+    height: 60px;
 }
 
 .item-container h3:last-child {
@@ -150,8 +155,12 @@ nav a:hover {
 
 .item-container h3 a {
     text-decoration: none;
-    color: rgb(255, 145, 0);
     color: rgb(50, 96, 139);
+}
+
+
+.item-container h3 a:hover {
+    color: rgb(255, 145, 0);
 }
 
 #item-list h1 {
@@ -162,6 +171,7 @@ nav a:hover {
 }
 
 #load-items-form {
+    grid-column: 2;
     justify-self: center;
 }
 
@@ -241,6 +251,12 @@ nav a:hover {
 
 #item-detail .other-items {
     grid-area: other-items;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 6fr;
+}
+
+#item-detail #other-items-list {
     padding: 1em;
     display: grid;
     grid-template-columns: repeat( auto-fit, 300px );
@@ -249,6 +265,11 @@ nav a:hover {
     grid-row-gap: 1em;
     justify-content: space-evenly;
     align-content: center;
+}
+
+#item-detail .other-items h2 {
+    padding: 0.5em 0 0 0.5em;
+    /* grid-column: span 4; */
 }
 
 #item-detail .item-toolbar .detail-form {

@@ -68,8 +68,8 @@ def load_items():
                               Item.category_id.in_(category_in)).order_by(order)
 
     item_count = len(items.all())
-    # Returning 6 items per page
-    items = items.paginate(page, 6, error_out=True)
+    # Returning 8 items per page
+    items = items.paginate(page, 8, error_out=True)
 
     next_page = None
     if items.has_next:
@@ -105,8 +105,8 @@ def item_detail(item_id):
 
     item = Item.query.get_or_404(item_id)
     seller = item.account_information_id
-    bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc()).limit(15)
-    other_items = Item.query.filter_by(account_information_id=seller).filter(Item.id != item.id).limit(4)
+    bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc()).limit(16)
+    other_items = Item.query.filter_by(account_information_id=seller).filter(Item.id != item.id, Item.sold == False, Item.hidden == False).limit(4)
 
     return render_template("items/detail.html", item=item, form=BidForm(), bids=bids, other_items=other_items)
 

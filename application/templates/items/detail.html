@@ -123,13 +123,15 @@
 </div>
 
 <div class="float-div other-items">
+    <h2>Other items by this seller</h2>
+    <div id="other-items-list">
     {% for item in other_items %}
     <div class='item-container'>
         <a href='{{ url_for("item_detail", item_id=item.id) }}'>
             <img src="{{ item.image_thumbnail }}" alt="{{ item.name }}">
         </a>
-        <h3>
-            <a href="{{ url_for('item_detail', item_id=item.id) }}">{{ item.name }}</a>
+        <h3 id="trunc">
+            <a href="{{ url_for('item_detail', item_id=item.id) }}">{{ item.name|truncate(57, True) }}</a>
         </h3>
         {% if item.bidding_time_left().hours > 23 %}
             <h3>{{ item.datetime_from_utc() }}</h3>
@@ -137,9 +139,10 @@
             {% from 'items/time_left_macro.html' import time_left_macro %}
             <h3>{{ time_left_macro(item.bidding_time_left()) }}</h3>
         {% endif %}
-        <h3 class='time-normal'>{{ item.bid_latest(item.id) }}</h3>
+        <h3 class='time-normal'>$ {{ item.bid_latest(item.id) }}</h3>
     </div>
     {% endfor %}
+    </div>
 </div>
 
 </main>
