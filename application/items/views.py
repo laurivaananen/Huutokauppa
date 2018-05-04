@@ -104,9 +104,11 @@ def items_form():
 def item_detail(item_id):
 
     item = Item.query.get_or_404(item_id)
+    seller = item.account_information_id
     bids = Bid.query.filter_by(item_id=item_id).order_by(Bid.amount.desc()).limit(15)
+    other_items = Item.query.filter_by(account_information_id=seller).filter(Item.id != item.id).limit(4)
 
-    return render_template("items/detail.html", item=item, form=BidForm(), bids=bids)
+    return render_template("items/detail.html", item=item, form=BidForm(), bids=bids, other_items=other_items)
 
 @login_required
 @application.route("/items/edit/<item_id>/", methods=["GET"])

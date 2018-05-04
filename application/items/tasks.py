@@ -44,7 +44,7 @@ def image_to_s3(file_key, item_id):
     full_image.save(full_image_bytes_stream, "JPEG", quality=75)
 
     # Save thumbnail image to s3 and get the url
-    thumbnail_image_key = "{}-400".format(file_key)
+    thumbnail_image_key = "{}-300".format(file_key)
     put_object_to_s3(image_bytes=thumbnail_image_bytes_stream.getvalue(), filename=thumbnail_image_key)
     # thumbnail_image_url = generate_presigned_url(filename=thumbnail_image_key)
     thumbnail_image_url = "{}{}".format(application.config["S3_LOCATION"], thumbnail_image_key)
@@ -80,7 +80,7 @@ def create_thumbnail(img):
         )
     )
     
-    img.thumbnail((400, 400))
+    img.thumbnail((300, 300))
     return img
 
 def create_full(img):

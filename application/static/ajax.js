@@ -1,6 +1,6 @@
 function list_items (items, table) {
     for (i = 0; i < items.length; i++) {
-        var name = "<h2><a href='" + $SCRIPT_ROOT + "/items/" + items[i]["id"] + "'>" + items[i]["name"] + "</a></h2>";
+        var name = "<h3><a href='" + $SCRIPT_ROOT + "/items/" + items[i]["id"] + "'>" + items[i]["name"] + "</a></h3>";
 
         var image = "<a href='" + $SCRIPT_ROOT + "/items/" + items[i]["id"] + "'><img src=" + items[i]["image_url"] + " alt=" + items[i]["name"] + "></a>"
 
@@ -45,7 +45,7 @@ function list_items (items, table) {
 
         var seller = "<td><a href='" + $SCRIPT_ROOT + "/user/" + items[i]["seller_id"] + "'>" + items[i]["seller"] + "</a></td>";
 
-        table.append("<div class='item-container'>" + name + image +  bidding_time_left + latest_bid + "</div>")
+        table.append("<div class='item-container'>" +  image + name +  bidding_time_left + latest_bid + "</div>")
     }
 };
 
