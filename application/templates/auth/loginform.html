@@ -3,18 +3,16 @@
 {% block body %}
 <main id="user-login">
 <div class="float-div">
-<h2 class="table-header">Login</h2>
-<form class="user-login detail-form" method="POST" action="{{ url_for('auth_login')}}">
-    {{ form.email_address.label }}
-    {{ form.email_address }}
-    <p class="error">{{ form.email_address.errors[0] }}</p>
+<h1 class="material-header">Login</h1>
+<form class="material-form" method="POST" action="{{ url_for('auth_login')}}">
+    {% from 'material_macros.html' import material_form %}
+    {% for form_field in form %}
+        {{ material_form(form_field) }}
+    {% endfor %}
 
-    {{ form.password.label }}
-    {{ form.password }}
-    <p class="error">{{ form.password.errors[0] }}</p>
-
-    <input class="btn" type="submit" value="Login"/>
+    <input class="material-button" type="submit" value="Login"/>
 </form>
 </div>
 </main>
+<script src="{{ url_for('static', filename='material.js') }}"></script>
 {% endblock %}

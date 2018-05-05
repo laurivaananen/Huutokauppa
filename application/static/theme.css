@@ -298,9 +298,13 @@ nav a:hover {
 
 #item-new {
     display: grid;
-    grid-template-columns: 1fr;
-    align-items: start;
-    padding: 6em 3em;
+    grid-template-columns: 1fr minmax(400px, 640px) 1fr;
+    /* align-items: start; */
+    padding: 10em 0;
+}
+
+#item-new .float-div {
+    grid-column: 2;
 }
 
 
@@ -308,25 +312,37 @@ nav a:hover {
 
 #item-edit {
     display: grid;
-    grid-template-columns: 1fr;
-    padding: 6em 3em;
+    grid-template-columns: 1fr minmax(400px, 640px) 1fr;
+    padding: 10em 0;
+}
+
+#item-edit .float-div {
+    grid-column: 2;
 }
 
 
-/* User new */
+/* User Signup */
 
 #user-signup {
     display: grid;
-    grid-template-columns: 1fr;
-    padding: 6em 6em;
+    grid-template-columns: 1fr minmax(400px, 640px) 1fr;
+}
+
+#user-signup .float-div {
+    margin: 10em 0;
+    grid-column: 2;
 }
 
 /* User edit */
 
 #user-edit {
     display: grid;
-    grid-template-columns: 1fr;
-    padding: 6em 6em;
+    grid-template-columns: 1fr minmax(400px, 640px) 1fr;
+    padding: 10em 0;
+}
+
+#user-edit .float-div {
+    grid-column: 2;
 }
 
 
@@ -334,8 +350,12 @@ nav a:hover {
 
 #user-login {
     display: grid;
-    grid-template-columns: 1fr;
-    padding: 6em 3em;
+    grid-template-columns: 1fr minmax(400px, 640px) 1fr;
+}
+
+#user-login .float-div {
+    margin: 10em 0;
+    grid-column: 2;
 }
 
 
@@ -539,28 +559,159 @@ DETAIL ELEMENTS
 
 
 /* Detail form */
+
+
+
 .detail-form {
     padding: 0 20px 20px 20px;
 }
 
-.detail-form label {
+/* .detail-form label {
+    padding-top: 32px;
+    font-size: 14px;
+    font-weight: 400;
     display: block;
+} */
+.material-header {
+    margin: 48px 2em 0 32px;
 }
 
-.detail-form input[type=text], .detail-form textarea, .detail-form input[type=password] {
-    display: inline-block;
-    width: 50%; /* Full width */
-    padding: 12px; 
-    border: 1px solid #ccc; /* Gray border */
-    border-radius: 4px; /* Rounded borders */
-    box-sizing: border-box; /* Make sure that padding and width stays in place */
-    margin-top: 0.5em; /* Add a top margin */
-    margin-bottom: 1em; /* Bottom margin */
-    resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+.material-form {
+    margin: 0 2em;
 }
+
+.material-form label {
+    margin-top: 48px;
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+    color: #444;
+}
+
+.material-form select {
+    color: #111;
+    display: inline-block;
+    width: 100%;
+    padding: 6px 0; 
+    border: 0;
+    font-size: 16px;
+    font-weight: 400;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: vertical;
+    font-family: 'Roboto', sans-serif;
+    background: 0;
+}
+
+.material-form .material-error {
+    color: #444;
+    font-size: 14px;
+    font-weight: 400;
+    padding-top: 6px;
+}
+
+.material-form .material-button {
+    margin: 48px 0 2em 0;
+    background-color: rgb(50, 96, 139);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    font-family: 'Roboto';
+    font-size: 14px;
+}
+
+.material-form .material-button:hover {
+    background-color: rgb(255, 145, 0);
+}
+
+.material-form textarea {
+    color: #111;
+    display: inline-block;
+    width: 100%;
+    margin-top: 6px;
+    padding: 6px 6px; 
+    border: 0;
+    font-size: 16px;
+    font-weight: 400;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: vertical;
+    font-family: 'Roboto', sans-serif;
+    height: 92px;
+}
+
+.material-form input[type=file] {
+    display: none;
+}
+
+.material-form label.material-file {
+    color: #111;
+    display: inline-block;
+    width: 100%;
+    padding: 6px 0; 
+    margin: 0;
+    border: 0;
+    font-size: 16px;
+    font-weight: 400;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: vertical;
+    font-family: 'Roboto', sans-serif;
+}
+
+.material-form input[type=text], .material-form input[type=password] {
+    color: #111;
+    display: inline-block;
+    width: 100%;
+    padding: 6px 0; 
+    border: 0;
+    font-size: 16px;
+    font-weight: 400;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: vertical;
+    font-family: 'Roboto', sans-serif;
+}
+
+.material-field-error label {
+    color: rgb(255, 70, 70);
+}
+
+.material-field-error .material-error {
+    color: rgb(255, 70, 70);
+}
+
+.material-field-error textarea {
+    border: 1px solid rgb(255, 27, 27);
+}
+
+.material-field-error input[type=text], .material-field-error input[type=password] {
+    border-bottom: 1px solid rgb(255, 27, 27);
+}
+
+label.material-label-focus{
+    color: rgb(72, 167, 255);
+}
+
+input.material-input-focus[type=text], input.material-input-focus[type=password]  {
+    border-bottom: 1px solid rgb(54, 158, 255);
+}
+
+
+
+
+
+
+
+
+
+
 
 .detail-form input[type=text]:focus, .detail-form textarea:focus, .detail-form input[type=password]:focus {
-    border: 1px solid rgb(180, 219, 255);
+    border-bottom: 1px solid rgb(23, 143, 255);
 }
 
 .detail-form input[type=submit], input[type=button] {

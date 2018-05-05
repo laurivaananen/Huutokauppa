@@ -1,0 +1,14 @@
+{% macro material_form(form_field) -%}
+
+{% if form_field.errors %}
+<div class="material-field material-field-error">
+{% else %}
+<div class="material-field">
+{% endif %}
+
+    {{ form_field.label(class="material-label") }}
+    {{ form_field(class="material-input") }}
+    <p class="material-error">{{ form_field.errors[0] }}</p>
+</div>
+
+{%- endmacro %}

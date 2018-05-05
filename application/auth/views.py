@@ -82,6 +82,9 @@ def user_edit(user_id):
                 form.first_name.data = account_information.user_account.first_name
                 form.last_name.data = account_information.user_account.last_name
                 form.user_name.data = account_information.user_account.user_name
+                del form.password
+                del form.repeat_password
+                del form.email_address
                 return render_template("auth/edit.html", form=form)
 
             items = account_information.items

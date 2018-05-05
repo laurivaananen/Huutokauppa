@@ -22,7 +22,9 @@ class UserSignupForm(FlaskForm):
     last_name = StringField("Last name", [validators.InputRequired(), validators.Length(max=144)])
     user_name = StringField("User name", [validators.InputRequired(), validators.Length(max=144)])
     email_address = StringField("Email address", [validators.InputRequired(), validators.Email(), validators.Length(max=144)])
-    password = PasswordField("Password", [validators.InputRequired(), validators.Length(min=8, max=144), validators.EqualTo("repeat_password", message="Passwords must match")])
+    password = PasswordField("Password",
+                             [validators.InputRequired(), validators.Length(min=8, max=144), validators.EqualTo("repeat_password", message="Passwords must match")],
+                             render_kw={"placeholder": "Minumum 8 characters"})
     repeat_password = PasswordField("Repeat password", [validators.InputRequired()])
     phone_number = StringField("Phone number", [validators.InputRequired(), validators.Length(max=144)])
     country = StringField("Country", [validators.InputRequired(), validators.Length(max=144)])

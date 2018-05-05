@@ -3,42 +3,101 @@
 {% block body %}
 <main id="item-new">
 <div class="float-div">
-<h1 class="table-header">New item</h1>
-<form class="detail-form" method="POST" enctype="multipart/form-data" action="{{ url_for('items_create') }}">
-    {{ form.starting_price.label }}
-    {{ form.starting_price }}
-    <p class="error">{{ form.starting_price.errors[0] }}</p>
+<h1 class="material-header">New item</h1>
+<form class="material-form" method="POST" enctype="multipart/form-data" action="{{ url_for('items_create') }}">
 
-    {{ form.bidding_end.bidding_end_date.label }}
-    {{ form.bidding_end.bidding_end_date(placeholder=form.get_current_date()) }}
-    <p class="error">{{ form.bidding_end.bidding_end_time.errors[0] }}</p>
+    {% if form.starting_price.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.starting_price.label(class="material-label") }}
+        {{ form.starting_price(class="material-input") }}
+        <p class="material-error">{{ form.starting_price.errors[0] }}</p>
+    </div>
 
-    {{ form.bidding_end.bidding_end_time.label }}
-    {{ form.bidding_end.bidding_end_time(placeholder=form.get_current_time()) }}
-    <p class="error">{{ form.bidding_end.bidding_end_time.errors[0] }}</p>
+    {% if form.bidding_end.bidding_end_date.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.bidding_end.bidding_end_date.label(class="material-label") }}
+        {{ form.bidding_end.bidding_end_date(class="material-input", placeholder=form.get_current_date()) }}
+        <p class="material-error">{{ form.bidding_end.bidding_end_date.errors[0] }}</p>
+    </div>
 
-    {{ form.name.label }}
-    {{ form.name }}
-    <p class="error">{{ form.name.errors[0] }}</p>
+    {% if form.bidding_end.bidding_end_time.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.bidding_end.bidding_end_time.label(class="material-label") }}
+        {{ form.bidding_end.bidding_end_time(class="material-input", placeholder=form.get_current_time()) }}
+        <p class="material-error">{{ form.bidding_end.bidding_end_time.errors[0] }}</p>
+    </div>
 
-    {{ form.image.label }}
-    {{ form.image() }}
-    <p class="error">{{ form.image.errors[0] }}</p>
+    {% if form.name.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.name.label(class="material-label") }}
+        {{ form.name(class="material-input") }}
+        <p class="material-error">{{ form.name.errors[0] }}</p>
+    </div>
 
-    {{ form.description.label }}
-    {{ form.description }}
-    <p class="error">{{ form.description.errors[0] }}</p>
+    {% if form.image.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.image.label(class="material-label") }}
+        <label for="image" class="material-file">Choose a file</label>
+        {{ form.image(class="material-file") }}
+        <p class="material-error">{{ form.image.errors[0] }}</p>
+    </div>
 
-    {{ form.quality.label }}
-    {{ form.quality }}
-    <p class="error">{{ form.quality.errors[0] }}</p>
+    {% if form.description.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.description.label(class="material-label") }}
+        {{ form.description(class="material-input") }}
+        <p class="material-error">{{ form.description.errors[0] }}</p>
+    </div>
 
-    {{ form.category.label }}
-    {{ form.category }}
-    <p class="error">{{ form.category.errors[0] }}</p>
+    {% if form.quality.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.quality.label(class="material-label") }}
+        {{ form.quality(class="material-input") }}
+        <p class="material-error">{{ form.quality.errors[0] }}</p>
+    </div>
 
-    <input class="btn" type="submit" value="New item"/>
+    {% if form.category.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.category.label(class="material-label") }}
+        {{ form.category(class="material-input") }}
+        <p class="material-error">{{ form.category.errors[0] }}</p>
+    </div>
+
+    <input class="material-button" type="submit" value="New item"/>
 </form>
 </div>
 </main>
+<script src="{{ url_for('static', filename='material.js') }}"></script>
 {% endblock %}

@@ -3,54 +3,17 @@
 {% block body %}
 <main id="user-signup">
 <div class="float-div">
-<h1 class="table-header">Signup</h1>
-<form class="detail-form" method="POST" action="{{ url_for('auth_usersignup')}}">
-    {{ form.first_name.label }}
-    {{ form.first_name }}
-    <p class="error">{{ form.first_name.errors[0] }}</p>
+<h1 class="material-header">Signup</h1>
+<form class="material-form" method="POST" action="{{ url_for('auth_usersignup')}}">
 
-    {{ form.last_name.label }}
-    {{ form.last_name }}
-    <p class="error">{{ form.last_name.errors[0] }}</p>
-
-    {{ form.user_name.label }}
-    {{ form.user_name }}
-    <p class="error">{{ form.user_name.errors[0] }}</p>
-
-    {{ form.email_address.label }}
-    {{ form.email_address }}
-    <p class="error">{{ form.email_address.errors[0] }}</p>
-
-    {{ form.phone_number.label }}
-    {{ form.phone_number }}
-    <p class="error">{{ form.phone_number.errors[0] }}</p>
-
-    {{ form.password.label }}
-    {{ form.password(placeholder="Min 8 characters") }}
-    <p class="error">{{ form.password.errors[0] }}</p>
-
-    {{ form.repeat_password.label }}
-    {{ form.repeat_password }}
-    <p class="error">{{ form.repeat_password.errors[0] }}</p>
+    {% from 'material_macros.html' import material_form %}
+    {% for form_field in form %}
+        {{ material_form(form_field) }}
+    {% endfor %}
     
-    {{ form.country.label }}
-    {{ form.country }}
-    <p class="error">{{ form.country.errors[0] }}</p>
-
-    {{ form.city.label }}
-    {{ form.city }}
-    <p class="error">{{ form.city.errors[0] }}</p>
-
-    {{ form.postal_code.label }}
-    {{ form.postal_code }}
-    <p class="error">{{ form.postal_code.errors[0] }}</p>
-
-    {{ form.street_address.label }}
-    {{ form.street_address }}
-    <p class="error">{{ form.street_address.errors[0] }}</p>
-
-    <input class="btn" type="submit" value="Signup"/>
+    <input class="material-button" type="submit" value="Signup"/>
 </form>
 </div>
 </main>
+<script src="{{ url_for('static', filename='material.js') }}"></script>
 {% endblock %}

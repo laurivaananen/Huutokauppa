@@ -6,29 +6,58 @@
 <main id="item-edit">
 
 <div class="float-div">
-<h2 class="table-header">Edit item</h2>
-<form class="detail-form" method="POST" action="{{ url_for('item_update', item_id=item.id) }}">
-    {{ form.name.label }}
-    {{ form.name }}
-    <p class="error">{{ form.name.errors[0] }}</p>
+<h1 class="material-header">Edit item</h1>
+<form class="material-form" method="POST" action="{{ url_for('item_update', item_id=item.id) }}">
+    {% if form.name.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.name.label(class="material-label") }}
+        {{ form.name(class="material-input") }}
+        <p class="material-error">{{ form.name.errors[0] }}</p>
+    </div>
 
-    {{ form.description.label }}
-    {{ form.description }}
-    <p class="error">{{ form.description.errors[0] }}</p>
+    {% if form.description.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.description.label(class="material-label") }}
+        {{ form.description(class="material-input") }}
+        <p class="material-error">{{ form.description.errors[0] }}</p>
+    </div>
 
-    {{ form.quality.label }}
-    {{ form.quality(value=item.quality.name) }}
-    <p class="error">{{ form.quality.errors[0] }}</p>
+    {% if form.quality.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.quality.label(class="material-label") }}
+        {{ form.quality(class="material-input") }}
+        <p class="material-error">{{ form.quality.errors[0] }}</p>
+    </div>
 
-    {{ form.category.label }}
-    {{ form.category(value=item.category.name) }}
-    <p class="error">{{ form.category.errors[0] }}</p>
+    {% if form.category.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.category.label(class="material-label") }}
+        {{ form.category(class="material-input") }}
+        <p class="material-error">{{ form.category.errors[0] }}</p>
+    </div>
 
-    <input class="btn" type="submit" value="Update item"/>
+    <input class="material-button" type="submit" value="Update item"/>
 </form>
 {% else %}
 <p class="info-text item-edit-top-span">You are not authorized to edit this information</p>
 {% endif %}
 </div>
 </main>
+<script src="{{ url_for('static', filename='material.js') }}"></script>
 {% endblock %}
