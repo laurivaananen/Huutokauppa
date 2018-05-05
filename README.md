@@ -47,9 +47,11 @@ The application is hosted in AWS Elastic Beanstalk because you can't do certain 
 * In you account page you can see your items that are currently on sale and all the items that you have bought
 * When adding a new item to sale you can choose name, starting price, bidding end datetime, image, description, category and quality
 * You can edit the item information or delete the item
+* On items detail page is also a list of other items being sold by the seller
 * When your chosen bidding time ends the item gets sold to the highest bidder, or removed from the store if nobody bid on it
 * When looking at other profiles you can only see limited information (no billing address or purchase history)
 * On the index page you can see users based on the amount of bids and amounts of items they have sold
+* On the index page you have a list of top 4 most bid items currently on sale
 * You can sort items based on price, bidding time left, date added to sale or name
 * You can sort items based on their category or quality
 * Full admin paned at http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/admin/
