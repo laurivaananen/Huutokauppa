@@ -139,7 +139,7 @@ def load_user(user_id):
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask import url_for
-from application.items.models import Item, Quality
+from application.items.models import Item, Quality, Category
 from application.bid.models import Bid
 
 
@@ -184,6 +184,7 @@ admin.add_view(AccountInformationModelView(AccountInformation, db.session))
 admin.add_view(ItemModelView(Item, db.session))
 admin.add_view(SecureModelView(Bid, db.session))
 admin.add_view(SecureModelView(Quality, db.session))
+admin.add_view(SecureModelView(Category, db.session))
 
 
 
