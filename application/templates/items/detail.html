@@ -24,12 +24,20 @@
 <!-- Toolbar to add a bid if you are not the owner -->
 {% if current_user.id != item.account_information.id %}
 <div class="float-div item-bid">
-<h2 class="table-header">Bid</h2>
-<form class="detail-form" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
-    {{ form.amount.label}}
-    {{ form.amount(placeholder=(1 + item.bid_latest(item.id))) }}
-    <p class="error">{{ form.amount.errors[0] }}</p>
-    <input class="btn" type="submit" value="Bid" {% if item.hidden or item.sold %}disabled{% endif %}/>
+<h2 class="material-header">Bid</h2>
+<form class="material-form" method="POST" action="{{ url_for('bid_create', item_id=item.id) }}">
+
+    {% if form.amount.errors %}
+    <div class="material-field material-field-error">
+    {% else %}
+    <div class="material-field">
+    {% endif %}
+    
+        {{ form.amount.label(class="material-label") }}
+        <span class="form-span">$</span>{{ form.amount(class="material-input") }}
+        <p class="material-error">{{ form.amount.errors[0] }}</p>
+    </div>
+    <input class="material-button" type="submit" value="Bid" {% if item.hidden or item.sold %}disabled{% endif %}/>
 </form>
 </div>
 {% endif %}
@@ -57,12 +65,12 @@
         <th>Seller</th>
         <td><a href="{{ url_for('user_detail', user_id=item.account_information_id) }}">{{ item.account_information.user_account.user_name }}</a></td>
     </tr>
-    {% if item.bidding_time_left().hours > 23 %}
+    {% if item.bidding_time_left(item.id).hours > 23 %}
         <tr>
             <th>Auction ends</th>
             <td>{{ item.datetime_from_utc() }}</td>
         </tr>
-    {% elif item.bidding_time_left().hours <= 0 and item.bidding_time_left().minutes <= 0 and item.bidding_time_left().seconds <= 0 %}
+    {% elif item.bidding_time_left(item.id).hours <= 0 and item.bidding_time_left(item.id).minutes <= 0 and item.bidding_time_left(item.id).seconds <= 0 %}
         <tr>
             <th>Auction has ended</th>
             {% if item.sold %}
@@ -75,7 +83,7 @@
         <tr>
             <th>Auction ends in</th>
             {% from 'items/time_left_macro.html' import time_left_macro %}
-            <td>{{ time_left_macro(item.bidding_time_left()) }}</td>
+            <td>{{ time_left_macro(item.bidding_time_left(item.id)) }}</td>
         </tr>
     {% endif %}
     <tr>
@@ -135,11 +143,11 @@
         <h3 id="trunc">
             <a href="{{ url_for('item_detail', item_id=item.id) }}">{{ item.name|truncate(57, True) }}</a>
         </h3>
-        {% if item.bidding_time_left().hours > 23 %}
+        {% if item.bidding_time_left(item.id).hours > 23 %}
             <h3>{{ item.datetime_from_utc() }}</h3>
         {% else %}
             {% from 'items/time_left_macro.html' import time_left_macro %}
-            <h3>{{ time_left_macro(item.bidding_time_left()) }}</h3>
+            <h3>{{ time_left_macro(item.bidding_time_left(item.id)) }}</h3>
         {% endif %}
         <h3 class='time-normal'>$ {{ item.bid_latest(item.id) }}</h3>
     </div>
@@ -149,4 +157,5 @@
 {% endif %}
 
 </main>
+<script src="{{ url_for('static', filename='material.js') }}"></script>
 {% endblock %}

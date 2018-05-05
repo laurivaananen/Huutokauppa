@@ -118,7 +118,8 @@ class AccountInformation(Base):
                     " INNER JOIN user_account on user_account.account_information_id = account_information.id"
                     " WHERE item.sold ='1'"
                     " GROUP BY user_account.id"
-                    " ORDER BY item_count DESC;")
+                    " ORDER BY item_count DESC"
+                    " LIMIT 3;")
 
         res = db.engine.execute(stmt)
         
@@ -135,7 +136,8 @@ class AccountInformation(Base):
                     " INNER JOIN bid ON bid.account_information_id = account_information.id"
                     " INNER JOIN user_account on user_account.account_information_id = account_information.id"
                     " GROUP BY user_account.id"
-                    " ORDER BY bid_count DESC;")
+                    " ORDER BY bid_count DESC"
+                    " LIMIT 3;")
 
         res = db.engine.execute(stmt)
         

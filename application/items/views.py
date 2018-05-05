@@ -80,7 +80,7 @@ def load_items():
                            "starting_price": item.starting_price,
                            "id": item.id,
                            "latest_bid": item.bid_latest(item.id),
-                           "bidding_time_left": item.bidding_time_left(),
+                           "bidding_time_left": item.bidding_time_left(item_id=item.id),
                            "bidding_end": item.datetime_from_utc(),
                            "quality": item.quality.name,
                            "seller": item.account_information.user_account.user_name,

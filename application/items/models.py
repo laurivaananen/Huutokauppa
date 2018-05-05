@@ -54,6 +54,14 @@ class Item(Base):
     def image_full_url(self):
         return self.image_full
 
+    @staticmethod
+    def utc_quick(item_id):
+        helsinki = pytz.timezone("Europe/Helsinki")
+        item = Item.query.get(item_id)
+        bidding_end_utc = pytz.utc.localize(item.bidding_end)
+
+        return bidding_end_utc.astimezone(helsinki).strftime("%Y-%m-%d %H:%M")
+
     def datetime_from_utc(self):
         helsinki = pytz.timezone("Europe/Helsinki")
         # Because all datetimes are saved in UTC timezone we need to convert them to Helsinki timezone
@@ -61,10 +69,13 @@ class Item(Base):
 
         return bidding_end_utc.astimezone(helsinki).strftime("%Y-%m-%d %H:%M")
 
-    def bidding_time_left(self):
+    @staticmethod
+    def bidding_time_left(item_id):
+        item = Item.query.get(item_id)
+        endd = item.bidding_end
         import math
         time_now = pytz.utc.localize(datetime.datetime.utcnow())
-        bidding_time_end = pytz.utc.localize(self.bidding_end)
+        bidding_time_end = pytz.utc.localize(endd)
         time_difference = bidding_time_end - time_now
         # How many seconds there are between now and bidding_end
         time_difference_seconds = int(math.floor(time_difference.total_seconds()))
@@ -109,6 +120,28 @@ class Item(Base):
             return response["bid_id"]
 
         return None
+
+    @staticmethod
+    def hot_items():
+        stmt = text("SELECT item.name AS item_name,COUNT(bid.id) AS bid_count,"
+                    " item.image_thumbnail AS image_thumbnail,"
+                    " item.current_price AS item_current_price,"
+                    " item.id AS item_id"
+                    " FROM item"
+                    " INNER JOIN bid ON bid.item_id = item.id"
+                    " WHERE item.sold = '0' AND item.hidden = '0'"
+                    " GROUP BY item.id"
+                    " ORDER BY bid_count DESC"
+                    " LIMIT 4;")
+
+        res = db.engine.execute(stmt)
+
+        response = []
+        print("\n\n\n")
+        for row in res:
+            response.append({"id": row["item_id"], "name": row["item_name"], "image_thumbnail": row["image_thumbnail"], "price": row["item_current_price"]})
+
+        return response
 
     def latest_bid(self):
         stmt = text("SELECT MAX(bid.amount) AS bid_latest FROM item"

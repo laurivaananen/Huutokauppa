@@ -17,4 +17,5 @@ $('.material-file').on('change', function () {
     var filename = filename.split("\\");
     var filename = filename[filename.length - 1];
     $('label.material-file').html(filename);
+    $('label.material-file').addClass('material-file-selected');
 });

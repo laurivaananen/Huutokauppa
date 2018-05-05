@@ -13,7 +13,7 @@
     {% endif %}
     
         {{ form.starting_price.label(class="material-label") }}
-        {{ form.starting_price(class="material-input") }}
+        <span class="form-span">$</span>{{ form.starting_price(class="material-input") }}
         <p class="material-error">{{ form.starting_price.errors[0] }}</p>
     </div>
 

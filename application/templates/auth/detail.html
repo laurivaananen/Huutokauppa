@@ -90,7 +90,7 @@
             {% for item in items %}
             <tr>
                 <td>
-                    <a class="important" href="{{ url_for('item_detail', item_id=item.id) }}">{{ item.name }}</a>
+                    <a class="important" href="{{ url_for('item_detail', item_id=item.id) }}">{{ item.name|truncate(57, True) }}</a>
                 </td>
                 <td>{{ item.starting_price }}</td>
 
@@ -106,11 +106,11 @@
                     <td class="info-text">{{ item.datetime_from_utc() }}</td>
                 {% else %}
 
-                {% if item.bidding_time_left().hours > 23 %}
+                {% if item.bidding_time_left(item.id).hours > 23 %}
                     <td>{{ item.datetime_from_utc() }}</td>
                 {% else %}
                     {% from 'items/time_left_macro.html' import time_left_macro %}
-                    <td>{{ time_left_macro(item.bidding_time_left()) }}</td>
+                    <td>{{ time_left_macro(item.bidding_time_left(item.id)) }}</td>
                 {% endif %}
                 {% endif %}
 

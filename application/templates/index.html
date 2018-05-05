@@ -2,7 +2,7 @@
 
 {% block body %}
 <main id="index">
-<div class="float-div">
+<div class="float-div top-sellers">
     <h1 class="top-sellers-h1 index-top-left">Top sellers</h1>
 
     {% if top_sellers %}
@@ -23,7 +23,7 @@
     {% endif %}
 </div>
 
-<div class="float-div">
+<div class="float-div top-bidders">
     <h1 class="top-bidders-h1 index-top-right">Top bidders</h1>
 
     {% if top_bidders %}
@@ -43,6 +43,31 @@
     <p class="info-text empty-table">No one has bid on anything yet</p>
     {% endif %}
 </div>
+
+{% if hot_items %}
+<div class="float-div hot_items">
+    <h1>Hot items</h1>
+    <div id="hot-items-div">
+    {% for item in hot_items %}
+    <div class='item-container'>
+        <a href='{{ url_for("item_detail", item_id=item.id) }}'>
+            <img src="{{ item.image_thumbnail }}" alt="{{ item.name }}">
+        </a>
+        <h3 id="trunc">
+            <a href="{{ url_for('item_detail', item_id=item.id) }}">{{ item.name|truncate(57, True) }}</a>
+        </h3>
+        {% if item.bidding_time_left.hours > 23 %}
+            <h3>{{ item.end_date }}</h3>
+        {% else %}
+            {% from 'items/time_left_macro.html' import time_left_macro %}
+            <h3>{{ time_left_macro(item.bidding_time_left) }}</h3>
+        {% endif %}
+        <h3 class='time-normal'>$ {{ item.price }}</h3>
+    </div>
+    {% endfor %}
+    </div>
+</div>
+{% endif %}
 
 </main>
     
