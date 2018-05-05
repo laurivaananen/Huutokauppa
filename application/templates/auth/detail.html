@@ -56,11 +56,11 @@
 <table class="detail-table">
     <tr>
         <th>Country</th>
-        <td>{{ account_information.country.name }}</td>
+        <td>{{ account_information.country.name|title()  }}</td>
     </tr>
     <tr>
         <th>City</th>
-        <td>{{ account_information.city.name }}</td>
+        <td>{{ account_information.city.name|title() }}</td>
     </tr>
     <tr>
         <th>Postal code</th>
@@ -68,7 +68,7 @@
     </tr>
     <tr>
         <th>Address</th>
-        <td>{{ account_information.street_address.name }}</td>
+        <td>{{ account_information.street_address.name|title()  }}</td>
     </tr>
 </table>
 </div>

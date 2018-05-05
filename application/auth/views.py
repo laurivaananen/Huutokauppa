@@ -40,10 +40,10 @@ def auth_usersignup():
         return render_template("auth/usersignupform.html", form=form, error="Error happened")
 
 
-    country = get_or_create(db.session, Country, name=form.country.data)
-    city = get_or_create(db.session, City, name=form.city.data)
+    country = get_or_create(db.session, Country, name=form.country.data.lower())
+    city = get_or_create(db.session, City, name=form.city.data.lower())
     postal_code = get_or_create(db.session, PostalCode, name=form.postal_code.data)
-    street_address = get_or_create(db.session, StreetAddress, name=form.street_address.data)
+    street_address = get_or_create(db.session, StreetAddress, name=form.street_address.data.lower())
 
     account_information = AccountInformation(email_address = form.email_address.data,
                                              phone_number = form.phone_number.data,
@@ -99,10 +99,10 @@ def user_edit(user_id):
         if not form.validate():
             return render_template("auth/edit.html", form=form)
 
-        country = get_or_create(db.session, Country, name=form.country.data)
-        city = get_or_create(db.session, City, name=form.city.data)
-        postal_code = get_or_create(db.session, PostalCode, name=form.postal_code.data)
-        street_address = get_or_create(db.session, StreetAddress, name=form.street_address.data)
+        country = get_or_create(db.session, Country, name=form.country.data.lower())
+        city = get_or_create(db.session, City, name=form.city.data.lower())
+        postal_code = get_or_create(db.session, PostalCode, name=form.postal_code.data.lower())
+        street_address = get_or_create(db.session, StreetAddress, name=form.street_address.data.lower())
         
         account_information.phone_number = form.phone_number.data
         account_information.country = country
