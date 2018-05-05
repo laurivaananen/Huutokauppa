@@ -693,6 +693,12 @@ DETAIL ELEMENTS
     color: rgb(32, 32, 32);
 }
 
+.material-form label.material-file-selected:focus {
+    outline-style: none;
+    box-shadow: none;
+    border-color: none;
+}
+
 .material-form input[type=text], .material-form input[type=password] {
     color: rgb(32, 32, 32);
     display: inline-block;
@@ -733,6 +739,9 @@ label.material-label-focus{
 }
 
 input.material-input-focus[type=text], input.material-input-focus[type=password]  {
+    outline-style: none;
+    box-shadow: none;
+    border-color: none;
     border-bottom: 1px solid rgb(54, 158, 255);
 }
 
