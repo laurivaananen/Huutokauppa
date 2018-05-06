@@ -54,6 +54,9 @@ class Item(Base):
     def image_full_url(self):
         return self.image_full
 
+    def __str__(self):
+        return self.name
+
     @staticmethod
     def utc_quick(item_id):
         helsinki = pytz.timezone("Europe/Helsinki")

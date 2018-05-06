@@ -76,7 +76,7 @@ def user_edit(user_id):
     if current_user.id == account_information.id:
         if request.method == "GET":
 
-            if current_user.is_authenticated() and current_user.id == account_information.id:
+            if current_user.is_authenticated and current_user.id == account_information.id:
                 form = UserSignupForm(obj=account_information)
                 # Adding default values to the form
                 form.first_name.data = account_information.user_account.first_name
@@ -153,7 +153,7 @@ def user_detail(user_id):
     items = None
     bought_items = None
 
-    if current_user.is_authenticated() and current_user.id == account_information.id:
+    if current_user.is_authenticated and current_user.id == account_information.id:
         items = account_information.items
         bought_items = account_information.bought_items
 

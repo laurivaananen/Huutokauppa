@@ -116,7 +116,7 @@ def item_detail(item_id):
 @application.route("/items/edit/<item_id>/", methods=["GET"])
 def item_edit(item_id):
     item = Item.query.get(item_id)
-    form = ItemForm(obj=item)
+    form = ItemForm()
 
     qualities = Quality.query.all()
     form.quality.choices = [(quality.id, quality.name) for quality in qualities]
@@ -124,8 +124,16 @@ def item_edit(item_id):
     categories = Category.query.all()
     form.category.choices = [(category.id, category.name) for category in categories]
 
+    
+    form.category.default = item.category_id
+    form.quality.default = item.quality_id
+    form.process()
+    form.name.data = item.name
+    form.description.data = item.description
+
+    
     if not item.sold and not item.hidden:
-        if current_user.is_authenticated() and (current_user.id is item.account_information_id):
+        if current_user.is_authenticated and (current_user.id is item.account_information_id):
             return render_template("items/edit.html", item=item, form=form)
         else:
             return redirect(url_for('items_index'))
@@ -151,7 +159,7 @@ def item_update(item_id):
 
     item = Item.query.get_or_404(item_id)
     if not item.sold and not item.hidden:
-        if current_user.is_authenticated() and (current_user.id == item.account_information.id):
+        if current_user.is_authenticated and (current_user.id == item.account_information.id):
             
             item.name = form.name.data
             item.description = form.description.data

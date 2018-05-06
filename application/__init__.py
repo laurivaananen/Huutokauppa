@@ -185,6 +185,7 @@ admin.add_view(ItemModelView(Item, db.session))
 admin.add_view(SecureModelView(Bid, db.session))
 admin.add_view(SecureModelView(Quality, db.session))
 admin.add_view(SecureModelView(Category, db.session))
+admin.add_view(SecureModelView(UserAccount, db.session))
 
 
 

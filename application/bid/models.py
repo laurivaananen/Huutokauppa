@@ -16,3 +16,5 @@ class Bid(Base):
         self.account_information_id = account_information_id
         self.item_id = item_id
 
+    def __str__(self):
+        return str(self.amount)

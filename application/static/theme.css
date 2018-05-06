@@ -573,6 +573,14 @@ DETAIL ELEMENTS
     padding-left: 20px;
 }
 
+.detail-table-vertical th:last-child, .detail-table-vertical td:last-child {
+    padding-right: 20px;
+}
+
+.detail-table th:last-child, .detail-table td:last-child {
+    padding-right: 20px;
+}
+
 .detail-table a, .detail-table-vertical a{
     text-decoration: none;
     color: rgb(50, 96, 139);

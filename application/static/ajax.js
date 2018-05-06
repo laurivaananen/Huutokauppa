@@ -18,7 +18,7 @@ function list_items (items, table) {
             var latest_bid = "<p class='info-text'>No bids yet</p>";
         }
 
-        if (items[i]["bidding_time_left"]["hours"] > 24) {
+        if (items[i]["bidding_time_left"]["hours"] > 23) {
             var bidding_time_left = "<h3 class='time-normal'>" + items[i]["bidding_end"] + "</h3>";
         } else {
             if (items[i]["bidding_time_left"]["hours"] <= 0) {
