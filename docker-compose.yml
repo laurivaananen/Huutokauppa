@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    container_name: huutokauppa_web
+    ports:
+      - 8000:8000
+    volumes:
+      - '.:/application'
+    environment:
+      PYTHONBUFFERED: 'true'
+  celery:
+    build: .
+    container_name: huutokauppa_celery
+    command: celery worker -l info -A application
+    volumes:
+      - '.:/application'
+  redis:
+    image: redis
+    volumes:
+      - 'redis:/data'
+      
+volumes:
+  redis:

@@ -5,6 +5,12 @@ application = Flask(__name__)
 application.config["BCRYPT_LOG_ROUNDS"] = 12
 application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
 application.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
+application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
+
+application.config["SQLALCHEMY_ECHO"] = True
+
+application.config["CELERY_BROKER_URL"] = "redis://redis:6379/0"
+application.config["CELERY_RESULT_BACKEND"] = "redis://redis:6379/0"
 # Bcrypt
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(application)
@@ -17,88 +23,97 @@ db = SQLAlchemy(application)
 
 
 
-if os.environ.get("HEROKU"):
 
-    @application.route("/", methods=["POST", "GET"])
-    def b_route():
-        return redirect("http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/")
+# if os.environ.get("HEROKU"):
 
-    @application.route('/<path:dummy>', methods=["POST", "GET"])
-    def redirect_to_aws(dummy):
-        return redirect("http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/")
+#     @application.route("/", methods=["POST", "GET"])
+#     def b_route():
+#         return redirect("http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/")
 
-elif os.environ.get("AWS") == "huutokauppa-sovellus":
+#     @application.route('/<path:dummy>', methods=["POST", "GET"])
+#     def redirect_to_aws(dummy):
+#         return redirect("http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/")
 
-    user = os.environ.get("PSQL_USER")
-    password = os.environ.get("PSQL_PASSWORD")
-    host = os.environ.get("PSQL_HOST")
-    port = os.environ.get("PSQL_PORT")
-    database = os.environ.get("PSQL_DATABASE")
+# elif os.environ.get("AWS") == "huutokauppa-sovellus":
 
-    application.config["S3_BUCKET"] = os.environ.get("S3_BUCKET")
-    application.config["S3_KEY"] = os.environ.get("S3_KEY")
-    application.config["S3_SECRET"] = os.environ.get("S3_SECRET")
-    application.config["S3_LOCATION"] = 'http://{}.s3.amazonaws.com/'.format(application.config["S3_BUCKET"])
+#     user = os.environ.get("PSQL_USER")
+#     password = os.environ.get("PSQL_PASSWORD")
+#     host = os.environ.get("PSQL_HOST")
+#     port = os.environ.get("PSQL_PORT")
+#     database = os.environ.get("PSQL_DATABASE")
 
-    application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://{}:{}@{}:{}/{}".format(user, password, host, port, database)
+#     application.config["S3_BUCKET"] = os.environ.get("S3_BUCKET")
+#     application.config["S3_KEY"] = os.environ.get("S3_KEY")
+#     application.config["S3_SECRET"] = os.environ.get("S3_SECRET")
+#     application.config["S3_LOCATION"] = 'http://{}.s3.amazonaws.com/'.format(application.config["S3_BUCKET"])
 
-    application.config["SQLALCHEMY_ECHO"] = True
+#     application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://{}:{}@{}:{}/{}".format(user, password, host, port, database)
 
-    application.config["CELERY_BROKER_URL"] = os.environ.get("REDIS_URL")
-    application.config["CELERY_RESULT_BACKEND"] = os.environ.get("REDIS_URL")
+#     application.config["SQLALCHEMY_ECHO"] = True
 
-    # Celery
-    from application.tasks import make_celery
+#     application.config["CELERY_BROKER_URL"] = os.environ.get("REDIS_URL")
+#     application.config["CELERY_RESULT_BACKEND"] = os.environ.get("REDIS_URL")
 
-
-    application.config.update()
-
-    celery = make_celery(application)
+#     # Celery
+#     from application.tasks import make_celery
 
 
+#     application.config.update()
 
-
-
-    from application import views
-
-    from application.items import models
-    from application.items import views
-
-    from application.bid import models, views
-
-    from application.auth import models
-    from application.auth import views
+#     celery = make_celery(application)
 
 
 
 
 
+#     from application import views
 
-else:
-    application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
+#     from application.items import models
+#     from application.items import views
 
-    application.config["SQLALCHEMY_ECHO"] = True
+#     from application.bid import models, views
 
-    application.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
-    application.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
-
-    # Celery
-    from application.tasks import make_celery
+#     from application.auth import models
+#     from application.auth import views
 
 
-    application.config.update()
 
-    celery = make_celery(application)
 
-    from application import views
 
-    from application.items import models
-    from application.items import views
 
-    from application.bid import models, views
+# else:
 
-    from application.auth import models
-    from application.auth import views
+# POSTGRES = {
+#     'user': 'postgres',
+#     'pw': 'password',
+#     'db': 'my_database',
+#     'host': 'localhost',
+#     'port': '5432',
+# }
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
+# %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+
+# application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:huutokauppapassword@db:5432/postgres"
+
+
+
+# Celery
+from application.tasks import make_celery
+
+
+application.config.update()
+
+celery = make_celery(application)
+
+from application import views
+
+from application.items import models
+from application.items import views
+
+from application.bid import models, views
+
+from application.auth import models
+from application.auth import views
 
 
 @application.route("/", methods=["POST", "GET"])

@@ -1,5 +1,8 @@
 # Huutokauppa
 
+## TODO
+Add a database container
+
 ## Installing and running the application locally
 
 This application uses sqlite, redis and python 3.6.3.
