@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  web:
+  ebay:
     build: .
-    container_name: huutokauppa_web
+    container_name: huutokauppa_ebay
     ports:
       - 8001:8001
     environment:

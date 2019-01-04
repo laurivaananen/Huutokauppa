@@ -12,6 +12,6 @@ COPY ./run.py .
 
 COPY ./application application
 
-EXPOSE 8000
+EXPOSE 8001
 
 CMD ["gunicorn", "-b", "0.0.0.0:8001", "application:application"]
