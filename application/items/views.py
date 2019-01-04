@@ -242,23 +242,22 @@ def items_create():
     full_image_bytes_stream = BytesIO()
     full_image.save(full_image_bytes_stream, "JPEG", quality=75)
 
-    if os.environ.get("AWS") == "huutokauppa-sovellus":
-        # Save thumbnail image to s3
-        put_object_to_s3(image_bytes=thumbnail_image_bytes_stream.getvalue(), filename=thumbnail_image_key)
-        thumbnail_image_url = "{}{}".format(application.config["S3_LOCATION"], thumbnail_image_key)
+    # if os.environ.get("AWS") == "huutokauppa-sovellus":
+    #     # Save thumbnail image to s3
+    #     put_object_to_s3(image_bytes=thumbnail_image_bytes_stream.getvalue(), filename=thumbnail_image_key)
+    #     thumbnail_image_url = "{}{}".format(application.config["S3_LOCATION"], thumbnail_image_key)
 
-        # Save full image to s3
-        put_object_to_s3(image_bytes=full_image_bytes_stream.getvalue(), filename=full_image_key)
-        full_image_url = "{}{}".format(application.config["S3_LOCATION"], full_image_key)
-    else:
+    #     # Save full image to s3
+    #     put_object_to_s3(image_bytes=full_image_bytes_stream.getvalue(), filename=full_image_key)
+    #     full_image_url = "{}{}".format(application.config["S3_LOCATION"], full_image_key)
         # If running locally save images to static/images
-        with open(os.path.join(application.config["UPLOAD_FOLDER"], thumbnail_image_name), "wb") as f:
-            f.write(thumbnail_image_bytes_stream.getvalue())
-            thumbnail_image_url = url_for('static', filename="images/{}".format(thumbnail_image_name))
+    with open(os.path.join(application.config["UPLOAD_FOLDER"], thumbnail_image_name), "wb") as f:
+        f.write(thumbnail_image_bytes_stream.getvalue())
+        thumbnail_image_url = url_for('static', filename="images/{}".format(thumbnail_image_name))
 
-        with open(os.path.join(application.config["UPLOAD_FOLDER"], full_image_name), "wb") as f:
-            f.write(full_image_bytes_stream.getvalue())
-            full_image_url = url_for('static', filename="images/{}".format(full_image_name))
+    with open(os.path.join(application.config["UPLOAD_FOLDER"], full_image_name), "wb") as f:
+        f.write(full_image_bytes_stream.getvalue())
+        full_image_url = url_for('static', filename="images/{}".format(full_image_name))
 
     item = Item(starting_price = form.starting_price.data,
                 current_price = form.starting_price.data,
