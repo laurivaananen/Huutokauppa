@@ -6,20 +6,31 @@ services:
     container_name: huutokauppa_web
     ports:
       - 8000:8000
-    volumes:
-      - '.:/application'
     environment:
       PYTHONBUFFERED: 'true'
+    depends_on:
+      - postgres
+
   celery:
     build: .
     container_name: huutokauppa_celery
     command: celery worker -l info -A application
-    volumes:
-      - '.:/application'
+    depends_on:
+      - postgres
+      - redis
+
   redis:
     image: redis
     volumes:
       - 'redis:/data'
+  
+  postgres:
+    image: postgres
+    container_name: huutokauppa_postgres
+    environment:
+      - POSTGRES_PASSWORD=huutokauppapassword
+    volumes:
+      - './postgres_data:/var/lib/postgresql/data'
       
 volumes:
   redis:

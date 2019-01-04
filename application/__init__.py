@@ -5,7 +5,9 @@ application = Flask(__name__)
 application.config["BCRYPT_LOG_ROUNDS"] = 12
 application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
 application.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
-application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
+# application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
+application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:huutokauppapassword@postgres:5432/postgres"
+
 
 application.config["SQLALCHEMY_ECHO"] = True
 
@@ -21,67 +23,23 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy(application)
 
 
+from flask_admin import Admin, AdminIndexView
+from flask_admin.contrib.sqla import ModelView
+from flask import url_for
+from application.models import Base
+from application.extensions import get_or_create
+from application.auth.models import Country, City, PostalCode, StreetAddress, AccountInformation, UserAccount
+from application.items.models import Item, Quality, Category
+from application.bid.models import Bid
 
+from application.auth import models
+from application.items import models
+from application.bid import models
+from application import models
 
-
-# if os.environ.get("HEROKU"):
-
-#     @application.route("/", methods=["POST", "GET"])
-#     def b_route():
-#         return redirect("http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/")
-
-#     @application.route('/<path:dummy>', methods=["POST", "GET"])
-#     def redirect_to_aws(dummy):
-#         return redirect("http://huutokauppa-sovellus.us-west-2.elasticbeanstalk.com/")
-
-# elif os.environ.get("AWS") == "huutokauppa-sovellus":
-
-#     user = os.environ.get("PSQL_USER")
-#     password = os.environ.get("PSQL_PASSWORD")
-#     host = os.environ.get("PSQL_HOST")
-#     port = os.environ.get("PSQL_PORT")
-#     database = os.environ.get("PSQL_DATABASE")
-
-#     application.config["S3_BUCKET"] = os.environ.get("S3_BUCKET")
-#     application.config["S3_KEY"] = os.environ.get("S3_KEY")
-#     application.config["S3_SECRET"] = os.environ.get("S3_SECRET")
-#     application.config["S3_LOCATION"] = 'http://{}.s3.amazonaws.com/'.format(application.config["S3_BUCKET"])
-
-#     application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://{}:{}@{}:{}/{}".format(user, password, host, port, database)
-
-#     application.config["SQLALCHEMY_ECHO"] = True
-
-#     application.config["CELERY_BROKER_URL"] = os.environ.get("REDIS_URL")
-#     application.config["CELERY_RESULT_BACKEND"] = os.environ.get("REDIS_URL")
-
-#     # Celery
-#     from application.tasks import make_celery
-
-
-#     application.config.update()
-
-#     celery = make_celery(application)
-
-
-
-
-
-#     from application import views
-
-#     from application.items import models
-#     from application.items import views
-
-#     from application.bid import models, views
-
-#     from application.auth import models
-#     from application.auth import views
-
-
-
-
-
-
-# else:
+print("\n\nCreating db\n\n")
+db.create_all()
+print("\n\ncreated db\n\n")
 
 # POSTGRES = {
 #     'user': 'postgres',
@@ -93,11 +51,7 @@ db = SQLAlchemy(application)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 # %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
-# application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:huutokauppapassword@db:5432/postgres"
 
-
-
-# Celery
 from application.tasks import make_celery
 
 
@@ -124,13 +78,6 @@ def b_route():
 def redirect_to_aws(dummy):
     return redirect(url_for('index'))
 
-
-    
-
-
-
-
-
 # Kirjautuminen
 from application.auth.models import UserAccount, AccountInformation
 from os import urandom
@@ -151,11 +98,7 @@ def load_user(user_id):
 
 
 # Admin
-from flask_admin import Admin, AdminIndexView
-from flask_admin.contrib.sqla import ModelView
-from flask import url_for
-from application.items.models import Item, Quality, Category
-from application.bid.models import Bid
+
 
 
 # Inheriting from the default admin view and adding authentication checks
@@ -205,12 +148,7 @@ admin.add_view(SecureModelView(UserAccount, db.session))
 
 
 
-from application.items.models import Quality, Category
 
-try:
-    db.create_all()
-except:
-    pass
 
 @application.before_first_request
 def add_qualities():
@@ -243,8 +181,6 @@ def add_categories():
 # Adding an admin account when application is run for the first time
 @application.before_first_request
 def add_super_admin():
-    from application.extensions import get_or_create
-    from application.auth.models import Country, City, PostalCode, StreetAddress
     if not AccountInformation.query.all():
         country = get_or_create(db.session, Country, name="admin")
         city = get_or_create(db.session, City, name="admin")

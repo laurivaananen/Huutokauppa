@@ -1,0 +1,22 @@
+venv
+.vscode
+__pycache__
+instance/
+.webassets-cache
+pip-log.txt
+pip-delete-this-directory.txt
+.Python
+*.so
+*.py[cod]
+*$py.class
+items.db
+jobs.db
+/application/static/images/*
+!/application/static/images/placeholder.jpeg
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+postgres_data
