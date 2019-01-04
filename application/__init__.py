@@ -6,7 +6,7 @@ application.config["BCRYPT_LOG_ROUNDS"] = 12
 application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
 application.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 # application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
-application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:huutokauppapassword@postgres:5432/postgres"
+application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:huutokauppapassword@ebay_postgres:5432/postgres"
 
 
 application.config["SQLALCHEMY_ECHO"] = True
