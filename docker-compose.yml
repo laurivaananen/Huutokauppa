@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  ebay:
+  huutokauppa_ebay:
     build: .
     container_name: huutokauppa_ebay
     ports:
@@ -9,22 +9,23 @@ services:
     environment:
       PYTHONBUFFERED: 'true'
     depends_on:
-      - postgres
+      - huutokauppa_postgres
 
-  celery:
+  huutokauppa_celery:
     build: .
     container_name: huutokauppa_celery
     command: celery worker -l info -A application
     depends_on:
-      - postgres
-      - redis
+      - huutokauppa_postgres
+      - huutokauppa_redis
 
-  redis:
+  huutokauppa_redis:
     image: redis
+    container_name: huutokauppa_redis
     volumes:
       - 'redis:/data'
   
-  postgres:
+  huutokauppa_postgres:
     image: postgres
     container_name: huutokauppa_postgres
     environment:

@@ -6,13 +6,13 @@ application.config["BCRYPT_LOG_ROUNDS"] = 12
 application.config["UPLOAD_FOLDER"] = os.getcwd() + "/application/static/images"
 application.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 # application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///items.db"
-application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:huutokauppapassword@ebay_postgres:5432/postgres"
+application.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:huutokauppapassword@huutokauppa_postgres:5432/postgres"
 
 
 application.config["SQLALCHEMY_ECHO"] = True
 
-application.config["CELERY_BROKER_URL"] = "redis://redis:6379/0"
-application.config["CELERY_RESULT_BACKEND"] = "redis://redis:6379/0"
+application.config["CELERY_BROKER_URL"] = "redis://huutokauppa_redis:6379/0"
+application.config["CELERY_RESULT_BACKEND"] = "redis://huutokauppa_redis:6379/0"
 # Bcrypt
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(application)
